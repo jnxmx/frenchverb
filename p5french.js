@@ -36,10 +36,10 @@ function next() {
   } else {
     varNum = 0;
   }
-  if (t1.getString(verbNum, 8) == 1) {
-    bgcolor = "#000000";
-  } else {
+  if (t1.getString(verbNum, 8) == 0) {
     bgcolor = "#0000FF";
+  } else {
+    bgcolor = "#000000";
   }
   tip = false;
 }

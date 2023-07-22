@@ -1,4 +1,5 @@
-let t1;
+let fulltable;
+let t1 = new p5.Table();
 let inp, preinp;
 let verbNum, conjNum, varNum;
 let bigKegel;
@@ -8,6 +9,9 @@ let answer;
 let bgcolor = "#000000";
 let tipcolor = bgcolor;
 let tip;
+let groupeName = ["irrégulier",
+                 "premiere",
+"deuxième", "troisième"];
 let prefix = [
   ["je ", "j'"],
   ["tu "],
@@ -47,18 +51,24 @@ let weird = [
   ["c", "ç"],
   ["y", "ÿ"],
 ];
+let grpbox = [];
+
 function preload() {
-  t1 = loadTable("assets/premierepresent.csv", "csv", "header");
+  fulltable = loadTable("assets/premierepresent.csv", "csv", "header");
 }
 
 function setup() {
+  textFont("Helvetica Neue, Helvetica, Arial, sans-serif");
+
   tip = false;
   createCanvas(windowWidth, windowHeight);
   bigKegel = height * 0.085;
   smallKegel = 0.35 * bigKegel;
+
   inpWidth = 0.5 * bigKegel;
   inp = createInput("");
   inp.input(inputTyped);
+  inp.style("font-family", "Helvetica Neue, Helvetica, Arial, sans-serif");
   inp.style("font-size", bigKegel + "px");
   inp.style("color", "#FFFFFF");
   inp.style("background-color", "rgba(0,0,0,0)");
@@ -72,6 +82,7 @@ function setup() {
   inp.elt.focus();
 
   preinp = createInput("");
+  preinp.style("font-family", "Helvetica Neue, Helvetica, Arial, sans-serif");
   preinp.style("font-size", bigKegel + "px");
   preinp.style("color", "rgb(255,255,255)");
   preinp.style("background-color", "rgba(0,0,0,0)");
@@ -80,7 +91,24 @@ function setup() {
   preinp.style("padding", "0");
   preinp.style("margin", "0 0 0 0");
   preinp.elt.setAttribute("readonly", "true");
-
+  for (let i = 0; i < 4; i++) {
+    grpbox[i] = createCheckbox(groupeName[i], false);
+    grpbox[i].style(
+      "font-family",
+      "Helvetica Neue, Helvetica, Arial, sans-serif"
+    );
+    grpbox[i].position(
+      width / 2 + (i - 2) * 6 * smallKegel,
+      height - 2 * smallKegel
+    );
+    //grpbox[i].style("display", "none");
+    grpbox[i].style("font-size", smallKegel + "px");
+    grpbox[i].style("color", "rgb(255,255,255)");
+    
+    grpbox[i].changed(changeGroup);
+    grpbox[i].checked(true);
+  }
+  changeGroup();
   next();
 }
 
@@ -216,12 +244,11 @@ function keyPressed() {
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
             );
             j = weird[i].length;
-            i = weird.length-1;
+            i = weird.length - 1;
           }
         }
       }
     }
-    
   } else if (keyCode === UP_ARROW) {
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
@@ -233,15 +260,12 @@ function keyPressed() {
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
             );
             j = weird[i].length;
-            i = weird.length-1;
+            i = weird.length - 1;
           }
         }
       }
     }
-    
   }
-  
-
 }
 
 function touchStarted() {
@@ -253,4 +277,22 @@ function touchEnded() {
   tipcolor = bgcolor;
   tip = false;
   inp.elt.focus();
+}
+
+function addgroup(num) {
+  let rows = fulltable.matchRows(num, "verb_group_number");
+  console.log(rows.length);
+  for (let r of rows) {
+    t1.addRow(r);
+  }
+}
+
+function changeGroup() {
+  t1.clearRows();
+  for (let i = 0; i < grpbox.length; i++) {
+    if (grpbox[i].checked()) {
+      addgroup(i);
+    }
+  }
+  next();
 }

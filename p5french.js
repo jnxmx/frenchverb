@@ -20,7 +20,7 @@ function setup() {
   next();
 
   let inputElem = createInput('');
-  inputElem.input(inputTyped);
+  //inputElem.input(inputTyped);
   inputElem.position(width/2, height/2);
   inputElem.elt.focus();
 }
@@ -71,16 +71,12 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function inputTyped() {
-  if (this.value().key == "Enter") {
-    next();
-  }
-
+function keyTyped() {
   if (keyCode == BACKSPACE || keyCode == DELETE) {
     if (answer.length>0) {
       answer = answer.substring(0, answer.length-1);
     }
-  } else if (keyCode == ENTER || keyCode == RETURN || key =='\n') {
+  } else if (keyCode == ENTER || keyCode == RETURN) {
     if (answer == t1.getString(verbNum, conjNum)) {
       next();
     }
@@ -127,4 +123,9 @@ function keyPressed() {
       }
     }
   }
+}
+
+function touchStarted() {
+// Focus on the input element when the canvas is touched
+  inputElem.elt.focus();
 }

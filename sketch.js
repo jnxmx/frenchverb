@@ -165,8 +165,8 @@ function draw() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  setup();
+  //resizeCanvas(windowWidth, windowHeight);
+  //setup();
 }
 
 function inputTyped() {

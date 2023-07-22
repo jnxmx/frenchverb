@@ -18,6 +18,11 @@ function setup() {
   bigKegel =  height/10;
   smallKegel = 0.35*bigKegel;
   next();
+
+  let inputElem = createInput('');
+  inputElem.input(inputTyped);
+  inputElem.position(width/2, height/2);
+  inputElem.elt.focus();
 }
 
 function next() {
@@ -66,17 +71,21 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function keyTyped() {
+function inputTyped() {
+  if (this.value().key == "Enter") {
+    next();
+  }
+
   if (keyCode == BACKSPACE || keyCode == DELETE) {
     if (answer.length>0) {
       answer = answer.substring(0, answer.length-1);
     }
-  } else if (keyCode == ENTER || keyCode == RETURN) {
+  } else if (keyCode == ENTER || keyCode == RETURN || key =='\n') {
     if (answer == t1.getString(verbNum, conjNum)) {
       next();
     }
   } else if (key == ' ') {
-    tip = true;
+    tip = !tip;
   } else {
     answer = answer+key;
   }
@@ -104,11 +113,11 @@ function keyPressed() {
     if (answer.length>0) {
       let lastSymbol = answer.charAt(answer.length-1);
       for (let i = 0; i < weird.length; i++) {
-        
+
         for (let j = 0; j < weird[i].length; j++) {
-          
+
           if (lastSymbol == weird[i][j]) {
-            
+
             let n = constrain(j+1, 0, weird[i].length-1);
             answer = answer.substring(0, answer.length-1)+weird[i][n];
             j = weird[i].length;

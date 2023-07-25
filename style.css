@@ -43,6 +43,12 @@ canvas {
 
 #translation {
   position: absolute;
+  width: 100%;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -54,8 +60,11 @@ canvas {
 }
 
 #hiddenInput {
-  width: 100%;
-  
+  width: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -67,7 +76,6 @@ canvas {
   border: rgba(0, 0, 0, 0);
   padding: 0;
   margin: 0;
-  touch-action: manipulation;
   autocomplete: off;
   autocorrect: off;
   autocapitalize: off;

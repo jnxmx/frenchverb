@@ -101,12 +101,10 @@ class Verb {
       this.present[3] = "nous" + this.present[3].substring(2);
     }
     if (this.present[4].substring(0, 2) == "s'") {
-      this.present[4] = "vous " + this.present[4].substring(2);
-      console.log(this.present);
+      this.present[4] = "vous " + this.present[4].substring(2);      
     }
     if (this.present[4].substring(0, 3) == "se ") {
       this.present[4] = "vous" + this.present[4].substring(2);
-      console.log(this.present);
     }
     
   }
@@ -245,6 +243,7 @@ function next() {
 }
 
 function draw() {
+  
   if (shake > 0) {
     displace = shake * sin(radians(shake));
     angle = radians(
@@ -402,6 +401,7 @@ function setCaretPosition(elemId, caretPos) {
 function touchStarted() {
   tipDisplaceX=-1.25*windowWidth;
   tip = true;
+  inp.elt.blur();
 }
 
 function touchEnded() {
@@ -424,6 +424,7 @@ function setPosition() {
     bigKegel = windowHeight * 0.085;
     smallKegel = 0.45 * bigKegel;
     result.style("top", "50%");
+    inp.style("top", "50%");
     tiplist.style("top", windowHeight * 0.5 + "px");
     groupName.style("bottom", smallKegel + "px");
     gradbox.style("height", 2 * smallKegel + "px");
@@ -431,6 +432,7 @@ function setPosition() {
     bigKegel = windowWidth * 0.1;
     smallKegel = 0.45 * bigKegel;
     result.style("top", windowHeight * 0.3 + "px");
+    inp.style("top", windowHeight * 0.3 + "px");
     tiplist.style("top", windowHeight * 0.3 + "px");
     groupName.style("bottom", windowHeight * 0.5 - bigKegel + "px");
     gradbox.style("height", windowHeight * 0.5 - bigKegel + "px");

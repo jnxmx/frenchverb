@@ -1,5 +1,6 @@
 let v = [];
-let result, verbFrench, translation, tiplist;
+let blurLevel = 0;
+let result, verbFrench, groupName, translation, tiplist;
 let shake,
   displace = 0.0,
   angle = 0.0;
@@ -14,7 +15,6 @@ let tipBackground = "#FFFFFF";
 let backgroundColorLerp;
 let tip;
 let tipDisplaceX = 0;
-let groupName;
 let fileName = ["3.csv"];
 let sourceTable = [];
 let prefix = [
@@ -254,6 +254,7 @@ function draw() {
   result.position(windowWidth * 0.5 + displace, result.position().y);
 
   if (!tip) {
+    //color
     if (backgroundColorLerp != backgroundColor) {
       backgroundColorLerp = lerpColor(
         color(backgroundColorLerp),
@@ -273,7 +274,7 @@ function draw() {
           " 100%)"
       );
     }
-    //result.show();
+    //moving
     tipDisplaceX = lerp(tipDisplaceX,1.25*windowWidth,0.1);
     if(tipDisplaceX>=windowWidth){
       tiplist.hide();
@@ -281,6 +282,13 @@ function draw() {
     } else {
       tiplist.position(tipDisplaceX);
     }
+    
+    //blur
+    blurLevel = lerp(blurLevel,0,0.1);
+    blurElt(verbFrench, blurLevel);
+    blurElt(groupName, blurLevel);
+    blurElt(translation, blurLevel);
+    blurElt(result, blurLevel);
   } else {
     tipDisplaceX = lerp(tipDisplaceX,windowWidth*0.5,0.1);
     tiplist.position(tipDisplaceX);
@@ -301,13 +309,30 @@ function draw() {
         lerpColor(color(backgroundColor), color(fontcolor), 0.9) +
         " 100%)"
     );
+    //blur
+    blurLevel = lerp(blurLevel,10,0.1);
+    blurElt(verbFrench, blurLevel);
+    blurElt(groupName, blurLevel);
+    blurElt(translation, blurLevel);
+    blurElt(result, blurLevel);
     //result.hide();
     tiplist.show();
+    
   }
 }
 
 function backgroundColorString(col) {
   return "rgb(" + red(col) + ", " + green(col) + ", " + blue(col) + ")";
+}
+
+function blurElt(name, power) {
+  if(power == 0) {
+    name.style("color", fontcolor);
+    name.removeAttribute("text-shadow");
+  } else {
+    name.style("color", "transparent");
+    name.style("text-shadow", "0 0 "+power+"px "+fontcolor);
+  }
 }
 
 function windowResized() {

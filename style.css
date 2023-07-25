@@ -1,0 +1,90 @@
+html, body {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+      -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+canvas {
+  display: block;
+}
+
+#result {  
+  width: 98%;
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  position: fixed;
+display: inline-block;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+}
+
+#verbFrench {  position: fixed;
+  width:100%;
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  position: fixed;
+display: inline-block;
+
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#translation {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#tip {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  white-space: pre-line;
+}
+
+#hiddenInput { 
+  width:1;
+  height:1;
+  position: absolute;top: 0px; left: 0px;
+  pointer-events: none;
+  font-size: 1px;
+  color:rgba(0,0,0,0);
+  background-color:rgba(0,0,0,0);
+  outline:rgba(0,0,0,0);
+  border:rgba(0,0,0,0);
+  padding: 0;
+  margin: 0;
+}
+
+.groupBox {
+  background-color:rgba(0,255,0,255);
+}
+
+#group {
+position: fixed;
+  
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+display: inline-block;
+  transform: translate(-50%, -50%);
+}
+
+#gradBox {
+  box-sizing: border-box;
+    width:100%;
+  
+  position: absolute;bottom: 0px; left: 0px;
+
+}

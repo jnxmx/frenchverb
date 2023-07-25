@@ -61,7 +61,7 @@ display: inline-block;
   transform: translate(-50%, -50%);
   
   pointer-events: none;
-  font-size: 1px;
+  font-size: 100px;
   color:rgba(0,0,0,0);
   background-color:rgba(0,0,0,0);
   outline:rgba(0,0,0,0);

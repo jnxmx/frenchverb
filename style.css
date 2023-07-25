@@ -61,15 +61,17 @@ canvas {
 
 #hiddenInput {
   width: 1px;
+  height: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
   position: absolute;
-  left: 50%;
+  left: -1px;
+  top: -1px;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  font-size: 16px;
+  font-size: 1px;
   color: rgba(0, 0, 0, 0);
   background-color: rgba(0, 0, 0, 0);
   outline: rgba(0, 0, 0, 0);

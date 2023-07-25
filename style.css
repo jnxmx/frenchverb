@@ -22,19 +22,19 @@ canvas {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: fixed;
+  position: absolute;
   display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #verbFrench {
-  position: fixed;
+  position: absolute;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: fixed;
+  position: absolute;
   display: inline-block;
 
   left: 50%;
@@ -42,20 +42,20 @@ canvas {
 }
 
 #translation {
-  position: fixed;
+  position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #tip {
-  position: fixed;
+  position: absolute;
   transform: translate(-50%, -50%);
   white-space: pre-line;
 }
 
 #hiddenInput {
   width: 100%;
-  height: 1px;
+  
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);

@@ -471,8 +471,8 @@ retordre,перекручивать,retords,retords,retord,retordons,retordez,re
 rompre,ломать,romps,romps,rompt,rompons,rompez,rompent
 corrompre,подкупать,corromps,corromps,corrompt,corrompons,corrompez,corrompent
 interrompre,прерывать,interromps,interromps,interrompt,interrompons,interrompez,interrompent
-foutre,дать, -,-,-,-,-,-
-se contrefoutre,не принимать во внимание, -,-,-,-,-,-
+foutre,дать,fous,fous,fout,foutons,foutez,foutent
+se contrefoutre,не принимать во внимание,me contrefous,te contrefous,se contrefout,nous contrefoutons,vous contrefoutez,se contrefoutent
 -,-,-,-,-,-,-,-
 prendre,брать,prends,prends,prend,prenons,prenez,prennent
 apprendre,учиться,apprends,apprends,apprend,apprenons,apprenez,apprennent
@@ -629,8 +629,8 @@ vivre,жить,vis,vis,vit,vivons,vivez,vivent
 revivre,оживать,revis,revis,revit,revivons,revivez,revivent
 survivre,переживать,survis,survis,survit,survivons,survivez,survivent
 -,-,-,-,-,-,-,-
-lire,читать,lis,lis, lit, lisons, lisez, lisent
-élire,выбирать,élis,élis, élit, élisons, élisez, élisent
+lire,читать,lis,lis,lit,lisons,lisez,lisent
+élire,выбирать,élis,élis,élit,élisons,élisez,élisent
 réélir,переизбирать,réélis,réélis,réélit,réélisons,réélisez,réélisent
 relire,перечитывать,relis,relis,relit,relisons,relisez,relisent
 -,-,-,-,-,-,-,-
@@ -649,7 +649,7 @@ sourire,улыбаться,souris,souris,sourit,sourions,souriez,sourient
 écrire,писать,écris,écris,écrit,écrivons,écrivez,écrivent
 circonscrire,ограничивать,circonscris,circonscris,circonscrit,circonscrivons,circonscrivez,circonscrent
 décrire,описывать,décris,décris,décrit,décrivons,décrivez,décrivent
-prescrire,предписывать, prescris, prescris, prescrit, prescrivons, prescrivez, prescrivent
+prescrire,предписывать,prescris,prescris,prescrit,prescrivons,prescrivez,prescrivent
 proscrire,запрещать,proscr is,proscr is,proscr it,proscr ivons,proscr ivez,proscr  ivent
 récrire,переписывать,récris,récris,récrit,récrivons,récrivez,récrivent
 réinscrire,записывать заново,réinscris,réinscris,réinscrit,réinscrivons,réinscrivez,réinscrivent

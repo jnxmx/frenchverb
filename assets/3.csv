@@ -53,7 +53,7 @@ revêtir,надевать,revêts,revêts,revêt,revêtons,revêtez,revêtent
 -,-,-,-,-,-,-,-
 couvrir,покрывать,couvre,couvre,couvre,couvrons,couvrez,couvrent
 découvrir,обнаруживать,découvre,découvre,découvre,découvrons,découvrez,découvrent
-recouvrir,перекрывать,recouvre,recouvre,recouvre,recouvrons,recouvrez,recouvrent
+recouvrir,перекрывать,recouvre,recouvres,recouvre,recouvrons,recouvrez,recouvrent
 ouvrir,открывать,ouvre,ouvre,ouvre,ouvrons,ouvrez,ouvrent
 entrouvrir,приоткрывать,entrouvre,entrouvre,entrouvre,entrouvrons,entrouvrez,entrouvrent
 rentrouvrir,повторно открывать,rentrouvre,rentrouvre,rentrouvre,rentrouvrons,rentrouvrez,rentrouvrent
@@ -129,7 +129,7 @@ promouvoir,поощрять,promouvois,promouvois,promouvait,promouvons,promouve
 pleuvoir,дождь,pleut,pleut,pleut,pleuvons,pleuvez,pleuvent
 repleuvoir,дождить снова,repleut,repleut,repleut,repleuvons,repleuvez,repleuvent
 -,-,-,-,-,-,-,-
-falloir,надо,il faut,il faut,il faut,il faut,il faut,il faut
+falloir,надо,-,-,faut,-,-,-
 -,-,-,-,-,-,-,-
 valoir,стоить,vaux,vaux,vaut,valons,valez,valent
 équivaloir,равняться,équivaut,équivaut,équivaut,équivaut,équivaut,équivaut
@@ -141,8 +141,8 @@ vouloir,хотеть,veux,veux,veut,voulons,voulez,veulent
 asseoir,садиться,assieds,assieds,assied,asseyons,asseyez,asseyent
 rasseoir,садиться снова,rasseyes,rasseyes,rasseye,rasseyons,rasseyez,rasseyent
 -,-,-,-,-,-,-,-
-seoir,подходить,me sied,te sied,se sied,nous siéons,vous siéez,se siedent
-messeoir,подходить несовершенно,me mensieds,te mensieds,se mensied,messeyons,messyez,se mensiedent
+seoir,уместно (уст.),-,-,sied,-,-,siedent
+messeoir,неуместно (уст.),-,-,mensied,-,-,messiéent
 -,-,-,-,-,-,-,-
 surseoir,приостанавливаться,sursied,sursied,sursied,surseyons,surseyez,sursiedent
 -,-,-,-,-,-,-,-

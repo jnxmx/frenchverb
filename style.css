@@ -22,19 +22,19 @@ canvas {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: absolute;
+  position: fixed;
   display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #verbFrench {
-  position: absolute;
+  position: fixed;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: absolute;
+  position: fixed;
   display: inline-block;
 
   left: 50%;
@@ -42,21 +42,22 @@ canvas {
 }
 
 #translation {
-  position: absolute;
+  position: fixed;
   width: 100%;
     white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: absolute;
+  position: fixed;
   display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #tip {
-  position: absolute;
+  position: fixed;
   transform: translate(-50%, -50%);
   white-space: pre-line;
+  line-height: 1.0;
 }
 
 #hiddenInput {
@@ -66,7 +67,7 @@ canvas {
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  position: absolute;
+  position: fixed;
   left: -1px;
   top: -1px;
   transform: translate(-50%, -50%);
@@ -90,7 +91,7 @@ canvas {
 }
 
 #group {
-  position: absolute;
+  position: fixed;
 
   white-space: nowrap;
   overflow: hidden;
@@ -104,7 +105,7 @@ canvas {
   box-sizing: border-box;
   width: 100%;
 
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   left: 0px;
 }

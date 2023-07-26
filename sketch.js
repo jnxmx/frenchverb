@@ -150,8 +150,8 @@ function setup() {
   verbFrench = createElement("div");
   translation = createElement("div");
   result = createElement("div");
-  tiplist = createElement("div");
   groupName = createElement("div");
+  tiplist = createElement("div");
 
   gradbox.id("gradBox");
   result.id("result");
@@ -207,7 +207,7 @@ function next() {
   } else {
     varNum = 0;
   }
-  if(v[verbNum].infinitive=="falloir") {
+  if(v[verbNum].present[0]=="-") {
     conjNum = 2;
     varNum = 0;
   }
@@ -450,16 +450,15 @@ function setPosition() {
     smallKegel = 0.45 * bigKegel;
     result.style("top", "50%");
     inp.style("top", "50%");
-    tiplist.style("top", windowHeight * 0.5 + "px");
+    
     groupName.style("bottom", smallKegel + "px");
     gradbox.style("height", 2 * smallKegel + "px");
   } else {
     bigKegel = windowWidth * 0.1;
     smallKegel = 0.45 * bigKegel;
-    result.style("top", windowHeight * 0.3 + "px");
+    result.style("top", windowHeight * 0.27 + "px");
     inp.style("top", windowHeight * 0.3 + "px");
-    tiplist.style("top", windowHeight * 0.3 + "px");
-    groupName.style("bottom", windowHeight * 0.5 - bigKegel + "px");
+    groupName.style("bottom", windowHeight * 0.5  + "px");
     gradbox.style("height", windowHeight * 0.5 - bigKegel + "px");
   }
 
@@ -476,6 +475,7 @@ function setPosition() {
 
   tiplist.style("font-size", smallKegel + "px");
   tiplist.style("color", backgroundColor);
+  tiplist.style("top", windowHeight * 0.5 + "px");
 
   tiplist.style("left", "50%");
   tiplist.hide();

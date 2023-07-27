@@ -1,22 +1,16 @@
-let v = [];
-let blurLevel = 0;
 let result, verbFrench, groupName, translation, tiplist;
-let shake,
-  displace = 0.0,
-  angle = 0.0;
 let inp;
 let verbNum, conjNum, varNum;
 let bigKegel;
 let smallKegel;
 let answer;
-let backgroundColor = "#4B63DA";
+let backgroundColor = "#4BC6DA";
 let fontcolor = "#EFEFEF";
-let tipBackground = "#FFFFFF";
 let backgroundColorLerp;
 let tip;
-let tipDisplaceX = 0;
-let fileName = ["3.csv"];
-let sourceTable = [];
+let shortTable;
+let fullTable;
+let verbRow;
 let prefix = [
   ["je ", "j'"],
   ["tu "],
@@ -47,119 +41,38 @@ let vowels = [
   "œ",
   "h",
 ];
-
-//let grpbox = [];
+let conjugationText = [
+  "indicative|present|first person singular",
+  "indicative|present|second person singular",
+  "indicative|present|third person singular",
+  "indicative|present|first person plural",
+  "indicative|present|second person plural",
+  "indicative|present|third person plural",
+];
+let correctAnswer;
 
 function preload() {
-  for (let i = 0; i < fileName.length; i++) {
-    sourceTable[i] = loadTable("assets/" + fileName[i], "csv", "header");
-  }
-}
-
-class Verb {
-  constructor(verbRow) {
-    let conjugationText = [
-      "je",
-      "tu",
-      "il/elle/on",
-      "nous",
-      "vous",
-      "ils/elles",
-    ];
-    this.infinitive = verbRow.getString("verb");
-    this.present = [];
-    this.present[0] = verbRow.getString(conjugationText[0]);
-    this.present[1] = verbRow.getString(conjugationText[1]);
-    this.present[2] = verbRow.getString(conjugationText[2]);
-    this.present[3] = verbRow.getString(conjugationText[3]);
-    this.present[4] = verbRow.getString(conjugationText[4]);
-    this.present[5] = verbRow.getString(conjugationText[5]);
-    this.russian = verbRow.getString("russian");
-    this.group = "";
-    this.fixSe();
-  }
-  setGroupName(verbExamples) {
-    this.group = verbExamples;
-  }
-  fixSe() {
-    if (this.present[0].substring(0, 2) == "s'") {
-      this.present[0] = "m'" + this.present[0].substring(2);
-    }
-    if (this.present[0].substring(0, 3) == "se ") {
-      this.present[0] = "me" + this.present[0].substring(2);
-    }
-    if (this.present[1].substring(0, 2) == "s'") {
-      this.present[1] = "t'" + this.present[1].substring(2);
-    }
-    if (this.present[1].substring(0, 3) == "se ") {
-      this.present[1] = "te" + this.present[1].substring(2);
-    }
-    if (this.present[3].substring(0, 2) == "s'") {
-      this.present[3] = "nous " + this.present[3].substring(2);
-    }
-    if (this.present[3].substring(0, 3) == "se ") {
-      this.present[3] = "nous" + this.present[3].substring(2);
-    }
-    if (this.present[4].substring(0, 2) == "s'") {
-      this.present[4] = "vous " + this.present[4].substring(2);      
-    }
-    if (this.present[4].substring(0, 3) == "se ") {
-      this.present[4] = "vous" + this.present[4].substring(2);
-    }
-    
-  }
+  fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
+  shortTable = loadTable("assets/mostpopular.csv", "csv", "header");
 }
 
 function setup() {
-  //table
-  for (let j = 0; j < sourceTable.length; j++) {
-    for (let i = 0; i < sourceTable[j].getColumnCount(); i++) {
-      if (sourceTable[j].columns[i] != "russian") {
-        //sourceTable[j].removeTokens(" ", i);
-      }
-    }
-    let groupString =
-      sourceTable[j].getRow(0).getString(0) +
-      ", " +
-      sourceTable[j].getRow(1).getString(0) +
-      ", " +
-      sourceTable[j].getRow(2).getString(0);
-    for (let i = 0; i < sourceTable[j].getRowCount(); i++) {
-      r = sourceTable[j].getRow(i);
-      if (r.getString(0) != "-") {
-        v[v.length] = new Verb(r);
-        v[v.length - 1].setGroupName(groupString);
-      } else {
-        groupString = "";
-        for (let l = i + 1; l < min(i + 4, sourceTable[j].getRowCount()); l++) {
-          if (sourceTable[j].getRow(l).getString(0) != "-") {
-            if (l > i + 1) {
-              groupString += ", ";
-            }
-            groupString += sourceTable[j].getRow(l).getString(0);
-          } else {
-            l = i + 4;
-          }
-        }
-      }
-    }
-  }
+  setVariable("--background", backgroundColor);
 
   //create dom
-  gradbox = createElement("div");
+  gradientBackgroundBox = createElement("div");
   verbFrench = createElement("div");
   translation = createElement("div");
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-
-  gradbox.id("gradBox");
+  //id
+  gradientBackgroundBox.id("gradBox");
   result.id("result");
   verbFrench.id("verbFrench");
   translation.id("translation");
   tiplist.id("tip");
   groupName.id("group");
-
   //fake input
   inp = createInput("");
   inp.input(inputTyped);
@@ -173,32 +86,32 @@ function setup() {
 
   tip = false;
 
-  //   for (let i = 0; i < 4; i++) {
-  //     grpbox[i] = createCheckbox(groupeName[i], false);
-
-  //         //grpbox[i].style("display", "none");
-  //     grpbox[i].class("groupBox");
-  //     grpbox[i].style("font-size", smallKegel + "px");
-  //     grpbox[i].style("color", fontcolor);
-  //     grpbox[i].position(
-  //       width / 2 + (i - 2) * 6 * smallKegel,
-  //       min(height, width) - 2 * smallKegel
-  //     );
-
-  //     grpbox[i].changed(changeGroup);
-  //     grpbox[i].checked(true);
-  //   }
-
   next();
 }
 
 function next() {
-  verbNum = int(random(0, v.length));
+  let reflexive = ["", "", "", "", "", ""];
+  verbNum = int(random(0, shortTable.getRowCount()));
+  let verb = shortTable.getString(verbNum, "verb");
+
   conjNum = int(random(0, 6));
+
+  if (verb.substring(0, 2) == "s'") {
+    reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'"];
+
+    verb = verb.substring(2);
+  } else if (verb.substring(0, 3) == "se ") {
+    reflexive = ["me ", "te ", "se ", "nous ", "vous ", "se "];
+
+    verb = verb.substring(3);
+  }
+  verbRow = fullTable.findRow(verb, "infinitive");
+
+  //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
   } else if (conjNum == 0) {
-    let firstLetter = v[verbNum].present[conjNum].charAt(0);
+    let firstLetter = verb.charAt(0);
     if (vowels.includes(firstLetter)) {
       varNum = 1;
     } else {
@@ -207,137 +120,126 @@ function next() {
   } else {
     varNum = 0;
   }
-  if(v[verbNum].present[0]=="-") {
+
+  //falloir etc.
+  if (verbRow.getString(conjugationText[0]) == "") {
     conjNum = 2;
     varNum = 0;
   }
-  // if (localTable.getString(verbNum, 8) == 0) {
-  //   backgroundColor = "#0000FF";
-  // } else {
-  //   backgroundColor = "#000000";
-  // }
+
   backgroundColorLerp = backgroundColor;
-  tiplist.style("color", backgroundColor);
-  tip = false;
+
   inp.value("");
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
-  verbFrench.html(v[verbNum].infinitive);
-  translation.html("[" + v[verbNum].russian + "]");
+  verbFrench.html(shortTable.getString(verbNum, "verb"));
+  translation.html("[" + shortTable.getString(verbNum, "russian") + "]");
+
+  correctAnswer =
+    reflexive[conjNum] + verbRow.getString(conjugationText[conjNum]);
   tiplist.html(
-    v[verbNum].present[0] +
-      "\n" +
-      v[verbNum].present[1] +
-      "\n" +
-      v[verbNum].present[2] +
-      "\n" +
-      v[verbNum].present[3] +
-      "\n" +
-      v[verbNum].present[4] +
-      "\n" +
-      v[verbNum].present[5]
+    reflexive[0] +
+      verbRow.getString(conjugationText[0]) +
+      "<br/>" +
+      reflexive[1] +
+      verbRow.getString(conjugationText[1]) +
+      "<br/>" +
+      reflexive[2] +
+      verbRow.getString(conjugationText[2]) +
+      "<br/>" +
+      reflexive[3] +
+      verbRow.getString(conjugationText[3]) +
+      "<br/>" +
+      reflexive[4] +
+      verbRow.getString(conjugationText[4]) +
+      "<br/>" +
+      reflexive[5] +
+      verbRow.getString(conjugationText[5])
   );
-  if (v[verbNum].group.length > 0) {
-    groupName.html("(" + v[verbNum].group + "...)");
-  }
-}
 
-function draw() {
-  
-  if (shake > 0) {
-    displace = shake * sin(radians(shake));
-    angle = radians(
-      lerp((15 * shake * sin(radians(3 * shake))) / bigKegel, 0, 0.1)
-    );
-    shake = lerp(shake, 0, 0.1);
-  }
-  result.position(windowWidth * 0.5 + displace, result.position().y);
-
-  if (!tip) {
-    //color
-    if (backgroundColorLerp != backgroundColor) {
-      backgroundColorLerp = lerpColor(
-        color(backgroundColorLerp),
-        color(backgroundColor),
-        0.1
-      );
-      select("body").style(
-        "background",
-        backgroundColorString(backgroundColorLerp)
-      );
-      gradbox.style(
-        "background-image",
-        "linear-gradient(" +
-          backgroundColorLerp +
-          " 0%," +
-          lerpColor(color(backgroundColor), color(fontcolor), 0.9) +
-          " 100%)"
-      );
-    }
-    //moving
-    tipDisplaceX = lerp(tipDisplaceX,1.25*windowWidth,0.1);
-    if(tipDisplaceX>=windowWidth){
-      tiplist.hide();
-      
-    } else {
-      tiplist.position(tipDisplaceX);
-    }
-    
-    //blur
-    blurLevel = lerp(blurLevel,0,0.1);
-    blurElt(verbFrench, blurLevel);
-    blurElt(groupName, blurLevel);
-    blurElt(translation, blurLevel);
-    blurElt(result, blurLevel);
-  } else {
-    tipDisplaceX = lerp(tipDisplaceX,windowWidth*0.5,0.1);
-    tiplist.position(tipDisplaceX);
-    backgroundColorLerp = lerpColor(
-      color(backgroundColorLerp),
-      lerpColor(color(backgroundColor), color(fontcolor), 0.9),
-      0.1
-    );
-    select("body").style(
-      "background",
-      backgroundColorString(backgroundColorLerp)
-    );
-    gradbox.style(
-      "background-image",
-      "linear-gradient(" +
-        backgroundColorLerp +
-        " 0%," +
-        lerpColor(color(backgroundColor), color(fontcolor), 0.9) +
-        " 100%)"
-    );
-    //blur
-    blurLevel = lerp(blurLevel,10,0.1);
-    blurElt(verbFrench, blurLevel);
-    blurElt(groupName, blurLevel);
-    blurElt(translation, blurLevel);
-    blurElt(result, blurLevel);
-    //result.hide();
-    tiplist.show();
-    
-  }
-}
-
-function backgroundColorString(col) {
-  return "rgb(" + red(col) + ", " + green(col) + ", " + blue(col) + ")";
-}
-
-function blurElt(name, power) {
-  if(power == 0) {
-    name.style("color", fontcolor);
-    name.removeAttribute("text-shadow");
-  } else {
-    name.style("color", "transparent");
-    name.style("text-shadow", "0 0 "+power+"px "+fontcolor);
-  }
+  groupName.html("(" + "...)");
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
   setPosition();
+}
+
+function draw() {
+  //update background color
+  colorMode(HSB, 1200);
+  backgroundColor = color(
+    (hue(backgroundColor) + 2.1 * sin(radians(frameCount))) % 1200,
+    saturation(backgroundColor),
+    brightness(backgroundColor)
+  );
+  colorMode(RGB, 255);
+  backgroundColorLerp = lerpColor(
+    color(backgroundColorLerp),
+    color(backgroundColor),
+    0.1
+  );
+  setVariable("--background", backgroundColorLerp);
+}
+
+function touchStarted() {
+  setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
+  tiplist.style(
+    "animation",
+    "fly-in 0.4s forwards 0.1s cubic-bezier(0.18,1,0.74,1)"
+  );
+  result.style("animation", "blur-in 0.5s forwards  ");
+  verbFrench.style("animation", "blur-in 0.5s forwards   ");
+  groupName.style("animation", "blur-in 0.5s forwards  ");
+  translation.style("animation", "blur-in 0.5s forwards   ");
+  gradientBackgroundBox.style("animation", "fade-in 0.8s forwards ease-out");
+  inp.elt.blur();
+}
+
+function touchEnded() {
+  setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
+
+  let tipPos = float(lookUpValue("tip", "left"));
+  if (tipPos >= windowWidth * 0.45) {
+    tiplist.style("animation", "fly-out 0.35s forwards");
+  } else {
+    setVariable("--tipPosition", lookUpValue("tip", "left"));
+    setVariable("--tipOpacity", lookUpValue("tip", "opacity"));
+    tiplist.style("animation", "fly-back 0.35s");
+  }
+  let bLev = float(splitTokens(lookUpValue("result", "text-shadow"), "px ")[5]);
+
+  setVariable("--blurLevel", bLev + "px");
+  result.style("animation", "blur-out 0.5s ease-in");
+  verbFrench.style("animation", "blur-out 0.5s ease-in");
+  groupName.style("animation", "blur-out 0.5s ease-in");
+  translation.style("animation", "blur-out 0.5s ease-in");
+  gradientBackgroundBox.style("animation", "fade-out 0.4s ease-in");
+  inp.elt.focus();
+}
+
+function setPosition() {
+  //select("body").style("background", backgroundColor);
+  if (windowWidth * 0.1 > windowHeight * 0.085) {
+    bigKegel = windowHeight * 0.085;
+  } else {
+    bigKegel = windowWidth * 0.1;
+  }
+  setVariable("--bigKegel", bigKegel + "px");
+}
+
+function setVariable(variable, val) {
+  document.documentElement.style.setProperty(variable, val);
+}
+
+function getVariable(variable) {
+  window.getComputedStyle(document.documentElement).getPropertyValue(variable);
+}
+
+function lookUpValue(elm, atr) {
+  let z = window
+    .getComputedStyle(document.getElementById(elm))
+    .getPropertyValue(atr);
+  return z;
 }
 
 function inputTyped() {
@@ -347,10 +249,10 @@ function inputTyped() {
 }
 
 function inputAnswer() {
-  if (answer == v[verbNum].present[conjNum]) {
+  if (answer == correctAnswer) {
     next();
   } else {
-    shake = bigKegel;
+    gradientBackgroundBox.style("animation", "shake 0.35s");
   }
 }
 
@@ -400,9 +302,9 @@ function keyPressed() {
   }
   inputTyped();
 }
+
 function setCaretPosition(elemId, caretPos) {
   var el = document.getElementById(elemId);
-
   if (el !== null) {
     if (el.createTextRange) {
       var range = el.createTextRange();
@@ -415,73 +317,9 @@ function setCaretPosition(elemId, caretPos) {
         el.setSelectionRange(caretPos, caretPos);
         return true;
       } else {
-        // fail city, fortunately this never happens (as far as I've tested) :)
         el.focus();
         return false;
       }
     }
   }
 }
-
-function touchStarted() {
-  tipDisplaceX=-1.25*windowWidth;
-  tip = true;
-  inp.elt.blur();
-}
-
-function touchEnded() {
-  tip = false;
-  inp.elt.focus();
-}
-
-function setPosition() {
-  select("body").style("background", backgroundColor);
-
-  gradbox.style(
-    "background-image",
-    "linear-gradient(" +
-      backgroundColor +
-      " 0%," +
-      lerpColor(color(backgroundColor), color(fontcolor), 0.9) +
-      " 100%)"
-  );
-  if (windowWidth * 0.1 > windowHeight * 0.085) {
-    bigKegel = windowHeight * 0.085;
-    smallKegel = 0.45 * bigKegel;
-    result.style("top", "50%");
-    inp.style("top", "50%");
-    
-    groupName.style("bottom", smallKegel + "px");
-    gradbox.style("height", 2 * smallKegel + "px");
-  } else {
-    bigKegel = windowWidth * 0.1;
-    smallKegel = 0.45 * bigKegel;
-    result.style("top", windowHeight * 0.27 + "px");
-    inp.style("top", windowHeight * 0.3 + "px");
-    groupName.style("bottom", windowHeight * 0.5  + "px");
-    gradbox.style("height", windowHeight * 0.5 - bigKegel + "px");
-  }
-
-  result.style("font-size", bigKegel + "px");
-  result.style("color", fontcolor);
-
-  verbFrench.style("font-size", bigKegel + "px");
-  verbFrench.style("color", fontcolor);
-  verbFrench.style("top", bigKegel + "px");
-
-  translation.style("font-size", smallKegel + "px");
-  translation.style("color", fontcolor);
-  translation.style("top", float(bigKegel + 1.75 * smallKegel) + "px");
-
-  tiplist.style("font-size", smallKegel + "px");
-  tiplist.style("color", backgroundColor);
-  tiplist.style("top", windowHeight * 0.5 + "px");
-
-  tiplist.style("left", "50%");
-  tiplist.hide();
-
-  groupName.style("font-size", smallKegel + "px");
-  groupName.style("color", fontcolor);
-  groupName.style("left", "50%");
-}
-

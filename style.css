@@ -1,5 +1,18 @@
-html,
+:root {
+  --background: #000000;
+  --fontColor: #ffffff;
+  --background2: color-mix(in srgb, var(--fontColor) 40%, var(--background));
+  --bigKegel: 0px;
+  --smallKegel: calc(0.45*var(--bigKegel));
+  --blurLevel: 0px;
+  --opacityLevel: 1;
+  --tipPosition: 50%;
+  --tipOpacity: 0;
+}
+
+phtml,
 body {
+  background: var(--fontColor);
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -18,31 +31,43 @@ canvas {
 }
 
 #result {
+  
   width: 98%;
+  font-size: var(--bigKegel);
+  color: var(--fontColor);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   position: fixed;
   display: inline-block;
+  top:50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #verbFrench {
+  
   position: fixed;
+    font-size: var(--bigKegel);
+  color: var(--fontColor);
+  
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   position: fixed;
   display: inline-block;
-
+  top: var(--bigKegel);
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #translation {
   position: fixed;
+      font-size: var(--smallKegel);
+  color: var(--fontColor);
+  top: calc(4*var(--smallKegel));
+  transform: translate(0, var(--bigKegel));
   width: 100%;
     white-space: nowrap;
   overflow: hidden;
@@ -55,9 +80,14 @@ canvas {
 
 #tip {
   position: fixed;
+        font-size: var(--smallKegel);
+  color: var(--background);
+  top: 50%;
   transform: translate(-50%, -50%);
-  white-space: pre-line;
+  /*white-space: pre-line;*/
   line-height: 1.0;
+  opacity: 0;
+  width: 100%;
 }
 
 #hiddenInput {
@@ -92,20 +122,92 @@ canvas {
 
 #group {
   position: fixed;
-
+  font-size: var(--smallKegel);
+  color: var(--fontColor);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
+  left: 50%;
+  bottom: var(--bigKegel);
   display: inline-block;
   transform: translate(-50%, -50%);
+  padding:1em;
 }
 
 #gradBox {
+  
+  position: fixed;
   box-sizing: border-box;
   width: 100%;
-
-  position: fixed;
+  height: 100%;
   bottom: 0px;
   left: 0px;
+  --background1: var(--background);
+  background-image: linear-gradient(var(--background1) 0%, color-mix(in srgb, var(--background1) 40%, var(--fontColor)) 45% 52%, var(--background2) 75% 85%, var(--fontColor) 115%);
+}
+
+@keyframes fly-in {
+  0% {left: 0;
+  opacity: 0;}
+  100% {left: 50%;
+  opacity: 1;}
+}
+@keyframes fly-out {
+  0% {left: 50%;
+  opacity: 1;}
+  100% {left: 100%;
+  opacity: 0;}
+}
+@keyframes fly-back {
+  0% {left: var(--tipPosition);
+  opacity: var(--tipOpacity);}
+  100% {left: 0;
+  opacity: 0;}
+}
+@keyframes fade-in {
+  0% {
+    opacity: var(--opacityLevel);
+  } 100% {
+    opacity: 0.4;
+  }
+}
+@keyframes fade-out {
+  0% {
+    opacity: var(--opacityLevel);
+  } 100% {
+    opacity: 1;
+  }
+}
+@keyframes blur-in {
+  0% {
+    color: transparent;
+  text-shadow: 0 0 0 var(--fontColor);
+    padding:1em;
+  } 100% {
+    color: transparent;
+  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--fontColor);
+    padding:1em;
+  }
+}
+@keyframes blur-out {
+  0% {
+    color: transparent;
+  text-shadow: 0 0 var(--blurLevel) var(--fontColor);
+    padding:1em;
+  } 100% {
+    color: transparent;
+  text-shadow: 0 0 0 var(--fontColor);
+    padding:1em;
+  }
+}
+
+.shaking {
+  animation: shake 0.35s;
+}
+
+@keyframes shake {
+  0% { left: 0rem; }
+  25% { left: 0.5rem; }
+  75% { left: -0.5rem; }
+  100% { left: 0rem; }
 }

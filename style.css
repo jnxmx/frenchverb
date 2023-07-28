@@ -1,9 +1,9 @@
 :root {
   --background: #000000;
   --fontColor: #ffffff;
-  --background2: color-mix(in srgb, var(--fontColor) 40%, var(--background));
+  --background2: color-mix(in srgb, var(--fontColor) 58%, var(--background));
   --bigKegel: min(10vw, 10vh);
-  --smallKegel: calc(0.45*var(--bigKegel));
+  --smallKegel: calc(0.5*var(--bigKegel));
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
@@ -66,7 +66,7 @@ canvas {
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  top: var(--bigKegel);
+  top: calc(var(--bigKegel)*1.6);
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -75,8 +75,7 @@ canvas {
   position: absolute;
       font-size: var(--smallKegel);
   color: var(--fontColor);
-  top: calc(4*var(--smallKegel));
-  transform: translate(0, var(--bigKegel));
+  top: calc(1.6*var(--bigKegel) + 1.55*var(--smallKegel));
   width: 100%;
     white-space: nowrap;
   overflow: hidden;
@@ -97,6 +96,13 @@ canvas {
   line-height: 1.0;
   opacity: 0;
   width: 100%;
+}
+
+div > p {
+  line-height: 1.1;
+  margin: 0;
+  padding: 0;
+
 }
 
 #hiddenInput {
@@ -125,20 +131,16 @@ canvas {
   caret-color: transparent;
 }
 
-.groupBox {
-  background-color: rgba(0, 255, 0, 255);
-}
-
 #group {
   position: absolute;  
   font-size: var(--smallKegel);
-  color: var(--fontColor);
+  color: var(--background2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   left: 50%;
   transform: translate(-50%, -50%);
-  bottom: var(--bigKegel);
+  top: var(--smallKegel);
   display: inline-block;
   padding:0em;
 }
@@ -208,11 +210,34 @@ canvas {
     padding:0em;
   }
 }
+@keyframes group-blur-in {
+  0% {
+    color: transparent;
+  text-shadow: 0 0 0 var(--background2);
+    padding:0em;
+  } 100% {
+    color: transparent;
+  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--background2);
+    padding:0em;
+  }
+}
+@keyframes group-blur-out {
+  0% {
+    color: transparent;
+  text-shadow: 0 0 var(--blurLevel) var(--background2);
+    padding:0em;
+  } 100% {
+    color: transparent;
+  text-shadow: 0 0 0 var(--background2);
+    padding:0em;
+  }
+}
 
 .shaking {
   position: relative;
   animation: shake 0.35s;
 }
+
 
 @keyframes shake {
   0% {  margin-left: 0rem; }

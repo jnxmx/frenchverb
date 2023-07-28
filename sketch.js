@@ -58,7 +58,6 @@ function preload() {
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable("assets/mostpopular.csv", "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
-  
 }
 
 function setup() {
@@ -66,17 +65,15 @@ function setup() {
   let index = 0;
   let subindex = 0;
   irregularGroups[0] = [];
-  for(let i = 0; i < irregularGroupsSource.length; i++) {
-  if(irregularGroupsSource[i]!="") {
-    irregularGroups[index][subindex] = irregularGroupsSource[i];
-    subindex++;
-  } else {
-    if(subindex>1) {
-    index++;
+  for (let i = 0; i < irregularGroupsSource.length; i++) {
+    if (irregularGroupsSource[i] != "") {
+      irregularGroups[index][subindex] = irregularGroupsSource[i];
+      subindex++;
+    } else {
+      index++;
+      irregularGroups[index] = [];
+      subindex = 0;
     }
-    irregularGroups[index] = [];
-    subindex = 0;
-  }
   }
 
   //create dom
@@ -87,7 +84,7 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-  
+
   //id
   contentBox.id("contentBox");
   gradientBackgroundBox.id("gradBox");
@@ -102,9 +99,7 @@ function setup() {
   tiplist.parent(contentBox);
   groupName.id("group");
   groupName.parent(contentBox);
-  
-  
-  
+
   //fake input
   inp = createInput("");
   inp.input(inputTyped);
@@ -114,8 +109,6 @@ function setup() {
   inp.elt.focus();
 
   noCanvas();
-
-  tip = false;
 
   next();
 }
@@ -138,7 +131,11 @@ function next() {
   }
   console.log(verb);
   verbRow = fullTable.findRow(verb, "infinitive");
-  
+  if (!verbRow) {
+    shortTable.removeRow(verbNum);
+    next();
+  }
+
   //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
@@ -158,25 +155,36 @@ function next() {
     conjNum = 2;
     varNum = 0;
   }
-  
-  //group search
-  for(let i = 0; i < irregularGroups.length; i++) {
-    if(irregularGroups[i].includes(verb)) {
-         groupName.html(join(irregularGroups[i], ', '));
-      console.log(groupName.html());
-      i = irregularGroups.length;
-        if (groupName.elt.clientWidth > windowWidth) {
-          groupName.html(', '+groupName.html()+', '+groupName.html());
-          setVariable("--scrollLength", groupName.elt.clientWidth+"px");
-          setVariable("--animationTime", 3.5*groupName.elt.clientWidth/windowWidth+"s");
-           groupName.style("animation", "leftScroll var(--animationTime) linear 0s infinite"); 
-          
-  }
-       } else {
-         groupName.html("");
-       }
-  }
 
+  //group search
+  for (let i = 0; i < irregularGroups.length; i++) {
+    if (irregularGroups[i].includes(verb)) {
+      if (irregularGroups[i].length > 1) {
+        groupName.html(join(irregularGroups[i], ", "));
+      } else {
+        groupName.html("!");
+      }
+      i = irregularGroups.length;
+      if (groupName.elt.clientWidth > windowWidth) {
+        groupName.html(", " + groupName.html() + ", " + groupName.html());
+        setVariable("--scrollLength", groupName.elt.clientWidth + "px");
+        setVariable(
+          "--animationTime",
+          (20* groupName.elt.clientWidth) / windowWidth + "s"
+        );
+        groupName.style(
+          "animation",
+          "leftScroll var(--animationTime) linear 0s infinite"
+        );
+      }
+    } else if (verb.substring(verb.length - 2) == "er") {
+      groupName.html("I");
+    } else if (verb.substring(verb.length - 2) == "ir") {
+      groupName.html("II");
+    } else {
+      groupName.html("III");
+    }
+  }
 
   backgroundColorLerp = backgroundColor;
 
@@ -189,26 +197,26 @@ function next() {
   correctAnswer =
     reflexive[conjNum] + verbRow.getString(conjugationText[conjNum]);
   tiplist.html(
-    reflexive[0] +
+    "<p>" +
+      reflexive[0] +
       verbRow.getString(conjugationText[0]) +
-      "<br/>" +
+      "</p><p>" +
       reflexive[1] +
       verbRow.getString(conjugationText[1]) +
-      "<br/>" +
+      "</p><p>" +
       reflexive[2] +
       verbRow.getString(conjugationText[2]) +
-      "<br/>" +
+      "</p><p>" +
       reflexive[3] +
       verbRow.getString(conjugationText[3]) +
-      "<br/>" +
+      "</p><p>" +
       reflexive[4] +
       verbRow.getString(conjugationText[4]) +
-      "<br/>" +
+      "</p><p>" +
       reflexive[5] +
-      verbRow.getString(conjugationText[5])
+      verbRow.getString(conjugationText[5]) +
+      "</p>"
   );
-
-  
 }
 
 function draw() {
@@ -237,12 +245,15 @@ function touchStarted() {
   result.style("animation", "blur-in 0.5s forwards  ");
   verbFrench.style("animation", "blur-in 0.5s forwards   ");
 
-  groupName.style("animation",  splitTokens(lookUpValue("group", "animation"), ',')[0] + ", blur-in 0.5s forwards  ");
- 
+  groupName.style(
+    "animation",
+    splitTokens(lookUpValue("group", "animation"), ",")[0] +
+      ", group-blur-in 0.5s forwards  "
+  );
+
   translation.style("animation", "blur-in 0.5s forwards   ");
   gradientBackgroundBox.style("animation", "fade-in 0.8s forwards ease-out");
   inp.elt.blur();
-  
 }
 
 function touchEnded() {
@@ -261,15 +272,17 @@ function touchEnded() {
   setVariable("--blurLevel", bLev + "px");
   result.style("animation", "blur-out 0.5s ease-in");
   verbFrench.style("animation", "blur-out 0.5s ease-in");
-  groupName.style("animation", splitTokens(lookUpValue("group", "animation"), ',')[0] + ", blur-out 0.5s ease-in");
+  groupName.style(
+    "animation",
+    splitTokens(lookUpValue("group", "animation"), ",")[0] +
+      ", group-blur-out 0.5s ease-in"
+  );
 
   translation.style("animation", "blur-out 0.5s ease-in");
   gradientBackgroundBox.style("animation", "fade-out 0.4s ease-in");
-  
+
   inp.elt.focus();
 }
-
-
 
 function setVariable(variable, val) {
   document.documentElement.style.setProperty(variable, val);
@@ -297,8 +310,7 @@ function inputAnswer() {
   if (answer == correctAnswer) {
     next();
   } else {
-    
-  result.style("animation", "0.25s ease-out 0s 1 normal none running shake");
+    result.style("animation", "0.25s ease-out 0s 1 normal none running shake");
   }
 }
 

@@ -102,11 +102,31 @@ function setup() {
 
   //fake input
   inp = createInput("");
-  inp.input(inputTyped);
-  inp.changed(inputAnswer);
+  //inp.input(inputTyped);
+  //inp.changed
   inp.id("hiddenInput");
   inp.elt.setAttribute("type", "text");
   inp.elt.focus();
+  inp.elt.addEventListener("input", (event) => {
+    // Get the value of the input field
+    result.style("animation", "");
+    const inputValue = event.target.value.toLowerCase();
+    answer = inputValue;
+    result.html(prefix[conjNum][varNum] + answer);
+  });
+  inp.elt.addEventListener("keyup", (event) => {
+    if (event.keyCode == ENTER) {
+      event.preventDefault();
+      if (answer == correctAnswer) {
+        next();
+      } else {
+        result.style(
+          "animation",
+          "0.25s ease-out 0s 1 normal none running shake"
+        );
+      }
+    }
+  });
 
   noCanvas();
 
@@ -157,6 +177,10 @@ function next() {
   }
 
   //group search
+  groupName.style(
+          "animation",
+          ""
+        );
   for (let i = 0; i < irregularGroups.length; i++) {
     if (irregularGroups[i].includes(verb)) {
       if (irregularGroups[i].length > 1) {
@@ -170,7 +194,7 @@ function next() {
         setVariable("--scrollLength", groupName.elt.clientWidth + "px");
         setVariable(
           "--animationTime",
-          (20* groupName.elt.clientWidth) / windowWidth + "s"
+          (20 * groupName.elt.clientWidth) / windowWidth + "s"
         );
         groupName.style(
           "animation",
@@ -299,21 +323,6 @@ function lookUpValue(elm, atr) {
   return z;
 }
 
-function inputTyped() {
-  result.style("animation", "");
-  inp.value(inp.value().toLowerCase());
-  answer = inp.value();
-  result.html(prefix[conjNum][varNum] + answer);
-}
-
-function inputAnswer() {
-  if (answer == correctAnswer) {
-    next();
-  } else {
-    result.style("animation", "0.25s ease-out 0s 1 normal none running shake");
-  }
-}
-
 function keyPressed() {
   setCaretPosition("hiddenInput", inp.value().length);
   let weird = [
@@ -358,7 +367,6 @@ function keyPressed() {
       }
     }
   }
-  inputTyped();
 }
 
 function setCaretPosition(elemId, caretPos) {

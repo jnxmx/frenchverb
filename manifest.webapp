@@ -1,0 +1,14 @@
+{
+  "name": "Verby",
+  "description": "French verbs conjugation training app",
+  "launch_path": "/index.html",
+ /"icons": {
+    "512": "/img/ws512.png",
+    "128": "/img/ws128.png"
+  },
+  "developer": {
+    "name": "Jnx",
+    "url": ""
+  },
+  "default_locale": "en"
+}

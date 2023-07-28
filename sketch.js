@@ -100,23 +100,22 @@ function setup() {
   groupName.id("group");
   groupName.parent(contentBox);
 
-  //fake input
+  //input
   inp = createInput("");
-  //inp.input(inputTyped);
-  //inp.changed
   inp.id("hiddenInput");
   inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   inp.elt.addEventListener("input", (event) => {
-    // Get the value of the input field
     result.style("animation", "");
     const inputValue = event.target.value.toLowerCase();
     answer = inputValue;
     result.html(prefix[conjNum][varNum] + answer);
   });
   inp.elt.addEventListener("keyup", (event) => {
+    event.preventDefault();
+    setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode == ENTER) {
-      event.preventDefault();
+      
       if (answer == correctAnswer) {
         next();
       } else {
@@ -126,6 +125,7 @@ function setup() {
         );
       }
     }
+    addAccentsWithUpDown(event.keyCode);
   });
 
   noCanvas();
@@ -323,8 +323,7 @@ function lookUpValue(elm, atr) {
   return z;
 }
 
-function keyPressed() {
-  setCaretPosition("hiddenInput", inp.value().length);
+function addAccentsWithUpDown(code) {
   let weird = [
     ["i", "î"],
     ["e", "é", "è", "ê", "ë"],
@@ -334,7 +333,7 @@ function keyPressed() {
     ["c", "ç"],
     ["y", "ÿ"],
   ];
-  if (keyCode === DOWN_ARROW) {
+  if (code == 40) {   
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
       for (let i = 0; i < weird.length; i++) {
@@ -344,13 +343,15 @@ function keyPressed() {
             inp.value(
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
             );
+            answer = inp.value();
+            result.html(prefix[conjNum][varNum] + answer);
             j = weird[i].length;
             i = weird.length - 1;
           }
         }
       }
     }
-  } else if (keyCode === UP_ARROW) {
+  } else if (code == 38) {
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
       for (let i = 0; i < weird.length; i++) {
@@ -360,6 +361,8 @@ function keyPressed() {
             inp.value(
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
             );
+            answer = inp.value();
+            result.html(prefix[conjNum][varNum] + answer);
             j = weird[i].length;
             i = weird.length - 1;
           }

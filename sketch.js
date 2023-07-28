@@ -1,4 +1,4 @@
-let result, verbFrench, groupName, translation, tiplist;
+let result, verbFrench, groupName, translation, tiplist, contentBox;
 let inp;
 let verbNum, conjNum, varNum;
 let bigKegel;
@@ -41,6 +41,8 @@ let vowels = [
   "œ",
   "h",
 ];
+let irregularGroupsSource;
+let irregularGroups = [[]];
 let conjugationText = [
   "indicative|present|first person singular",
   "indicative|present|second person singular",
@@ -52,27 +54,57 @@ let conjugationText = [
 let correctAnswer;
 
 function preload() {
+  setVariable("--background", backgroundColor);
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable("assets/mostpopular.csv", "csv", "header");
+  irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
+  
 }
 
 function setup() {
-  setVariable("--background", backgroundColor);
+  //set groups
+  let index = 0;
+  let subindex = 0;
+  irregularGroups[0] = [];
+  for(let i = 0; i < irregularGroupsSource.length; i++) {
+  if(irregularGroupsSource[i]!="") {
+    irregularGroups[index][subindex] = irregularGroupsSource[i];
+    subindex++;
+  } else {
+    if(subindex>1) {
+    index++;
+    }
+    irregularGroups[index] = [];
+    subindex = 0;
+  }
+  }
 
   //create dom
+  contentBox = createElement("div");
   gradientBackgroundBox = createElement("div");
   verbFrench = createElement("div");
   translation = createElement("div");
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
+  
   //id
+  contentBox.id("contentBox");
   gradientBackgroundBox.id("gradBox");
+  gradientBackgroundBox.parent(contentBox);
   result.id("result");
+  result.parent(contentBox);
   verbFrench.id("verbFrench");
+  verbFrench.parent(contentBox);
   translation.id("translation");
+  translation.parent(contentBox);
   tiplist.id("tip");
+  tiplist.parent(contentBox);
   groupName.id("group");
+  groupName.parent(contentBox);
+  
+  
+  
   //fake input
   inp = createInput("");
   inp.input(inputTyped);
@@ -82,7 +114,6 @@ function setup() {
   inp.elt.focus();
 
   noCanvas();
-  setPosition();
 
   tip = false;
 
@@ -105,8 +136,9 @@ function next() {
 
     verb = verb.substring(3);
   }
+  console.log(verb);
   verbRow = fullTable.findRow(verb, "infinitive");
-
+  
   //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
@@ -126,6 +158,25 @@ function next() {
     conjNum = 2;
     varNum = 0;
   }
+  
+  //group search
+  for(let i = 0; i < irregularGroups.length; i++) {
+    if(irregularGroups[i].includes(verb)) {
+         groupName.html(join(irregularGroups[i], ', '));
+      console.log(groupName.html());
+      i = irregularGroups.length;
+        if (groupName.elt.clientWidth > windowWidth) {
+          groupName.html(', '+groupName.html()+', '+groupName.html());
+          setVariable("--scrollLength", groupName.elt.clientWidth+"px");
+          setVariable("--animationTime", 3.5*groupName.elt.clientWidth/windowWidth+"s");
+           groupName.style("animation", "leftScroll var(--animationTime) linear 0s infinite"); 
+          
+  }
+       } else {
+         groupName.html("");
+       }
+  }
+
 
   backgroundColorLerp = backgroundColor;
 
@@ -157,11 +208,7 @@ function next() {
       verbRow.getString(conjugationText[5])
   );
 
-  groupName.html("(" + "...)");
-}
-
-function windowResized() {
-  setPosition();
+  
 }
 
 function draw() {
@@ -189,10 +236,13 @@ function touchStarted() {
   );
   result.style("animation", "blur-in 0.5s forwards  ");
   verbFrench.style("animation", "blur-in 0.5s forwards   ");
-  groupName.style("animation", "blur-in 0.5s forwards  ");
+
+  groupName.style("animation",  splitTokens(lookUpValue("group", "animation"), ',')[0] + ", blur-in 0.5s forwards  ");
+ 
   translation.style("animation", "blur-in 0.5s forwards   ");
   gradientBackgroundBox.style("animation", "fade-in 0.8s forwards ease-out");
   inp.elt.blur();
+  
 }
 
 function touchEnded() {
@@ -211,21 +261,15 @@ function touchEnded() {
   setVariable("--blurLevel", bLev + "px");
   result.style("animation", "blur-out 0.5s ease-in");
   verbFrench.style("animation", "blur-out 0.5s ease-in");
-  groupName.style("animation", "blur-out 0.5s ease-in");
+  groupName.style("animation", splitTokens(lookUpValue("group", "animation"), ',')[0] + ", blur-out 0.5s ease-in");
+
   translation.style("animation", "blur-out 0.5s ease-in");
   gradientBackgroundBox.style("animation", "fade-out 0.4s ease-in");
+  
   inp.elt.focus();
 }
 
-function setPosition() {
-  //select("body").style("background", backgroundColor);
-  if (windowWidth * 0.1 > windowHeight * 0.085) {
-    bigKegel = windowHeight * 0.085;
-  } else {
-    bigKegel = windowWidth * 0.1;
-  }
-  setVariable("--bigKegel", bigKegel + "px");
-}
+
 
 function setVariable(variable, val) {
   document.documentElement.style.setProperty(variable, val);
@@ -243,6 +287,7 @@ function lookUpValue(elm, atr) {
 }
 
 function inputTyped() {
+  result.style("animation", "");
   inp.value(inp.value().toLowerCase());
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
@@ -252,7 +297,8 @@ function inputAnswer() {
   if (answer == correctAnswer) {
     next();
   } else {
-    gradientBackgroundBox.style("animation", "shake 0.35s");
+    
+  result.style("animation", "0.25s ease-out 0s 1 normal none running shake");
   }
 }
 

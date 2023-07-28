@@ -2,12 +2,14 @@
   --background: #000000;
   --fontColor: #ffffff;
   --background2: color-mix(in srgb, var(--fontColor) 40%, var(--background));
-  --bigKegel: 0px;
+  --bigKegel: min(10vw, 10vh);
   --smallKegel: calc(0.45*var(--bigKegel));
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
   --tipOpacity: 0;
+  --animationTime: 3s;
+  --scrollLength: 0;
 }
 
 phtml,
@@ -30,15 +32,23 @@ canvas {
   display: block;
 }
 
+#contentBox {
+  position: relative;
+  width: 100vw;
+  height: min(100vw, 100vh);
+    left: 0px;
+  top: 0px;
+}
+
 #result {
   
-  width: 98%;
+  width: 100%;
   font-size: var(--bigKegel);
   color: var(--fontColor);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: fixed;
+  position: absolute;
   display: inline-block;
   top:50%;
   left: 50%;
@@ -47,7 +57,7 @@ canvas {
 
 #verbFrench {
   
-  position: fixed;
+  position: absolute;
     font-size: var(--bigKegel);
   color: var(--fontColor);
   
@@ -55,7 +65,6 @@ canvas {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: fixed;
   display: inline-block;
   top: var(--bigKegel);
   left: 50%;
@@ -63,7 +72,7 @@ canvas {
 }
 
 #translation {
-  position: fixed;
+  position: absolute;
       font-size: var(--smallKegel);
   color: var(--fontColor);
   top: calc(4*var(--smallKegel));
@@ -72,14 +81,14 @@ canvas {
     white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: fixed;
+  position: absolute;
   display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #tip {
-  position: fixed;
+  position: absolute;
         font-size: var(--smallKegel);
   color: var(--background);
   top: 50%;
@@ -97,7 +106,7 @@ canvas {
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  position: fixed;
+  position: absolute;
   left: -1px;
   top: -1px;
   transform: translate(-50%, -50%);
@@ -121,21 +130,20 @@ canvas {
 }
 
 #group {
-  position: fixed;
+  position: absolute;  
   font-size: var(--smallKegel);
   color: var(--fontColor);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   left: 50%;
+  transform: translate(-50%, -50%);
   bottom: var(--bigKegel);
   display: inline-block;
-  transform: translate(-50%, -50%);
-  padding:1em;
+  padding:0em;
 }
 
-#gradBox {
-  
+#gradBox {  
   position: fixed;
   box-sizing: border-box;
   width: 100%;
@@ -182,32 +190,44 @@ canvas {
   0% {
     color: transparent;
   text-shadow: 0 0 0 var(--fontColor);
-    padding:1em;
+    padding:0em;
   } 100% {
     color: transparent;
   text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--fontColor);
-    padding:1em;
+    padding:0em;
   }
 }
 @keyframes blur-out {
   0% {
     color: transparent;
   text-shadow: 0 0 var(--blurLevel) var(--fontColor);
-    padding:1em;
+    padding:0em;
   } 100% {
     color: transparent;
   text-shadow: 0 0 0 var(--fontColor);
-    padding:1em;
+    padding:0em;
   }
 }
 
 .shaking {
+  position: relative;
   animation: shake 0.35s;
 }
 
 @keyframes shake {
-  0% { left: 0rem; }
-  25% { left: 0.5rem; }
-  75% { left: -0.5rem; }
-  100% { left: 0rem; }
+  0% {  margin-left: 0rem; }
+  25% { margin-left: 0.75rem; }
+  75% { margin-left: -0.75rem; }
+  100% { margin-left: 0rem; }
+}
+
+@keyframes leftScroll {
+  from {
+    
+     margin-left: calc(0.25*var(--scrollLength)); 
+  }
+  to {
+    margin-left: -1000px;
+     margin-left: calc(-0.25*var(--scrollLength)); 
+  }
 }

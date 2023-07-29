@@ -153,19 +153,23 @@ function setup() {
 }
 
 function next() {
+  result.style(
+    "animation",
+    "1.6s ease-out 0s 1 normal forwards running resultIn"
+  );
   verbFrench.style(
     "animation",
     "0.5s ease-in 0s 1 normal forwards running newVerb"
   );
   translation.style(
     "animation",
-    "1.0s ease-in 0s 1 normal none running newGroup"
+    "1.5s ease-in 0s 1 normal none running newGroup"
   );
 
   let reflexive = ["", "", "", "", "", ""];
   verbNum = int(random(0, shortTable.getRowCount()));
   let verb = shortTable.getString(verbNum, "verb");
-  speak(verb);
+  
   conjNum = int(random(0, 6));
 
   if (verb.substring(0, 2) == "s'") {
@@ -183,12 +187,12 @@ function next() {
     shortTable.removeRow(verbNum);
     next();
   }
-
+  speak(verb);
   //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
   } else if (conjNum == 0) {
-    let firstLetter = verb.charAt(0);
+    let firstLetter = verbRow.getString(conjugationText[0]).charAt(0);
     if (vowels.includes(firstLetter)) {
       varNum = 1;
     } else {
@@ -290,17 +294,16 @@ function draw() {
   );
   setVariable("--background", backgroundColorLerp);
 
-  //updating group color 0 0 0 var(--fontColor);
-  console.log("now: " + lookUpValue("group", "text-shadow"));
-  //let colormergestring = str(color(lerpColor(color(fontcolor), color(backgroundColorLerp),0.58))).substring(0,16)+")"+lookUpValue("group", "text-shadow").substring(18);
-
   //waiting for next
-  if (float(lookUpValue("verbFrench", "margin-top")) < -0.79 * windowHeight) {
+  if (float(lookUpValue("verbFrench", "margin-top")) < -0.75 * windowHeight) {
     next();
   }
 }
 
 function correctAnimation() {
+  result.style(
+    "animation", "1.45s linear 0s 1 normal forwards running resultOut"
+  );
   verbFrench.style(
     "animation",
     "1.95s ease-in 0.05s 1 normal forwards running flyUp"

@@ -1,5 +1,5 @@
 const synth = window.speechSynthesis;
-let voices;
+let theVoice;
 
 let result, verbFrench, groupName, translation, tiplist, contentBox;
 let inp;
@@ -135,7 +135,7 @@ function setup() {
   });
 
   //sound
-  voices = synth.getVoices().sort(function (a, b) {
+  let voices = synth.getVoices().sort(function (a, b) {
     const aname = a.name.toUpperCase();
     const bname = b.name.toUpperCase();
     if (aname < bname) {
@@ -146,7 +146,13 @@ function setup() {
       return +1;
     }
   });
-
+  for (let i = 0; i < voices.length; i++) {
+    console.log(voices[i].name);
+      if (voices[i].name === "Thomas") {
+        theVoice = voices[i];
+        break;
+      }
+    }
   noCanvas();
 
   next();
@@ -477,13 +483,12 @@ function speak(message) {
       console.error("SpeechSynthesisUtterance.onerror");
     };
 
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === "Thomas") {
-        utterThis.voice = voices[i];
-        break;
-      }
-    }
 
+    utterThis.volume = 1; // Volume range = 0 - 1
+  utterThis.rate = 1; // Speed of the text read , default 1
+  utterThis.voice = theVoice; // change voice
+  utterThis.lang = 'fr-FR'
+  
     synth.speak(utterThis);
   }
 }

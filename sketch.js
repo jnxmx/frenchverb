@@ -111,8 +111,8 @@ function setup() {
 
   //id
   contentBox.id("contentBox");
-  contentBox.mousePressed(showTip);
-  contentBox.mouseReleased(hideTip);
+  contentBox.touchStarted(showTip);
+  contentBox.touchEnded(hideTip);
   gradientBackgroundBox.id("gradBox");
   gradientBackgroundBox.parent(contentBox);
   result.id("result");
@@ -218,7 +218,7 @@ function createNext() {
   }
 
   //falloir etc.
-  if (verbRow.getString(conjugationText[0]).lenght < 1) {
+  if (verbRow.getString(conjugationText[0]).length < 1) {
     conjNum = 2;
     varNum = 0;
   }
@@ -316,7 +316,6 @@ function draw() {
   );
   setVariable("--background", backgroundColorLerp);
   //waiting for next
-  console.log(float(lookUpValue("verbFrench", "margin-top")), -7.5 * float(lookUpValue("verbFrench","font-size")));
   if (float(lookUpValue("verbFrench", "margin-top")) < -7.5 * float(lookUpValue("verbFrench","font-size"))) {
     createNext();
   }

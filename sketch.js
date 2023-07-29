@@ -5,7 +5,7 @@ let theVoice;
 
 
 
-let result, verbFrench, groupName, translation, tiplist, contentBox;
+let result, verbFrench, groupName, translation, tiplist, contentBox, menubutton;
 let inp;
 let verbNum, conjNum, varNum;
 let answer;
@@ -107,9 +107,12 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
+  menubutton = createElement("div");
 
   //id
   contentBox.id("contentBox");
+  contentBox.mousePressed(showTip);
+  contentBox.mouseReleased(hideTip);
   gradientBackgroundBox.id("gradBox");
   gradientBackgroundBox.parent(contentBox);
   result.id("result");
@@ -122,6 +125,10 @@ function setup() {
   tiplist.parent(contentBox);
   groupName.id("group");
   groupName.parent(contentBox);
+  
+  //menu
+  menubutton.class("menubutton");
+  menubutton.html("=")
 
   //input
   inp = createInput("");
@@ -335,7 +342,7 @@ function correctAnimation() {
   );
 }
 
-function touchStarted() {
+function showTip() {
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
   tiplist.style(
     "animation",
@@ -355,7 +362,7 @@ function touchStarted() {
   inp.elt.blur();
 }
 
-function touchEnded() {
+function hideTip() {
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
 
   let tipPos = float(lookUpValue("tip", "left"));

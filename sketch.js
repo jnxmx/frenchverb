@@ -1,11 +1,12 @@
+const synth = window.speechSynthesis;
+let voices;
+
 let result, verbFrench, groupName, translation, tiplist, contentBox;
 let inp;
 let verbNum, conjNum, varNum;
-let bigKegel;
-let smallKegel;
 let answer;
 let backgroundColor = "#4BC6DA";
-let fontcolor = "#EFEFEF";
+let fontcolor = "#F0F0D2";
 let backgroundColorLerp;
 let tip;
 let shortTable;
@@ -77,6 +78,7 @@ function setup() {
   }
 
   //create dom
+  setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
   gradientBackgroundBox = createElement("div");
   verbFrench = createElement("div");
@@ -105,20 +107,24 @@ function setup() {
   inp.id("hiddenInput");
   inp.elt.setAttribute("type", "text");
   inp.elt.focus();
+  //onkeypress
   inp.elt.addEventListener("input", (event) => {
     result.style("animation", "");
     const inputValue = event.target.value.toLowerCase();
     answer = inputValue;
     result.html(prefix[conjNum][varNum] + answer);
   });
+  //onsend
   inp.elt.addEventListener("keyup", (event) => {
     event.preventDefault();
     setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode == ENTER) {
-      
       if (answer == correctAnswer) {
-        next();
+        speak(prefix[conjNum][varNum] + answer);
+        correctAnimation();
       } else {
+        result.style("animation", "0s ease 0s 1 normal none running none ");
+        lookUpValue("result", "animation");
         result.style(
           "animation",
           "0.25s ease-out 0s 1 normal none running shake"
@@ -128,16 +134,38 @@ function setup() {
     addAccentsWithUpDown(event.keyCode);
   });
 
+  //sound
+  voices = synth.getVoices().sort(function (a, b) {
+    const aname = a.name.toUpperCase();
+    const bname = b.name.toUpperCase();
+    if (aname < bname) {
+      return -1;
+    } else if (aname == bname) {
+      return 0;
+    } else {
+      return +1;
+    }
+  });
+
   noCanvas();
 
   next();
 }
 
 function next() {
+  verbFrench.style(
+    "animation",
+    "0.5s ease-in 0s 1 normal forwards running newVerb"
+  );
+  translation.style(
+    "animation",
+    "1.0s ease-in 0s 1 normal none running newGroup"
+  );
+
   let reflexive = ["", "", "", "", "", ""];
   verbNum = int(random(0, shortTable.getRowCount()));
   let verb = shortTable.getString(verbNum, "verb");
-
+  speak(verb);
   conjNum = int(random(0, 6));
 
   if (verb.substring(0, 2) == "s'") {
@@ -177,10 +205,7 @@ function next() {
   }
 
   //group search
-  groupName.style(
-          "animation",
-          ""
-        );
+  groupName.style("animation", "");
   for (let i = 0; i < irregularGroups.length; i++) {
     if (irregularGroups[i].includes(verb)) {
       if (irregularGroups[i].length > 1) {
@@ -209,6 +234,12 @@ function next() {
       groupName.html("III");
     }
   }
+  groupName.style(
+    "animation",
+    lookUpValue("group", "animation") +
+      ", " +
+      "1.5s ease-in 0s 1 normal none running newGroup"
+  );
 
   backgroundColorLerp = backgroundColor;
 
@@ -258,6 +289,32 @@ function draw() {
     0.1
   );
   setVariable("--background", backgroundColorLerp);
+
+  //updating group color 0 0 0 var(--fontColor);
+  console.log("now: " + lookUpValue("group", "text-shadow"));
+  //let colormergestring = str(color(lerpColor(color(fontcolor), color(backgroundColorLerp),0.58))).substring(0,16)+")"+lookUpValue("group", "text-shadow").substring(18);
+
+  //waiting for next
+  if (float(lookUpValue("verbFrench", "margin-top")) < -0.79 * windowHeight) {
+    next();
+  }
+}
+
+function correctAnimation() {
+  verbFrench.style(
+    "animation",
+    "1.95s ease-in 0.05s 1 normal forwards running flyUp"
+  );
+  translation.style(
+    "animation",
+    "1.95s ease-in 0.1s 1 normal forwards running flyUp"
+  );
+  groupName.style(
+    "animation",
+    lookUpValue("group", "animation") +
+      ", " +
+      "1.95s ease-in 0.0s 1 normal forwards running flyUp"
+  );
 }
 
 function touchStarted() {
@@ -272,7 +329,7 @@ function touchStarted() {
   groupName.style(
     "animation",
     splitTokens(lookUpValue("group", "animation"), ",")[0] +
-      ", group-blur-in 0.5s forwards  "
+      ", group-blur-in 0.5s forwards"
   );
 
   translation.style("animation", "blur-in 0.5s forwards   ");
@@ -308,12 +365,15 @@ function touchEnded() {
   inp.elt.focus();
 }
 
+//structure
+
 function setVariable(variable, val) {
   document.documentElement.style.setProperty(variable, val);
 }
 
 function getVariable(variable) {
-  window.getComputedStyle(document.documentElement).getPropertyValue(variable);
+  //window.getComputedStyle(document.documentElement).getPropertyValue(variable);
+  getComputedStyle(document.documentElement).getPropertyValue(variable);
 }
 
 function lookUpValue(elm, atr) {
@@ -322,6 +382,8 @@ function lookUpValue(elm, atr) {
     .getPropertyValue(atr);
   return z;
 }
+
+//input fixes
 
 function addAccentsWithUpDown(code) {
   let weird = [
@@ -333,7 +395,7 @@ function addAccentsWithUpDown(code) {
     ["c", "ç"],
     ["y", "ÿ"],
   ];
-  if (code == 40) {   
+  if (code == 40) {
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
       for (let i = 0; i < weird.length; i++) {
@@ -390,5 +452,35 @@ function setCaretPosition(elemId, caretPos) {
         return false;
       }
     }
+  }
+}
+
+//sound
+
+function speak(message) {
+  if (synth.speaking) {
+    console.error("speechSynthesis.speaking");
+    return;
+  }
+
+  if (message !== "") {
+    const utterThis = new SpeechSynthesisUtterance(message);
+
+    utterThis.onend = function (event) {
+      console.log("SpeechSynthesisUtterance.onend");
+    };
+
+    utterThis.onerror = function (event) {
+      console.error("SpeechSynthesisUtterance.onerror");
+    };
+
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === "Thomas") {
+        utterThis.voice = voices[i];
+        break;
+      }
+    }
+
+    synth.speak(utterThis);
   }
 }

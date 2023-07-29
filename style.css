@@ -1,7 +1,7 @@
 :root {
   --background: #000000;
   --fontColor: #ffffff;
-  --background2: color-mix(in srgb, var(--fontColor) 58%, var(--background));
+  --background2: color-mix(in srgb, var(--fontColor) 48%, var(--background));
   --bigKegel: min(10vw, 10vh);
   --smallKegel: calc(0.5*var(--bigKegel));
   --blurLevel: 0px;
@@ -53,6 +53,7 @@ canvas {
   top:50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation-composition: unset;
 }
 
 #verbFrench {
@@ -98,7 +99,7 @@ canvas {
   width: 100%;
 }
 
-div > p {
+#tip > p {
   line-height: 1.1;
   margin: 0;
   padding: 0;
@@ -143,6 +144,7 @@ div > p {
   top: var(--smallKegel);
   display: inline-block;
   padding:0em;
+
 }
 
 #gradBox {  
@@ -217,25 +219,20 @@ div > p {
     padding:0em;
   } 100% {
     color: transparent;
-  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--background2);
+  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--fontColor);
     padding:0em;
   }
 }
 @keyframes group-blur-out {
   0% {
     color: transparent;
-  text-shadow: 0 0 var(--blurLevel) var(--background2);
+  text-shadow: 0 0 var(--blurLevel) var(--fontColor);
     padding:0em;
   } 100% {
     color: transparent;
   text-shadow: 0 0 0 var(--background2);
     padding:0em;
   }
-}
-
-.shaking {
-  position: relative;
-  animation: shake 0.35s;
 }
 
 
@@ -252,7 +249,77 @@ div > p {
      margin-left: calc(0.25*var(--scrollLength)); 
   }
   to {
-    margin-left: -1000px;
      margin-left: calc(-0.25*var(--scrollLength)); 
   }
+}
+
+@keyframes flyUp {
+  0% {
+    opacity: 1;
+    margin-top:0px
+  } 
+  
+  20% {
+    opacity: 0;
+  }
+  
+  100% {
+    opacity: 0;
+    margin-top:-80vh;
+  } 
+}
+
+@keyframes newVerb {
+  0% {
+    opacity: 0;
+  }   
+  100% {
+    opacity: 1;
+  } 
+}
+@keyframes newGroup {
+  0%, 70% {
+    opacity: 0;
+  }   
+  100% {
+    opacity: 1;
+  } 
+}
+
+@keyframes resultOut {
+  0% {
+    left: 50%;
+    transform: translate(-50%, -50%), scale(1.0);
+  }   
+  75% {
+    left: 50%;
+    transform: translate(-50%, -50%), scale(1.2);
+  } 
+  100% {
+    left: 150%;
+  }   
+}
+
+@keyframes resultIn {
+  0%, 40% {
+    opacity: 0;
+    left: 0%
+  }   
+  
+  53% {
+    left: 15%
+  }
+   
+  62% {
+    left: 40%
+  }
+  
+  70% {
+    opacity: 0.3;
+    left: 52%;
+  }
+  100% {
+    opacity: 1;
+    left: 50%
+  }   
 }

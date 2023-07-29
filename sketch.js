@@ -147,7 +147,6 @@ function setup() {
     }
   });
   for (let i = 0; i < voices.length; i++) {
-    console.log(voices[i].name);
       if (voices[i].name === "Thomas") {
         theVoice = voices[i];
         break;
@@ -177,7 +176,7 @@ function next() {
   let verb = shortTable.getString(verbNum, "verb");
   
   conjNum = int(random(0, 6));
-
+  console.log(verb);
   if (verb.substring(0, 2) == "s'") {
     reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'"];
 
@@ -187,7 +186,7 @@ function next() {
 
     verb = verb.substring(3);
   }
-  console.log(verb);
+  
   verbRow = fullTable.findRow(verb, "infinitive");
   if (!verbRow) {
     shortTable.removeRow(verbNum);
@@ -260,26 +259,26 @@ function next() {
   translation.html("[" + shortTable.getString(verbNum, "russian") + "]");
 
   correctAnswer =
-    reflexive[conjNum] + verbRow.getString(conjugationText[conjNum]);
+    reflexive[conjNum] + splitTokens(verbRow.getString(conjugationText[conjNum]),';')[0];
   tiplist.html(
     "<p>" +
       reflexive[0] +
-      verbRow.getString(conjugationText[0]) +
+      splitTokens(verbRow.getString(conjugationText[0]),';')[0] +
       "</p><p>" +
       reflexive[1] +
-      verbRow.getString(conjugationText[1]) +
+      splitTokens(verbRow.getString(conjugationText[1]),';')[0] +
       "</p><p>" +
       reflexive[2] +
-      verbRow.getString(conjugationText[2]) +
+      splitTokens(verbRow.getString(conjugationText[2]),';')[0] +
       "</p><p>" +
       reflexive[3] +
-      verbRow.getString(conjugationText[3]) +
+      splitTokens(verbRow.getString(conjugationText[3]),';')[0] +
       "</p><p>" +
       reflexive[4] +
-      verbRow.getString(conjugationText[4]) +
+      splitTokens(verbRow.getString(conjugationText[4]),';')[0] +
       "</p><p>" +
       reflexive[5] +
-      verbRow.getString(conjugationText[5]) +
+      splitTokens(verbRow.getString(conjugationText[5]),';')[0] +
       "</p>"
   );
 }

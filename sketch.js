@@ -113,6 +113,8 @@ function setup() {
   contentBox.id("contentBox");
   contentBox.touchStarted(showTip);
   contentBox.touchEnded(hideTip);
+  contentBox.mousePressed(showTip);
+  contentBox.mouseReleased(hideTip);
   gradientBackgroundBox.id("gradBox");
   gradientBackgroundBox.parent(contentBox);
   result.id("result");

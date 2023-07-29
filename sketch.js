@@ -487,7 +487,7 @@ function speak(message) {
     utterThis.volume = 1; // Volume range = 0 - 1
   utterThis.rate = 1; // Speed of the text read , default 1
   utterThis.voice = theVoice; // change voice
-  utterThis.lang = 'fr-FR'
+  utterThis.lang = 'fr_FR'
   
     synth.speak(utterThis);
   }

@@ -1,6 +1,10 @@
 const synth = window.speechSynthesis;
 let theVoice;
 
+
+
+
+
 let result, verbFrench, groupName, translation, tiplist, contentBox;
 let inp;
 let verbNum, conjNum, varNum;
@@ -57,8 +61,25 @@ let correctAnswer;
 function preload() {
   setVariable("--background", backgroundColor);
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
-  shortTable = loadTable("assets/mostpopular.csv", "csv", "header");
+  shortTable = loadTable("assets/willdudziak147.csv", "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
+  let voices = synth.getVoices().sort(function (a, b) {
+    const aname = a.name.toUpperCase();
+    const bname = b.name.toUpperCase();
+    if (aname < bname) {
+      return -1;
+    } else if (aname == bname) {
+      return 0;
+    } else {
+      return +1;
+    }
+  });
+  for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === "Thomas") {
+        theVoice = voices[i];
+        break;
+      }
+    }
 }
 
 function setup() {
@@ -134,30 +155,12 @@ function setup() {
     addAccentsWithUpDown(event.keyCode);
   });
 
-  //sound
-  let voices = synth.getVoices().sort(function (a, b) {
-    const aname = a.name.toUpperCase();
-    const bname = b.name.toUpperCase();
-    if (aname < bname) {
-      return -1;
-    } else if (aname == bname) {
-      return 0;
-    } else {
-      return +1;
-    }
-  });
-  for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === "Thomas") {
-        theVoice = voices[i];
-        break;
-      }
-    }
   noCanvas();
 
-  next();
+  createNext();
 }
 
-function next() {
+function createNext() {
   result.style(
     "animation",
     "1.6s ease-out 0s 1 normal forwards running resultIn"
@@ -190,7 +193,7 @@ function next() {
   verbRow = fullTable.findRow(verb, "infinitive");
   if (!verbRow) {
     shortTable.removeRow(verbNum);
-    next();
+    createNext();
   }
   speak(verb);
   //varNum:
@@ -208,7 +211,7 @@ function next() {
   }
 
   //falloir etc.
-  if (verbRow.getString(conjugationText[0]) == "") {
+  if (verbRow.getString(conjugationText[0]).lenght < 1) {
     conjNum = 2;
     varNum = 0;
   }
@@ -281,6 +284,13 @@ function next() {
       splitTokens(verbRow.getString(conjugationText[5]),';')[0] +
       "</p>"
   );
+  
+  if (verbRow.getString(conjugationText[0]).lenght < 1) {
+    tiplist.html(
+    "<p>il " +
+      splitTokens(verbRow.getString(conjugationText[2]),';')[0] +
+      "</p>");
+  }
 }
 
 function draw() {
@@ -298,10 +308,10 @@ function draw() {
     0.1
   );
   setVariable("--background", backgroundColorLerp);
-
   //waiting for next
-  if (float(lookUpValue("verbFrench", "margin-top")) < -0.75 * windowHeight) {
-    next();
+  console.log(float(lookUpValue("verbFrench", "margin-top")), -7.5 * float(lookUpValue("verbFrench","font-size")));
+  if (float(lookUpValue("verbFrench", "margin-top")) < -7.5 * float(lookUpValue("verbFrench","font-size"))) {
+    createNext();
   }
 }
 
@@ -379,9 +389,10 @@ function setVariable(variable, val) {
   document.documentElement.style.setProperty(variable, val);
 }
 
-function getVariable(variable) {
-  //window.getComputedStyle(document.documentElement).getPropertyValue(variable);
-  getComputedStyle(document.documentElement).getPropertyValue(variable);
+function getVariable(variable) { 
+let z = window.getComputedStyle(document.documentElement).getPropertyValue(variable);
+  return z;
+  //getComputedStyle(document.documentElement).getPropertyValue(variable);
 }
 
 function lookUpValue(elm, atr) {
@@ -467,22 +478,19 @@ function setCaretPosition(elemId, caretPos) {
 
 function speak(message) {
   if (synth.speaking) {
-    console.error("speechSynthesis.speaking");
+    //console.error("speechSynthesis.speaking");
     return;
   }
-
   if (message !== "") {
     const utterThis = new SpeechSynthesisUtterance(message);
 
     utterThis.onend = function (event) {
-      console.log("SpeechSynthesisUtterance.onend");
+      //console.log("SpeechSynthesisUtterance.onend");
     };
 
     utterThis.onerror = function (event) {
-      console.error("SpeechSynthesisUtterance.onerror");
+      //console.error("SpeechSynthesisUtterance.onerror");
     };
-
-
     utterThis.volume = 1; // Volume range = 0 - 1
   utterThis.rate = 1; // Speed of the text read , default 1
   utterThis.voice = theVoice; // change voice

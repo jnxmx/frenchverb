@@ -32,6 +32,17 @@ canvas {
   display: block;
 }
 
+.menubutton {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  transform: translateY(-100%);
+  text-align: center;
+  font-size: var(--bigKegel);
+  color: var(--fontColor);
+  cursor: pointer;
+}
+
 #contentBox {
   position: relative;
   width: 100vw;
@@ -265,7 +276,7 @@ canvas {
   
   100% {
     opacity: 0;
-    margin-top:-80vh;
+    margin-top:calc(-8*var(--bigKegel));
   } 
 }
 

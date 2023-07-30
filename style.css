@@ -10,6 +10,8 @@
   --tipOpacity: 0;
   --animationTime: 3s;
   --scrollLength: 0;
+  --menubuttonx;
+  --menubuttony;
 }
 
 phtml,
@@ -33,14 +35,49 @@ canvas {
 }
 
 .menubutton {
-  position: fixed;
-  left: 0;
-  height: 0.1rem;
-  transform: translateY(-100%);
-  text-align: center;
-  font-size: var(--bigKegel);
+  appearance: none;
   color: var(--fontColor);
+  height: var(--smallKegel);
+  position: absolute;
+  left: 0;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: calc(0.85*var(--bigKegel));
+  
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  
   cursor: pointer;
+  user-select: none;
+  transition: hover .2s ease-in-out;
+  left: var(--menubuttonx);
+  top: var(--menubuttony);
+  display: grid;
+  place-content: center;
+}
+.menubutton:hover {
+  transform: translate(-50%, -53%) scale(1.1);
+}
+.menubutton::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+}
+.menubutton:checked::before {
+  transform: scale(1);
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
 }
 
 #contentBox {

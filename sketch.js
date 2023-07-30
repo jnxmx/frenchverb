@@ -78,7 +78,9 @@ function setup() {
       subindex = 0;
     }
   }
-
+  if ("virtualKeyboard" in navigator) {
+    navigator.virtualKeyboard.overlaysContent = true;
+  }
   //create dom
   setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
@@ -128,7 +130,6 @@ function setup() {
   });
   //onsend
   inp.elt.addEventListener("keyup", (event) => {
-
     event.preventDefault();
     setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode == ENTER) {
@@ -146,13 +147,13 @@ function setup() {
     }
     addAccentsWithUpDown(event.keyCode);
   });
-  
+
   inp.elt.addEventListener("keydown", (event) => {
     if (event.keyCode == LEFT_ARROW) {
       showTip();
     }
   });
-    
+
   noCanvas();
 
   createNext();
@@ -294,11 +295,6 @@ function createNext() {
 }
 
 function draw() {
-    if ("virtualKeyboard" in navigator) {
-    console.log(navigator.virtualKeyboard.overlaysContent);
-  navigator.virtualKeyboard.overlaysContent = true;
-    console.log(navigator.virtualKeyboard.overlaysContent);
-}
   //update background color
   colorMode(HSB, 1200);
   backgroundColor = color(
@@ -506,7 +502,7 @@ function setVoice() {
   let voices = synth.getVoices().filter(function (voice) {
     return voice.lang.includes("FR");
   });
-  
+
   if (
     voices.filter(function (voice) {
       return voice.name.startsWith("Microsoft Denise");

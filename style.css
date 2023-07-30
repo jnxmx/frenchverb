@@ -86,6 +86,11 @@ canvas {
   height: min(100vw, 100vh);
     left: 0px;
   top: 0px;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  display: inline-block;
 }
 
 #result {

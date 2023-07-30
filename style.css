@@ -10,8 +10,7 @@
   --tipOpacity: 0;
   --animationTime: 3s;
   --scrollLength: 0;
-  --menubuttonx: 0;
-  --menubuttony: env(keyboard-inset-height, 0px);;
+  --keyboardHeight: env(keyboard-inset-height, 0px);
 }
 
 phtml,
@@ -42,7 +41,7 @@ canvas {
   left: 0;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: calc(0.85*var(--bigKegel));
+  font-size: calc(0.9*var(--bigKegel));
   
   padding-left: 0.6rem;
   padding-right: 0.6rem;
@@ -50,8 +49,8 @@ canvas {
   cursor: pointer;
   user-select: none;
   transition: hover .2s ease-in-out;
-  left: var(--menubuttonx);
-  bottom: var(--menubuttony);
+  left: 0.76em;
+  bottom: calc(0.48em + env(keyboard-inset-height, 0em));
   display: grid;
   place-content: center;
 }

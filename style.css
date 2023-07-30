@@ -83,18 +83,16 @@ canvas {
 #contentBox {
   position: relative;
   width: 100vw;
-  height: min(100vw, 100vh);
+  height: min(125vw, 100vh);
     left: 0px;
   top: 0px;
     white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: absolute;
   display: inline-block;
 }
 
 #result {
-  
   width: 100%;
   font-size: var(--bigKegel);
   color: var(--fontColor);

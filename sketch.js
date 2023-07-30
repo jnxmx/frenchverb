@@ -128,6 +128,7 @@ function setup() {
   });
   //onsend
   inp.elt.addEventListener("keyup", (event) => {
+
     event.preventDefault();
     setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode == ENTER) {
@@ -145,7 +146,13 @@ function setup() {
     }
     addAccentsWithUpDown(event.keyCode);
   });
-
+  
+  inp.elt.addEventListener("keydown", (event) => {
+    if (event.keyCode == LEFT_ARROW) {
+      showTip();
+    }
+  });
+    
   noCanvas();
 
   createNext();

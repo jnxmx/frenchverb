@@ -489,7 +489,7 @@ function speak(message) {
   if (message !== "") {
     const utterThis = new SpeechSynthesisUtterance(message);
     utterThis.voice = theVoice;
-    utterThis.lang = utterThis.voice.lang;
+    utterThis.lang = "fr_FR";
     utterThis.volume = 1;
     utterThis.rate = 1;
     synth.speak(utterThis);

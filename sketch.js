@@ -537,3 +537,7 @@ function setVoice() {
     })[0];
   }
 }
+
+if ("virtualKeyboard" in navigator) {
+  navigator.virtualKeyboard.overlaysContent = true;
+}

@@ -1,10 +1,6 @@
 const synth = window.speechSynthesis;
 let theVoice;
 
-
-
-
-
 let result, verbFrench, groupName, translation, tiplist, contentBox, menubutton;
 let inp;
 let verbNum, conjNum, varNum;
@@ -63,26 +59,11 @@ function preload() {
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable("assets/willdudziak147.csv", "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
-  let voices = synth.getVoices().sort(function (a, b) {
-    const aname = a.name.toUpperCase();
-    const bname = b.name.toUpperCase();
-    if (aname < bname) {
-      return -1;
-    } else if (aname == bname) {
-      return 0;
-    } else {
-      return +1;
-    }
-  });
-  for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === "Thomas") {
-        theVoice = voices[i];
-        break;
-      }
-    }
 }
 
 function setup() {
+  setVoice();
+
   //set groups
   let index = 0;
   let subindex = 0;
@@ -107,7 +88,7 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-  menubutton = createElement("div");
+  menubutton = createCheckbox("", false);
 
   //id
   contentBox.id("contentBox");
@@ -127,10 +108,11 @@ function setup() {
   tiplist.parent(contentBox);
   groupName.id("group");
   groupName.parent(contentBox);
-  
+
   //menu
   menubutton.class("menubutton");
-  menubutton.html("=")
+  menubutton.id("menubuttonmain");
+  menubutton.html("≡");
 
   //input
   inp = createInput("");
@@ -186,7 +168,7 @@ function createNext() {
   let reflexive = ["", "", "", "", "", ""];
   verbNum = int(random(0, shortTable.getRowCount()));
   let verb = shortTable.getString(verbNum, "verb");
-  
+
   conjNum = int(random(0, 6));
   console.log(verb);
   if (verb.substring(0, 2) == "s'") {
@@ -198,7 +180,7 @@ function createNext() {
 
     verb = verb.substring(3);
   }
-  
+
   verbRow = fullTable.findRow(verb, "infinitive");
   if (!verbRow) {
     shortTable.removeRow(verbNum);
@@ -271,34 +253,36 @@ function createNext() {
   translation.html("[" + shortTable.getString(verbNum, "russian") + "]");
 
   correctAnswer =
-    reflexive[conjNum] + splitTokens(verbRow.getString(conjugationText[conjNum]),';')[0];
+    reflexive[conjNum] +
+    splitTokens(verbRow.getString(conjugationText[conjNum]), ";")[0];
   tiplist.html(
     "<p>" +
       reflexive[0] +
-      splitTokens(verbRow.getString(conjugationText[0]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[0]), ";")[0] +
       "</p><p>" +
       reflexive[1] +
-      splitTokens(verbRow.getString(conjugationText[1]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[1]), ";")[0] +
       "</p><p>" +
       reflexive[2] +
-      splitTokens(verbRow.getString(conjugationText[2]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
       "</p><p>" +
       reflexive[3] +
-      splitTokens(verbRow.getString(conjugationText[3]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[3]), ";")[0] +
       "</p><p>" +
       reflexive[4] +
-      splitTokens(verbRow.getString(conjugationText[4]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[4]), ";")[0] +
       "</p><p>" +
       reflexive[5] +
-      splitTokens(verbRow.getString(conjugationText[5]),';')[0] +
+      splitTokens(verbRow.getString(conjugationText[5]), ";")[0] +
       "</p>"
   );
-  
+
   if (verbRow.getString(conjugationText[0]).lenght < 1) {
     tiplist.html(
-    "<p>il " +
-      splitTokens(verbRow.getString(conjugationText[2]),';')[0] +
-      "</p>");
+      "<p>il " +
+        splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
+        "</p>"
+    );
   }
 }
 
@@ -318,14 +302,18 @@ function draw() {
   );
   setVariable("--background", backgroundColorLerp);
   //waiting for next
-  if (float(lookUpValue("verbFrench", "margin-top")) < -7.5 * float(lookUpValue("verbFrench","font-size"))) {
+  if (
+    float(lookUpValue("verbFrench", "margin-top")) <
+    -7.5 * float(lookUpValue("verbFrench", "font-size"))
+  ) {
     createNext();
   }
 }
 
 function correctAnimation() {
   result.style(
-    "animation", "1.45s linear 0s 1 normal forwards running resultOut"
+    "animation",
+    "1.45s linear 0s 1 normal forwards running resultOut"
   );
   verbFrench.style(
     "animation",
@@ -397,8 +385,10 @@ function setVariable(variable, val) {
   document.documentElement.style.setProperty(variable, val);
 }
 
-function getVariable(variable) { 
-let z = window.getComputedStyle(document.documentElement).getPropertyValue(variable);
+function getVariable(variable) {
+  let z = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue(variable);
   return z;
   //getComputedStyle(document.documentElement).getPropertyValue(variable);
 }
@@ -491,19 +481,51 @@ function speak(message) {
   }
   if (message !== "") {
     const utterThis = new SpeechSynthesisUtterance(message);
-
-    utterThis.onend = function (event) {
-      //console.log("SpeechSynthesisUtterance.onend");
-    };
-
-    utterThis.onerror = function (event) {
-      //console.error("SpeechSynthesisUtterance.onerror");
-    };
-    utterThis.volume = 1; // Volume range = 0 - 1
-  utterThis.rate = 1; // Speed of the text read , default 1
-  utterThis.voice = theVoice; // change voice
-  utterThis.lang = 'fr_FR'
-  
+    utterThis.voice = theVoice;
+    utterThis.lang = utterThis.voice.lang;
+    utterThis.volume = 1;
+    utterThis.rate = 1;
     synth.speak(utterThis);
+  }
+}
+
+function setVoice() {
+  window.speechSynthesis.getVoices();
+  let voices = synth.getVoices().filter(function (voice) {
+    return voice.lang.endsWith("FR");
+  });
+  if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Microsoft Denise");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Microsoft");
+    })[0];
+  } else if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Google");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Google");
+    })[0];
+  } else if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Thomas");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Thomas");
+    })[0];
+  } else {
+    console.log(
+      voices.filter(function (voice) {
+        return voice.lang.startsWith("fr-FR");
+      })
+    );
+    theVoice = voices.filter(function (voice) {
+      return voice.lang.startsWith("fr-FR");
+    })[0];
   }
 }

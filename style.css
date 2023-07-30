@@ -10,8 +10,8 @@
   --tipOpacity: 0;
   --animationTime: 3s;
   --scrollLength: 0;
-  --menubuttonx;
-  --menubuttony;
+  --menubuttonx: 0;
+  --menubuttony: env(keyboard-inset-height, 0px);;
 }
 
 phtml,
@@ -51,7 +51,7 @@ canvas {
   user-select: none;
   transition: hover .2s ease-in-out;
   left: var(--menubuttonx);
-  top: var(--menubuttony);
+  bottom: var(--menubuttony);
   display: grid;
   place-content: center;
 }

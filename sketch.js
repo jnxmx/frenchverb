@@ -119,6 +119,10 @@ function setup() {
   //input
   inp = createInput("");
   inp.id("hiddenInput");
+  inp.autocomplete = 'off';
+  inp.autocorrect= 'off';
+  inp.autocapitalize= 'off';
+  inp.spellcheck= 'off';
   inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   //onkeypress

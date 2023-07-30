@@ -499,8 +499,9 @@ function speak(message) {
 function setVoice() {
   window.speechSynthesis.getVoices();
   let voices = synth.getVoices().filter(function (voice) {
-    return voice.lang.endsWith("FR");
+    return voice.lang.includes("FR");
   });
+  
   if (
     voices.filter(function (voice) {
       return voice.name.startsWith("Microsoft Denise");

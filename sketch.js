@@ -294,6 +294,11 @@ function createNext() {
 }
 
 function draw() {
+    if ("virtualKeyboard" in navigator) {
+    console.log(navigator.virtualKeyboard.overlaysContent);
+  navigator.virtualKeyboard.overlaysContent = true;
+    console.log(navigator.virtualKeyboard.overlaysContent);
+}
   //update background color
   colorMode(HSB, 1200);
   backgroundColor = color(
@@ -536,8 +541,4 @@ function setVoice() {
       return voice.lang.startsWith("fr-FR");
     })[0];
   }
-}
-
-if ("virtualKeyboard" in navigator) {
-  navigator.virtualKeyboard.overlaysContent = true;
 }

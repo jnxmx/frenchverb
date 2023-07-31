@@ -18,6 +18,7 @@
 phtml,
 body {
   color: var(--fontColor);
+  accent-color: var(--background);
   background: var(--fontColor);
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin: 0;
@@ -35,10 +36,41 @@ canvas {
   display: block;
 }
 
+/* [type=radio]{
+      height: 1.2rem;
+    width: 1.2rem;
+    margin-right: 0.5rem;
+  font-size: var(--bigKegel);  
+  color: var(--fontColor);
+
+
+
+  border-radius: 50%;
+
+
+  background: var(--background);
+
+
+  border: 0.1em solid var(--background2);
+  box-shadow: 0 0 0 0.1em var(--fontcolor);
+
+    
+    border-radius: 50%;
+}
+
+[type=radio]:hover{
+  border-width: 0;
+}
+[type=radio]:checked{
+      box-shadow: 0 0 0 1px var(--checked-color);
+    background-color: var(--checked-color);
+    border-width: 0.2rem;
+} */
 #menubutton { 
   display:none;
 }
 label[for="menubutton"] {
+  user-select: none; 
   display: block;
   position: absolute;   
   appearance: none;
@@ -82,14 +114,18 @@ label[for="menubutton"]:hover {
   left: 0.3em;
   width: 0.0em;
   height: 0.8em;
-
+  overflow: hidden;
+  overflow-y: hidden;
   z-index: 998;
   background-color:   var(--fontColor); 
-  display: flex;
+/*   display: flex; 
+   flex-direction: column;  */
+  
   justify-content: center;
   align-items: center;
   border-radius: 0.1em; 
   transition: height 0.2s ease, width 0.2s ease 0.2s, bottom 0.15s ease, left 0.2s ease 0.2s;  
+  
 }
 #menubutton:checked ~ div.menu {
   transition: width 0.4s ease, height 0.8s ease 0.4s, left 0.15s ease, bottom 0.4s ease 0.4s;
@@ -101,12 +137,25 @@ label[for="menubutton"]:hover {
   width: calc(100% - 0.6em);
   height: calc(100% - 0.6em); 
 }
-/* #menubutton:checked::after ~ div.menu {
-  visibility: hidden;
-} */
-/* #menubutton:checked::before ~ div.menu {
-  visibility: hidden;
-} */
+
+.menu > p {
+/*   display: flex; */
+  min-height: 1.5em;
+  text-align: left;
+  line-height: 1.5em;
+  font-size: var(--smallKegel);
+  margin:0em;
+  margin-left: 1.4em;
+  padding: 0em;
+  color: var(--background);
+}
+#verba {
+  text-align: right;
+  margin: 0.2em;
+  block-size: 1.43em;
+  color: var(--background);
+  margin-right: 0.6em;
+}
 
 .fade {
   animation:0.4s ease 0s 1 normal forwards running opacity-fade;

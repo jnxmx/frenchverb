@@ -11,8 +11,8 @@
   --animationTime: 3s;
   --scrollLength: 0;
   --keyboardHeight: env(keyboard-inset-height, 0px);
-  --menubuttony: calc(0.72*0.9*var(--bigKegel) + env(keyboard-inset-height, 0em));
-  --menubuttonx: calc(0.72*0.9*var(--bigKegel));
+  --menubuttony: calc(0.38*0.9*var(--bigKegel) + env(keyboard-inset-height, 0em));
+  --menubuttonx: calc(0.27*0.9*var(--bigKegel));
 }
 
 phtml,
@@ -42,60 +42,71 @@ label[for="menubutton"] {
   display: block;
   position: fixed;   
   appearance: none;
-  color: var(--background2);
-  
+  color: var(--fontColor);  
   height: 1em;
+  width: 1em;
   left: var(--menubuttonx);
   bottom: var(--menubuttony);
+  
   z-index: 999;
   text-align: center;
   font-size: calc(0.9*var(--bigKegel));  
   cursor: pointer;
-  transition: transform 0.2s ease, bottom 0.5s ease, color 0.5s ease;
+  transform-origin: 50% 60%;
+  transition: transform 0.2s ease-in 0.2s, 
+    bottom 0.2s ease;
 }
 label[for="menubutton"]:hover {
   transform: scale(1.05);
 }
+#menubutton:checked ~ label {
+  transition: transform 0.2s ease-out, 
+    bottom 0.8s ease 0.4s, 
+    color 1s linear;
+  color: var(--background2);
+  transform: scale(0.8) rotate(-90deg);
+    left: var(--menubuttonx);
+  bottom: calc(100% - 1.2em);
+}
+#menubutton:checked ~ label:hover {
+  transform: scale(0.75) rotate(-90deg);
+}
 .menu {
+/* visibility: hidden; */
   position: fixed;   
   appearance: none;
   font-size: var(--bigKegel);  
   color: var(--fontColor);
-  bottom: calc(0.68em + env(keyboard-inset-height, 0em));
-  left: 0.58em;
-  width: 0.65em;
-  height: 0.65em;
-  opacity: 1.0;
+  bottom: calc(0.3em + env(keyboard-inset-height, 0em));
+  left: 0.3em;
+  width: 0.0em;
+  height: 0.8em;
+
   z-index: 998;
   background-color:   var(--fontColor); 
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.1em;  
-  transform:scale(1.0, 1.0);
-  transition: opacity 0.0s linear 1.0s, transform 0.1s linear 0.5s, height 0.2s ease, width 0.4s ease 0.1s, bottom 0.15s ease, left 0.4s ease 0.1s;  
-}
-
-#menubutton:checked + label {
-  color: var(--background2);
+  border-radius: 0.1em; 
+  transition: height 0.2s ease, width 0.2s ease 0.2s, bottom 0.15s ease, left 0.2s ease 0.2s;  
 }
 #menubutton:checked ~ div.menu {
+  transition: width 0.4s ease, height 0.8s ease 0.4s, left 0.15s ease, bottom 0.4s ease 0.4s;
 
-  transition: opacity 0.0s ease, transform 0.1s linear, width 0.2s ease, height 0.4s ease 0.1s, left 0.15s ease, bottom 0.4s ease 0.1s, visibility 0s;
-  transform:scale(1.0,1.0);
-  bottom: 0.25em;
-  left: 0.25em; 
-  border-radius: 0.2em;
-  opacity: 1.0;
-  width: calc(100% - 0.5em);
-  height: calc(100% - 0.5em); 
+  bottom: 0.3em;
+  left: 0.3em; 
+  border-radius: 0.15em;
+
+  width: calc(100% - 0.6em);
+  height: calc(100% - 0.6em); 
 }
+/* #menubutton:checked::after ~ div.menu {
+  visibility: hidden;
+} */
 /* #menubutton:checked::before ~ div.menu {
   visibility: hidden;
-}
-#menubutton:checked::after ~ div.menu {
-  visibility: visible;
 } */
+
 .fade {
   animation:0.4s ease 0s 1 normal forwards running opacity-fade;
 }

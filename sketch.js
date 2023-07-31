@@ -1,7 +1,14 @@
 const synth = window.speechSynthesis;
 let theVoice;
 
-let result, verbFrench, groupName, translation, tiplist, contentBox, menubutton, menu;
+let result,
+  verbFrench,
+  groupName,
+  translation,
+  tiplist,
+  contentBox,
+  menubutton,
+  menu;
 let menucontrol;
 let inp;
 let verbNum, conjNum, varNum;
@@ -78,11 +85,11 @@ function setup() {
       subindex = 0;
     }
   }
-  
+
   if ("virtualKeyboard" in navigator) {
     navigator.virtualKeyboard.overlaysContent = true;
   }
-  
+
   //create dom
   setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
@@ -114,22 +121,23 @@ function setup() {
 
   //menu
   menucontrol = createInput();
-  menucontrol.attribute('type', 'checkbox');
+  menucontrol.attribute("type", "checkbox");
   // menucontrol.attribute('checked', true);
   menucontrol.id("menubutton");
   menucontrol.changed(toggleMenu);
-  menubutton = createElement('label', '≡');
-  menubutton.attribute('for', "menubutton");
+  menubutton = createElement("label", "");
+  menubutton.html("≡");
+  menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
 
   //input
   inp = createInput("");
   inp.id("hiddenInput");
-  inp.elt.autocomplete = 'off';
-  inp.elt.autocorrect= 'off';
-  inp.elt.autocapitalize= 'off';
-  inp.elt.spellcheck= 'off';
+  inp.elt.autocomplete = "off";
+  inp.elt.autocorrect = "off";
+  inp.elt.autocapitalize = "off";
+  inp.elt.spellcheck = "off";
   inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   //onkeypress
@@ -554,13 +562,26 @@ function setVoice() {
 
 function toggleMenu() {
   if (this.elt.checked) {
-        // Code to execute when the checkbox is checked (true)
-        console.log("Checkbox is checked (ON)");
+    groupName.style(
+      "animation",
+      lookUpValue("group", "animation") +
+        ", " +
+        "1.95s ease-in 0.0s 1 normal forwards running flyUp"
+    );
+
     inp.elt.blur();
-      } else {
-        // Code to execute when the checkbox is unchecked (false)
-        console.log("Checkbox is unchecked (OFF)");
-        createNext();
-        inp.elt.focus();
-      }
+    menubutton.html("✕");
+  } else {
+    result.style("animation", "0s ease 0s 1 normal none running none ");
+    verbFrench.style("animation", "0s ease 0s 1 normal none running none ");
+    translation.style("animation", "0s ease 0s 1 normal none running none ");
+    groupName.style("animation", "0s ease 0s 1 normal none running none ");
+    lookUpValue("result", "animation");
+    lookUpValue("verbFrench", "animation");
+    lookUpValue("translation", "animation");
+    lookUpValue("group", "animation");
+    createNext();
+    inp.elt.focus();
+    menubutton.html("≡");
+  }
 }

@@ -1,6 +1,6 @@
 const synth = window.speechSynthesis;
 let theVoice;
-
+let lang;
 let result,
   verbFrench,
   groupName,
@@ -130,6 +130,29 @@ function setup() {
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
+  menu.html("<p id = 'verba'>Verba</p>");
+  
+  let newP = createElement("p");
+  newP.parent(menu);
+  newP.html("</br>");
+  let pTrans = createElement("p");
+  pTrans.parent(menu);
+  
+  pTrans.html("Translation:");
+  pTrans = createElement("p");
+  lang = createRadio();
+  lang.option('russian', "russian");
+  lang.option('english', "english");
+  lang.selected('russian');
+  lang.parent(menu);
+  let newnewP = createElement("p");
+  newnewP.parent(newP);
+  newnewP.html("Translation:");
+  newP.parent(menu);
+  newP.html("Verb list:");
+  newP = createElement("p");
+  newP.parent(menu);
+  newP.html("tested on Chrome/Safari");
 
   //input
   inp = createInput("");
@@ -277,7 +300,7 @@ function createNext() {
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
   verbFrench.html(shortTable.getString(verbNum, "verb"));
-  translation.html("[" + shortTable.getString(verbNum, "russian") + "]");
+  translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
 
   correctAnswer =
     reflexive[conjNum] +
@@ -568,7 +591,8 @@ function toggleMenu() {
         ", " +
         "1.95s ease-in 0.0s 1 normal forwards running flyUp"
     );
-
+translation.style("animation", "0.4s ease 0.5s 1 reverse forwards running newVerb");
+    result.style("animation", "0.4s ease 0.4s 1 reverse forwards running newVerb");
     inp.elt.blur();
     menubutton.html("✕");
   } else {

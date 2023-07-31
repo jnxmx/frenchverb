@@ -40,7 +40,7 @@ canvas {
 }
 label[for="menubutton"] {
   display: block;
-  position: fixed;   
+  position: absolute;   
   appearance: none;
   color: var(--fontColor);  
   height: 1em;
@@ -54,7 +54,7 @@ label[for="menubutton"] {
   cursor: pointer;
   transform-origin: 50% 60%;
   transition: transform 0.2s ease-in 0.2s, 
-    bottom 0.2s ease;
+    bottom 0.15s ease;
 }
 label[for="menubutton"]:hover {
   transform: scale(1.05);
@@ -63,6 +63,7 @@ label[for="menubutton"]:hover {
   transition: transform 0.2s ease-out, 
     bottom 0.8s ease 0.4s, 
     color 1s linear;
+  font-size: calc(0.9*var(--bigKegel));  
   color: var(--background2);
   transform: scale(0.8) rotate(-90deg);
     left: var(--menubuttonx);
@@ -73,11 +74,11 @@ label[for="menubutton"]:hover {
 }
 .menu {
 /* visibility: hidden; */
-  position: fixed;   
+  position: absolute;   
   appearance: none;
   font-size: var(--bigKegel);  
   color: var(--fontColor);
-  bottom: calc(0.3em + env(keyboard-inset-height, 0em));
+  bottom: 0.3em;
   left: 0.3em;
   width: 0.0em;
   height: 0.8em;

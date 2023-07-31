@@ -179,6 +179,7 @@ function setup() {
         speak(prefix[conjNum][varNum] + answer);
         correctAnimation();
       } else {
+        findMistake();
         result.style("animation", "0s ease 0s 1 normal none running none ");
         lookUpValue("result", "animation");
         result.style(
@@ -358,6 +359,22 @@ function draw() {
   ) {
     createNext();
   }
+}
+
+function findMistake() {
+  let startIndex = 0; 
+  let endIndex = answer.length+1;
+  for(let i = 1; i< answer.length; i++) {
+    if(correctAnswer.startsWith(answer.substring(0,i))) {
+       startIndex = i;
+       }
+  }
+    for(let i = answer.length-1; i>=0; i--) {
+    if(correctAnswer.endsWith(answer.substring(i,answer.length))) {
+       endIndex = i;
+       }
+  }
+  result.html(prefix[conjNum][varNum]+answer.substring(0,startIndex)+"<s>"+answer.substring(startIndex,endIndex)+"</s>"+answer.substring(endIndex,answer.length+1))
 }
 
 function correctAnimation() {

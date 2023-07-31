@@ -561,5 +561,6 @@ function toggleMenu() {
         // Code to execute when the checkbox is unchecked (false)
         console.log("Checkbox is unchecked (OFF)");
         createNext();
+        inp.elt.focus();
       }
 }

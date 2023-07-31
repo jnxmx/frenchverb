@@ -1,14 +1,14 @@
 const synth = window.speechSynthesis;
 let theVoice;
 
-let result, verbFrench, groupName, translation, tiplist, contentBox, menubutton;
+let result, verbFrench, groupName, translation, tiplist, contentBox, menubutton, menu;
+let menucontrol;
 let inp;
 let verbNum, conjNum, varNum;
 let answer;
 let backgroundColor = "#4BC6DA";
 let fontcolor = "#F0F0D2";
 let backgroundColorLerp;
-let tip;
 let shortTable;
 let fullTable;
 let verbRow;
@@ -78,9 +78,11 @@ function setup() {
       subindex = 0;
     }
   }
+  
   if ("virtualKeyboard" in navigator) {
     navigator.virtualKeyboard.overlaysContent = true;
   }
+  
   //create dom
   setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
@@ -90,7 +92,6 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-  menubutton = createCheckbox("", false);
 
   //id
   contentBox.id("contentBox");
@@ -112,9 +113,15 @@ function setup() {
   groupName.parent(contentBox);
 
   //menu
-  menubutton.class("menubutton");
-  menubutton.id("menubuttonmain");
-  menubutton.html("≡");
+  menucontrol = createInput();
+  menucontrol.attribute('type', 'checkbox');
+  // menucontrol.attribute('checked', true);
+  menucontrol.id("menubutton");
+  menucontrol.changed(toggleMenu);
+  menubutton = createElement('label', '≡');
+  menubutton.attribute('for', "menubutton");
+  menu = createElement("div");
+  menu.class("menu");
 
   //input
   inp = createInput("");
@@ -152,11 +159,11 @@ function setup() {
     addAccentsWithUpDown(event.keyCode);
   });
 
-  inp.elt.addEventListener("keydown", (event) => {
-    if (event.keyCode == LEFT_ARROW) {
-      showTip();
-    }
-  });
+  // inp.elt.addEventListener("keydown", (event) => {
+  //   if (event.keyCode == LEFT_ARROW) {
+  //     showTip();
+  //   }
+  // });
 
   noCanvas();
 
@@ -241,12 +248,12 @@ function createNext() {
           "leftScroll var(--animationTime) linear 0s infinite"
         );
       }
-    } else if (verb.substring(verb.length - 2) == "er") {
+    } else if (verb.endsWith("er")) {
       groupName.html("I");
-    } else if (verb.substring(verb.length - 2) == "ir") {
+    } else if (verb.endsWith("ir") || verb.endsWith("ïr")) {
       groupName.html("II");
     } else {
-      groupName.html("III");
+      groupName.html("?");
     }
   }
   groupName.style(
@@ -289,7 +296,7 @@ function createNext() {
       "</p>"
   );
 
-  if (verbRow.getString(conjugationText[0]).lenght < 1) {
+  if (verbRow.getString(conjugationText[0]).length < 1) {
     tiplist.html(
       "<p>il " +
         splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
@@ -361,6 +368,7 @@ function showTip() {
   translation.style("animation", "blur-in 0.5s forwards   ");
   gradientBackgroundBox.style("animation", "fade-in 0.8s forwards ease-out");
   inp.elt.blur();
+  menubutton.class("fade");
 }
 
 function hideTip() {
@@ -389,6 +397,7 @@ function hideTip() {
   gradientBackgroundBox.style("animation", "fade-out 0.4s ease-in");
 
   inp.elt.focus();
+  menubutton.class("unfade");
 }
 
 //structure
@@ -541,4 +550,16 @@ function setVoice() {
       return voice.lang.startsWith("fr-FR");
     })[0];
   }
+}
+
+function toggleMenu() {
+  if (this.elt.checked) {
+        // Code to execute when the checkbox is checked (true)
+        console.log("Checkbox is checked (ON)");
+    inp.elt.blur();
+      } else {
+        // Code to execute when the checkbox is unchecked (false)
+        console.log("Checkbox is unchecked (OFF)");
+        createNext();
+      }
 }

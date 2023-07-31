@@ -42,7 +42,8 @@ label[for="menubutton"] {
   display: block;
   position: fixed;   
   appearance: none;
-  color: var(--fontColor);
+  color: var(--background2);
+  
   height: 1em;
   left: var(--menubuttonx);
   bottom: var(--menubuttony);
@@ -58,30 +59,29 @@ label[for="menubutton"]:hover {
 .menu {
   position: fixed;   
   appearance: none;
-  visibility: hidden;
   font-size: var(--bigKegel);  
-  color: var(--background2);
-  bottom: calc(0.97em + env(keyboard-inset-height, 0em));
-  left: 0.68em;
-  width: 0.45em;
-  height: 0.07em;
+  color: var(--fontColor);
+  bottom: calc(0.68em + env(keyboard-inset-height, 0em));
+  left: 0.58em;
+  width: 0.65em;
+  height: 0.65em;
   opacity: 1.0;
   z-index: 998;
   background-color:   var(--fontColor); 
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.2em;  
+  border-radius: 0.1em;  
   transform:scale(1.0, 1.0);
-  transition: visibility 0.0s 1.0s, opacity 0.0s linear 1.0s, transform 0.1s linear 0.5s, height 0.2s ease, width 0.4s ease 0.1s, bottom 0.15s ease, left 0.4s ease 0.1s;  
+  transition: opacity 0.0s linear 1.0s, transform 0.1s linear 0.5s, height 0.2s ease, width 0.4s ease 0.1s, bottom 0.15s ease, left 0.4s ease 0.1s;  
 }
 
 #menubutton:checked + label {
   color: var(--background2);
 }
 #menubutton:checked ~ div.menu {
-  visibility: visible;
-  transition: visibility 0.0s, opacity 0.0s ease, transform 0.1s linear, width 0.2s ease, height 0.4s ease 0.1s, left 0.15s ease, bottom 0.4s ease 0.1s, visibility 0s;
+
+  transition: opacity 0.0s ease, transform 0.1s linear, width 0.2s ease, height 0.4s ease 0.1s, left 0.15s ease, bottom 0.4s ease 0.1s, visibility 0s;
   transform:scale(1.0,1.0);
   bottom: 0.25em;
   left: 0.25em; 

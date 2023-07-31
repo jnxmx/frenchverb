@@ -2,7 +2,7 @@
   --background: #000000;
   --fontColor: #ffffff;
   --background2: color-mix(in srgb, var(--fontColor) 48%, var(--background));
-  --bigKegel: min(10vw, 10vh);
+  --bigKegel: min(12.5vw, 10vh);
   --smallKegel: calc(0.5*var(--bigKegel));
   --blurLevel: 0px;
   --opacityLevel: 1;
@@ -11,81 +11,135 @@
   --animationTime: 3s;
   --scrollLength: 0;
   --keyboardHeight: env(keyboard-inset-height, 0px);
+  --menubuttony: calc(0.72*0.9*var(--bigKegel) + env(keyboard-inset-height, 0em));
+  --menubuttonx: calc(0.72*0.9*var(--bigKegel));
 }
 
 phtml,
 body {
+  color: var(--fontColor);
   background: var(--fontColor);
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   text-align: center;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none; 
+  -khtml-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
 }
 
 canvas {
   display: block;
 }
 
-.menubutton {
+#menubutton { 
+  display:none;
+}
+label[for="menubutton"] {
+  display: block;
+  position: fixed;   
   appearance: none;
   color: var(--fontColor);
-  height: var(--smallKegel);
-  position: absolute;
-  left: 0;
-  transform: translate(-50%, -50%);
+  height: 1em;
+  left: var(--menubuttonx);
+  bottom: var(--menubuttony);
+  z-index: 999;
   text-align: center;
-  font-size: calc(0.9*var(--bigKegel));
-  
-  padding-left: 0.6rem;
-  padding-right: 0.6rem;
-  
+  font-size: calc(0.9*var(--bigKegel));  
   cursor: pointer;
-  user-select: none;
-  transition: hover .2s ease-in-out;
-  left: 0.76em;
-  bottom: calc(0.48em + env(keyboard-inset-height, 0em));
-  display: grid;
-  place-content: center;
+  transition: transform 0.2s ease, bottom 0.5s ease, color 0.5s ease;
 }
-.menubutton:hover {
-  transform: translate(-50%, -53%) scale(1.1);
+label[for="menubutton"]:hover {
+  transform: scale(1.05);
 }
-.menubutton::before {
-  content: "";
-  width: 0.65em;
-  height: 0.65em;
-  transform: scale(0);
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--form-control-color);
-}
-.menubutton:checked::before {
-  transform: scale(1);
+.menu {
+  position: fixed;   
+  appearance: none;
+  visibility: hidden;
+  font-size: var(--bigKegel);  
+  color: var(--background2);
+  bottom: calc(0.97em + env(keyboard-inset-height, 0em));
+  left: 0.68em;
+  width: 0.45em;
+  height: 0.07em;
+  opacity: 1.0;
+  z-index: 998;
+  background-color:   var(--fontColor); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.2em;  
+  transform:scale(1.0, 1.0);
+  transition: visibility 0.0s 1.0s, opacity 0.0s linear 1.0s, transform 0.1s linear 0.5s, height 0.2s ease, width 0.4s ease 0.1s, bottom 0.15s ease, left 0.4s ease 0.1s;  
 }
 
-.popup {
-  margin: 70px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 30%;
-  position: relative;
-  transition: all 5s ease-in-out;
+#menubutton:checked + label {
+  color: var(--background2);
+}
+#menubutton:checked ~ div.menu {
+  visibility: visible;
+  transition: visibility 0.0s, opacity 0.0s ease, transform 0.1s linear, width 0.2s ease, height 0.4s ease 0.1s, left 0.15s ease, bottom 0.4s ease 0.1s, visibility 0s;
+  transform:scale(1.0,1.0);
+  bottom: 0.25em;
+  left: 0.25em; 
+  border-radius: 0.2em;
+  opacity: 1.0;
+  width: calc(100% - 0.5em);
+  height: calc(100% - 0.5em); 
+}
+/* #menubutton:checked::before ~ div.menu {
+  visibility: hidden;
+}
+#menubutton:checked::after ~ div.menu {
+  visibility: visible;
+} */
+.fade {
+  animation:0.4s ease 0s 1 normal forwards running opacity-fade;
+}
+
+@keyframes opacity-fade {
+  0% {
+    text-shadow: 0 0 0 var(--fontColor);
+    color: var(--fontColor);
+  }
+  1% {
+    color: transparent;
+  }
+  100% {
+    text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--fontColor);
+    color: transparent;
+  }
+}
+.unfade {
+  animation:0.5s ease 0s 1 normal forwards running opacity-unfade;
+}
+@keyframes opacity-unfade {
+  0% {
+    color: transparent;
+    text-shadow: 0 0 var(--blurLevel) var(--fontColor);
+  }
+  99% {
+    color: transparent;
+  }
+  100% {
+    text-shadow: 0 0 0 var(--fontColor);
+    color: var(--fontColor);
+  }
 }
 
 #contentBox {
-  position: relative;
+  position: absolute;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   width: 100vw;
   height: min(125vw, 100vh);
-    left: 0px;
+  left: 0px;
   top: 0px;
-    white-space: nowrap;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
@@ -106,12 +160,10 @@ canvas {
   animation-composition: unset;
 }
 
-#verbFrench {
-  
+#verbFrench { 
   position: absolute;
-    font-size: var(--bigKegel);
-  color: var(--fontColor);
-  
+  font-size: var(--bigKegel);
+  color: var(--fontColor);  
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -124,11 +176,11 @@ canvas {
 
 #translation {
   position: absolute;
-      font-size: var(--smallKegel);
+  font-size: var(--smallKegel);
   color: var(--fontColor);
   top: calc(1.6*var(--bigKegel) + 1.55*var(--smallKegel));
   width: 100%;
-    white-space: nowrap;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   position: absolute;
@@ -139,11 +191,10 @@ canvas {
 
 #tip {
   position: absolute;
-        font-size: var(--smallKegel);
+  font-size: var(--smallKegel);
   color: var(--background);
   top: 50%;
   transform: translate(-50%, -50%);
-  /*white-space: pre-line;*/
   line-height: 1.0;
   opacity: 0;
   width: 100%;
@@ -153,7 +204,6 @@ canvas {
   line-height: 1.1;
   margin: 0;
   padding: 0;
-
 }
 
 #hiddenInput {
@@ -175,7 +225,6 @@ canvas {
   border: rgba(0, 0, 0, 0);
   padding: 0;
   margin: 0;
-
   caret-color: transparent;
 }
 
@@ -207,21 +256,21 @@ canvas {
 
 @keyframes fly-in {
   0% {left: 0;
-  opacity: 0;}
+    opacity: 0;}
   100% {left: 50%;
-  opacity: 1;}
+    opacity: 1;}
 }
 @keyframes fly-out {
   0% {left: 50%;
-  opacity: 1;}
+    opacity: 1;}
   100% {left: 100%;
-  opacity: 0;}
+    opacity: 0;}
 }
 @keyframes fly-back {
   0% {left: var(--tipPosition);
-  opacity: var(--tipOpacity);}
+    opacity: var(--tipOpacity);}
   100% {left: 0;
-  opacity: 0;}
+    opacity: 0;}
 }
 @keyframes fade-in {
   0% {
@@ -291,8 +340,7 @@ canvas {
 }
 
 @keyframes leftScroll {
-  from {
-    
+  from {   
      margin-left: calc(0.25*var(--scrollLength)); 
   }
   to {
@@ -351,16 +399,13 @@ canvas {
   0%, 40% {
     opacity: 0;
     left: 0%
-  }   
-  
+  }     
   53% {
     left: 15%
-  }
-   
+  }   
   62% {
     left: 40%
-  }
-  
+  } 
   70% {
     opacity: 0.3;
     left: 52%;
@@ -370,3 +415,4 @@ canvas {
     left: 50%
   }   
 }
+

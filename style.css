@@ -3,13 +3,12 @@
   --fontColor: #ffffff;
   --background1: color-mix(in srgb, var(--fontColor) 88%, var(--background));
   --background2: color-mix(in srgb, var(--fontColor) 48%, var(--background));
-  --bigKegel: min(10vw, 10vh);
+  --bigKegel:10vh;
   --smallKegel: calc(0.5*var(--bigKegel));
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
   --tipOpacity: 0;
-  --animationTime: 3s;
   --scrollLength: 0;
   --keyboardHeight: env(keyboard-inset-height, 0px);
   --menubuttony: calc(0.38*0.9*var(--bigKegel) + env(keyboard-inset-height, 0em));
@@ -516,3 +515,6 @@ flex-direction: column;
   }   
 }
 
+s {
+  text-decoration-color: var(--background);
+}

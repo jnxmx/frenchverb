@@ -1,6 +1,6 @@
 const synth = window.speechSynthesis;
 let theVoice;
-let lang;
+let lang, dict;
 let result,
   verbFrench,
   groupName,
@@ -9,6 +9,7 @@ let result,
   contentBox,
   menubutton,
   menu;
+let mode, soundon;
 let menucontrol;
 let inp;
 let verbNum, conjNum, varNum;
@@ -18,6 +19,8 @@ let fontcolor = "#F0F0D2";
 let backgroundColorLerp;
 let shortTable;
 let fullTable;
+let listFileName = ["assets/willdudziak147.csv","assets/willdudziak681.csv","assets/50verbs.csv"];
+let listName = ["Will Dudziak's short list (147)", "Will Dudziak's full list (681)", "50 most popular"];
 let verbRow;
 let prefix = [
   ["je ", "j'"],
@@ -64,7 +67,7 @@ let correctAnswer;
 function preload() {
   setVariable("--background", backgroundColor);
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
-  shortTable = loadTable("assets/willdudziak147.csv", "csv", "header");
+  shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
 }
 
@@ -130,30 +133,67 @@ function setup() {
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
-  menu.html("<p id = 'verba'>Verba</p>");
   
+  //name
   let newP = createElement("p");
   newP.parent(menu);
-  newP.html("</br>");
-  let pTrans = createElement("p");
-  pTrans.parent(menu);
-  
-  pTrans.html("Translation:");
-  pTrans = createElement("p");
-  lang = createRadio();
+  newP.id("verba")
+  newP.html("Verba");
+  //translation
+  let pEmpty1 = createElement("p");
+  pEmpty1.parent(menu);  
+  pEmpty1.class("empty");  
+  let pTrans1 = createElement("p");
+  pTrans1.parent(menu);  
+  pTrans1.html("Translation:"); 
+  let pTrans2 = createElement("p"); 
+  pTrans2.parent(menu); 
+  pTrans2.class("radio-wrapper");
+  //pTrans2.id("Language")
+  lang = createRadio("Language");
   lang.option('russian', "russian");
   lang.option('english', "english");
   lang.selected('russian');
-  lang.parent(menu);
-  let newnewP = createElement("p");
-  newnewP.parent(newP);
-  newnewP.html("Translation:");
-  newP.parent(menu);
-  newP.html("Verb list:");
-  newP = createElement("p");
-  newP.parent(menu);
-  newP.html("tested on Chrome/Safari");
+  lang.parent(pTrans2);
+  
+  //dict
+  pEmpty1 = createElement("p");
+  pEmpty1.parent(menu);  
+  pEmpty1.class("empty");  
+  let pVerb1 = createElement("p");
+  pVerb1.parent(menu);
+  pVerb1.html("Verb list:");
+  let pVerb2 = createElement("p"); 
+  pVerb2.parent(menu); 
+  pVerb2.class("radio-wrapper");
+  let dict = createRadio("Dictionary");
+  dict.changed(changeList);
+  for(let i = 0; i < listFileName.length; i++) {
+    dict.option(listFileName[i], listName[i]);
+  }
+  dict.selected(listFileName[0]);
+  dict.parent(pVerb2)
+  //mode
+  
+  pEmpty1 = createElement("p");
+  pEmpty1.parent(menu);  
+  pEmpty1.class("empty");   
+  let pMode1 = createElement("p");
+  pMode1.parent(menu);
+  pMode1.html("Optional:");
+  let pMode2 = createElement("p");
+  pMode2.parent(menu);
+  mode = createCheckbox("show only translation", false);
+  mode.parent(pMode2);
+  soundon = createCheckbox("speech synth", true);
+  soundon.parent(pMode2);
+  
 
+  pVerb1 = createElement("p");
+  pVerb1.parent(menu);
+  pVerb1.html("Tested on Chrome/Safari");
+  
+  
   //input
   inp = createInput("");
   inp.id("hiddenInput");
@@ -237,7 +277,7 @@ function createNext() {
     shortTable.removeRow(verbNum);
     createNext();
   }
-  speak(verb);
+  
   //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
@@ -253,7 +293,9 @@ function createNext() {
   }
 
   //falloir etc.
-  if (verbRow.getString(conjugationText[0]).length < 1) {
+  let impersonal = false;
+  if (verbRow.getString(conjugationText[0]).length < 1 || verb == "advenir") {
+    impersonal = true;
     conjNum = 2;
     varNum = 0;
   }
@@ -300,8 +342,6 @@ function createNext() {
   inp.value("");
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
-  verbFrench.html(shortTable.getString(verbNum, "verb"));
-  translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
 
   correctAnswer =
     reflexive[conjNum] +
@@ -327,8 +367,20 @@ function createNext() {
       splitTokens(verbRow.getString(conjugationText[5]), ";")[0] +
       "</p>"
   );
+  
+ if(!mode.checked()) {
+   if(soundon.checked())
+    {speak(verb);}
+    verbFrench.html(shortTable.getString(verbNum, "verb"));
+    translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
+  } else {
+    verbFrench.html(shortTable.getString(verbNum, lang.value()));
+    translation.html("");
+    groupName.html("");
+    tiplist.html("<p>"+correctAnswer+"</p></br>"+tiplist.html());
+  }
 
-  if (verbRow.getString(conjugationText[0]).length < 1) {
+  if (impersonal) {
     tiplist.html(
       "<p>il " +
         splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
@@ -363,18 +415,28 @@ function draw() {
 
 function findMistake() {
   let startIndex = 0; 
-  let endIndex = answer.length+1;
-  for(let i = 1; i< answer.length; i++) {
+  let endIndex = answer.length;
+  let start="", end="", strike="";
+  for(let i = 0; i<= answer.length; i++) {
     if(correctAnswer.startsWith(answer.substring(0,i))) {
        startIndex = i;
-       }
+    }
   }
-    for(let i = answer.length-1; i>=0; i--) {
-    if(correctAnswer.endsWith(answer.substring(i,answer.length))) {
+  for(let i = answer.length; i>=0; i--) {
+    if(correctAnswer.substring(startIndex).endsWith(answer.substring(i))) {
        endIndex = i;
-       }
+    }
   }
-  result.html(prefix[conjNum][varNum]+answer.substring(0,startIndex)+"<s>"+answer.substring(startIndex,endIndex)+"</s>"+answer.substring(endIndex,answer.length+1))
+  if (startIndex > endIndex ) {
+    start = answer.substring(0,endIndex);
+    end = answer.substring(startIndex);
+    strike = answer.substring(endIndex,startIndex)
+  } else{
+    start = answer.substring(0,startIndex);
+    end = answer.substring(endIndex);
+    strike = answer.substring(startIndex,endIndex)
+  }
+  result.html(prefix[conjNum][varNum]+start+"<s>"+strike+"</s>"+end);
 }
 
 function correctAnimation() {
@@ -473,7 +535,7 @@ function lookUpValue(elm, atr) {
 
 function addAccentsWithUpDown(code) {
   let weird = [
-    ["i", "î"],
+    ["i", "î", "ï"],
     ["e", "é", "è", "ê", "ë"],
     ["a", "à", "â"],
     ["o", "ô", "ö"],
@@ -625,4 +687,9 @@ translation.style("animation", "0.4s ease 0.5s 1 reverse forwards running newVer
     inp.elt.focus();
     menubutton.html("≡");
   }
+}
+
+function changeList() {
+  shortTable = loadTable(this.value(), "csv", "header");
+  
 }

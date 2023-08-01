@@ -19,8 +19,16 @@ let fontcolor = "#F0F0D2";
 let backgroundColorLerp;
 let shortTable;
 let fullTable;
-let listFileName = ["assets/willdudziak147.csv","assets/willdudziak681.csv","assets/50verbs.csv"];
-let listName = ["Will Dudziak's short list (147)", "Will Dudziak's full list (681)", "50 most popular"];
+let listFileName = [
+  "assets/willdudziak147.csv",
+  "assets/willdudziak681.csv",
+  "assets/50verbs.csv",
+];
+let listName = [
+  "Will Dudziak's short list (147)",
+  "Will Dudziak's full list (681)",
+  "50 most popular",
+];
 let verbRow;
 let prefix = [
   ["je ", "j'"],
@@ -70,10 +78,12 @@ function preload() {
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
 }
-
+function windowResized() {
+  setBigKegel();
+}
 function setup() {
   setVoice();
-
+  
   //set groups
   let index = 0;
   let subindex = 0;
@@ -93,6 +103,7 @@ function setup() {
     navigator.virtualKeyboard.overlaysContent = true;
   }
 
+  setBigKegel();
   //create dom
   setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
@@ -133,51 +144,51 @@ function setup() {
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
-  
+
   //name
   let newP = createElement("p");
   newP.parent(menu);
-  newP.id("verba")
-  newP.html("Verba");
+  newP.id("verba");
+  newP.html("Verbose");
   //translation
   let pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);  
-  pEmpty1.class("empty");  
+  pEmpty1.parent(menu);
+  pEmpty1.class("empty");
   let pTrans1 = createElement("p");
-  pTrans1.parent(menu);  
-  pTrans1.html("Translation:"); 
-  let pTrans2 = createElement("p"); 
-  pTrans2.parent(menu); 
+  pTrans1.parent(menu);
+  pTrans1.html("Translation:");
+  let pTrans2 = createElement("p");
+  pTrans2.parent(menu);
   pTrans2.class("radio-wrapper");
   //pTrans2.id("Language")
   lang = createRadio("Language");
-  lang.option('russian', "russian");
-  lang.option('english', "english");
-  lang.selected('russian');
+  lang.option("russian", "russian");
+  lang.option("english", "english");
+  lang.selected("russian");
   lang.parent(pTrans2);
-  
+
   //dict
   pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);  
-  pEmpty1.class("empty");  
+  pEmpty1.parent(menu);
+  pEmpty1.class("empty");
   let pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.html("Verb list:");
-  let pVerb2 = createElement("p"); 
-  pVerb2.parent(menu); 
+  let pVerb2 = createElement("p");
+  pVerb2.parent(menu);
   pVerb2.class("radio-wrapper");
   let dict = createRadio("Dictionary");
   dict.changed(changeList);
-  for(let i = 0; i < listFileName.length; i++) {
+  for (let i = 0; i < listFileName.length; i++) {
     dict.option(listFileName[i], listName[i]);
   }
   dict.selected(listFileName[0]);
-  dict.parent(pVerb2)
+  dict.parent(pVerb2);
   //mode
-  
+
   pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);  
-  pEmpty1.class("empty");   
+  pEmpty1.parent(menu);
+  pEmpty1.class("empty");
   let pMode1 = createElement("p");
   pMode1.parent(menu);
   pMode1.html("Optional:");
@@ -187,13 +198,11 @@ function setup() {
   mode.parent(pMode2);
   soundon = createCheckbox("speech synth", true);
   soundon.parent(pMode2);
-  
 
   pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.html("Tested on Chrome/Safari");
-  
-  
+
   //input
   inp = createInput("");
   inp.id("hiddenInput");
@@ -243,41 +252,29 @@ function setup() {
 }
 
 function createNext() {
-  result.style(
-    "animation",
-    "1.6s ease-out 0s 1 normal forwards running resultIn"
-  );
-  verbFrench.style(
-    "animation",
-    "0.5s ease-in 0s 1 normal forwards running newVerb"
-  );
-  translation.style(
-    "animation",
-    "1.5s ease-in 0s 1 normal none running newGroup"
-  );
-
-  let reflexive = ["", "", "", "", "", ""];
+  //choode verb
   verbNum = int(random(0, shortTable.getRowCount()));
   let verb = shortTable.getString(verbNum, "verb");
-
+  let reflexive;
   conjNum = int(random(0, 6));
   console.log(verb);
+  //cut reflexive
   if (verb.substring(0, 2) == "s'") {
     reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'"];
-
     verb = verb.substring(2);
   } else if (verb.substring(0, 3) == "se ") {
     reflexive = ["me ", "te ", "se ", "nous ", "vous ", "se "];
-
     verb = verb.substring(3);
+  } else {
+    reflexive = ["", "", "", "", "", ""];
   }
-
+  //find conjugation
   verbRow = fullTable.findRow(verb, "infinitive");
   if (!verbRow) {
     shortTable.removeRow(verbNum);
     createNext();
   }
-  
+
   //varNum:
   if (conjNum == 2 || conjNum == 5) {
     varNum = int(random(0, prefix[conjNum].length));
@@ -301,7 +298,7 @@ function createNext() {
   }
 
   //group search
-  groupName.style("animation", "");
+  setAnimation(groupName, "", 0, 0);
   for (let i = 0; i < irregularGroups.length; i++) {
     if (irregularGroups[i].includes(verb)) {
       if (irregularGroups[i].length > 1) {
@@ -313,13 +310,11 @@ function createNext() {
       if (groupName.elt.clientWidth > windowWidth) {
         groupName.html(", " + groupName.html() + ", " + groupName.html());
         setVariable("--scrollLength", groupName.elt.clientWidth + "px");
-        setVariable(
-          "--animationTime",
-          (20 * groupName.elt.clientWidth) / windowWidth + "s"
-        );
-        groupName.style(
-          "animation",
-          "leftScroll var(--animationTime) linear 0s infinite"
+        setAnimation(
+          groupName,
+          "leftScroll linear infinite",
+          (20.0 * groupName.elt.clientWidth) / windowWidth,
+          0
         );
       }
     } else if (verb.endsWith("er")) {
@@ -330,12 +325,6 @@ function createNext() {
       groupName.html("?");
     }
   }
-  groupName.style(
-    "animation",
-    lookUpValue("group", "animation") +
-      ", " +
-      "1.5s ease-in 0s 1 normal none running newGroup"
-  );
 
   backgroundColorLerp = backgroundColor;
 
@@ -367,26 +356,35 @@ function createNext() {
       splitTokens(verbRow.getString(conjugationText[5]), ";")[0] +
       "</p>"
   );
-    if (impersonal) {
+  if (impersonal) {
     tiplist.html(
       "<p>il " +
         splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
         "</p>"
     );
   }
- if(!mode.checked()) {
-   if(soundon.checked())
-    {speak(verb);}
+  if (!mode.checked()) {
+    if (soundon.checked()) {
+      speak(verb);
+    }
     verbFrench.html(shortTable.getString(verbNum, "verb"));
     translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
   } else {
     verbFrench.html(shortTable.getString(verbNum, lang.value()));
     translation.html("");
     groupName.html("");
-    tiplist.html("<p>"+shortTable.getString(verbNum, "verb")+"</p></br>"+tiplist.html());
+    tiplist.html(
+      "<p>" +
+        shortTable.getString(verbNum, "verb") +
+        "</p></br>" +
+        tiplist.html()
+    );
   }
 
-
+  setAnimation(result, "resultIn ease-out forwards", 1.6, 0);
+  setAnimation(verbFrench, "newVerb ease-in forwards", 0.5, 0);
+  setAnimation(translation, "newGroup ease-in", 1.5, 0);
+  secondAnimation(groupName, "newGroup ease-in", 1.5, 0);
 }
 
 function draw() {
@@ -404,81 +402,65 @@ function draw() {
     0.1
   );
   setVariable("--background", backgroundColorLerp);
-  //waiting for next
-  if (
-    float(lookUpValue("verbFrench", "margin-top")) <
-    -7.5 * float(lookUpValue("verbFrench", "font-size"))
-  ) {
-    createNext();
-  }
 }
 
 function findMistake() {
-  let startIndex = 0; 
+  let startIndex = 0;
   let endIndex = answer.length;
-  let start="", end="", strike="";
-  for(let i = 0; i<= answer.length; i++) {
-    if(correctAnswer.startsWith(answer.substring(0,i))) {
-       startIndex = i;
+  let start = "",
+    end = "",
+    strike = "";
+  for (let i = 0; i <= answer.length; i++) {
+    if (correctAnswer.startsWith(answer.substring(0, i))) {
+      startIndex = i;
     }
   }
-  for(let i = answer.length; i>=0; i--) {
-    if(correctAnswer.substring(startIndex).endsWith(answer.substring(i))) {
-       endIndex = i;
+  for (let i = answer.length; i >= 0; i--) {
+    if (correctAnswer.substring(startIndex).endsWith(answer.substring(i))) {
+      endIndex = i;
     }
   }
-  if (startIndex > endIndex ) {
-    start = answer.substring(0,endIndex);
+  if (startIndex > endIndex) {
+    start = answer.substring(0, endIndex);
     end = answer.substring(startIndex);
-    strike = answer.substring(endIndex,startIndex)
-  } else{
-    start = answer.substring(0,startIndex);
+    strike = answer.substring(endIndex, startIndex);
+  } else {
+    start = answer.substring(0, startIndex);
     end = answer.substring(endIndex);
-    strike = answer.substring(startIndex,endIndex)
+    strike = answer.substring(startIndex, endIndex);
   }
-  result.html(prefix[conjNum][varNum]+start+"<s>"+strike+"</s>"+end);
+  result.html(prefix[conjNum][varNum] + start + "<s>" + strike + "</s>" + end);
 }
 
 function correctAnimation() {
-  result.style(
-    "animation",
-    "1.45s linear 0s 1 normal forwards running resultOut"
+  addEventListener(
+    "animationend",
+    function (e) {
+      if (e.animationName == "resultOut") createNext();
+    },
+    false
   );
-  verbFrench.style(
-    "animation",
-    "1.95s ease-in 0.05s 1 normal forwards running flyUp"
-  );
-  translation.style(
-    "animation",
-    "1.95s ease-in 0.1s 1 normal forwards running flyUp"
-  );
-  groupName.style(
-    "animation",
-    lookUpValue("group", "animation") +
-      ", " +
-      "1.95s ease-in 0.0s 1 normal forwards running flyUp"
-  );
+  setAnimation(result, "resultOut linear forwards", 1.45, 0);
+  secondAnimation(groupName, "flyUp ease-in forwards", 1.95, 0);
+  setAnimation(verbFrench, "flyUp ease-in forwards", 1.95, 0.05);
+  setAnimation(translation, "flyUp ease-in forwards", 1.95, 0.1);
 }
 
 function showTip() {
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
-  tiplist.style(
-    "animation",
-    "fly-in 0.4s forwards 0.1s cubic-bezier(0.18,1,0.74,1)"
+  setAnimation(
+    tiplist,
+    "fly-in forwards cubic-bezier(0.18,1,0.74,1)",
+    0.4,
+    0.1
   );
-  result.style("animation", "blur-in 0.5s forwards  ");
-  verbFrench.style("animation", "blur-in 0.5s forwards   ");
-
-  groupName.style(
-    "animation",
-    splitTokens(lookUpValue("group", "animation"), ",")[0] +
-      ", group-blur-in 0.5s forwards"
-  );
-
-  translation.style("animation", "blur-in 0.5s forwards   ");
-  gradientBackgroundBox.style("animation", "fade-in 0.8s forwards ease-out");
-  inp.elt.blur();
+  secondAnimation(result, "blur-in forwards", 0.5, 0);
+  secondAnimation(verbFrench, "blur-in forwards", 0.5, 0);
+  addAnimation(groupName, "group-blur-in forwards", 0.5, 0);
+  secondAnimation(translation, "blur-in forwards", 0.5, 0);
+  setAnimation(gradientBackgroundBox, "fade-in forwards ease-out", 0.8, 0);
   menubutton.class("fade");
+  inp.elt.blur();
 }
 
 function hideTip() {
@@ -486,28 +468,22 @@ function hideTip() {
 
   let tipPos = float(lookUpValue("tip", "left"));
   if (tipPos >= windowWidth * 0.45) {
-    tiplist.style("animation", "fly-out 0.35s forwards");
+    setAnimation(tiplist, "fly-out forwards", 0.35, 0.0);
   } else {
     setVariable("--tipPosition", lookUpValue("tip", "left"));
     setVariable("--tipOpacity", lookUpValue("tip", "opacity"));
-    tiplist.style("animation", "fly-back 0.35s");
+    setAnimation(tiplist, "fly-back", 0.35, 0.0);
   }
   let bLev = float(splitTokens(lookUpValue("result", "text-shadow"), "px ")[5]);
 
   setVariable("--blurLevel", bLev + "px");
-  result.style("animation", "blur-out 0.5s ease-in");
-  verbFrench.style("animation", "blur-out 0.5s ease-in");
-  groupName.style(
-    "animation",
-    splitTokens(lookUpValue("group", "animation"), ",")[0] +
-      ", group-blur-out 0.5s ease-in"
-  );
-
-  translation.style("animation", "blur-out 0.5s ease-in");
-  gradientBackgroundBox.style("animation", "fade-out 0.4s ease-in");
-
-  inp.elt.focus();
+  setAnimation(result, "blur-out ease-in", 0.5, 0);
+  setAnimation(verbFrench, "blur-out ease-in", 0.5, 0);
+  secondAnimation(groupName, "group-blur-out ease-in", 0.5, 0);
+  setAnimation(translation, "blur-out ease-in", 0.5, 0);
+  setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);
   menubutton.class("unfade");
+  inp.elt.focus();
 }
 
 //structure
@@ -664,25 +640,17 @@ function setVoice() {
 
 function toggleMenu() {
   if (this.elt.checked) {
-    groupName.style(
-      "animation",
-      lookUpValue("group", "animation") +
-        ", " +
-        "1.95s ease-in 0.0s 1 normal forwards running flyUp"
-    );
-translation.style("animation", "0.4s ease 0.5s 1 reverse forwards running newVerb");
-    result.style("animation", "0.4s ease 0.4s 1 reverse forwards running newVerb");
+    secondAnimation(groupName, "flyUp forwards ease-in", 1.95, 0);
+    setAnimation(translation, "newVerb reverse forwards", 0.4, 0.5);
+    setAnimation(verbFrench, "newVerb reverse forwards", 0.4, 0.55);
+    setAnimation(result, "newVerb reverse forwards", 0.4, 0.4);
     inp.elt.blur();
     menubutton.html("✕");
   } else {
-    result.style("animation", "0s ease 0s 1 normal none running none ");
+    setAnimation(result, "", "0s ease 0s 1 normal none running none ");
     verbFrench.style("animation", "0s ease 0s 1 normal none running none ");
     translation.style("animation", "0s ease 0s 1 normal none running none ");
     groupName.style("animation", "0s ease 0s 1 normal none running none ");
-    lookUpValue("result", "animation");
-    lookUpValue("verbFrench", "animation");
-    lookUpValue("translation", "animation");
-    lookUpValue("group", "animation");
     createNext();
     inp.elt.focus();
     menubutton.html("≡");
@@ -691,5 +659,50 @@ translation.style("animation", "0.4s ease 0.5s 1 reverse forwards running newVer
 
 function changeList() {
   shortTable = loadTable(this.value(), "csv", "header");
-  
+}
+
+function setBigKegel() {
+  setVariable(
+    "--bigKegel",
+    min(
+      windowHeight * 0.1,
+      (windowWidth * textSize()) / textWidth("nous déconceptualisons")
+    ) + "px"
+  );
+}
+
+
+
+function setAnimation(elem, name, time, delay) {
+  elem.style("animation", "0s ease 0s 1 normal none running none ");
+  lookUpValue(elem.elt.id, "animation");
+  elem.style("animation", name + " " + time + "s" + " " + delay + "s");
+}
+function secondAnimation(elem, name, time, delay) {
+  elem.style(
+    "animation",
+    splitTokens(lookUpValue(elem.elt.id, "animation"), ",")[0] +
+      ", " +
+      name +
+      " " +
+      time +
+      "s" +
+      " " +
+      delay +
+      "s"
+  );
+}
+function addAnimation(elem, name, time, delay) {
+  elem.style(
+    "animation",
+    lookUpValue(elem.elt.id, "animation") +
+      ", " +
+      name +
+      " " +
+      time +
+      "s" +
+      " " +
+      delay +
+      "s"
+  );
 }

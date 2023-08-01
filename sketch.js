@@ -367,7 +367,13 @@ function createNext() {
       splitTokens(verbRow.getString(conjugationText[5]), ";")[0] +
       "</p>"
   );
-  
+    if (impersonal) {
+    tiplist.html(
+      "<p>il " +
+        splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
+        "</p>"
+    );
+  }
  if(!mode.checked()) {
    if(soundon.checked())
     {speak(verb);}
@@ -377,16 +383,10 @@ function createNext() {
     verbFrench.html(shortTable.getString(verbNum, lang.value()));
     translation.html("");
     groupName.html("");
-    tiplist.html("<p>"+correctAnswer+"</p></br>"+tiplist.html());
+    tiplist.html("<p>"+shortTable.getString(verbNum, "verb")+"</p></br>"+tiplist.html());
   }
 
-  if (impersonal) {
-    tiplist.html(
-      "<p>il " +
-        splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
-        "</p>"
-    );
-  }
+
 }
 
 function draw() {

@@ -1,4 +1,5 @@
 const synth = window.speechSynthesis;
+let pendingUpdate = false;
 let theVoice;
 let lang, dict;
 let result,
@@ -119,12 +120,16 @@ function setup() {
     }
   }
 
-  if ("virtualKeyboard" in navigator) {
-    navigator.virtualKeyboard.overlaysContent = true;
-  }
+  
 
-  setBigKegel();
+
+window.visualViewport.addEventListener("scroll", viewportHandler);
+window.visualViewport.addEventListener("resize", viewportHandler)
+
   //create dom
+  setBigKegel();
+  lv = createElement("div");
+  lv.id("layoutViewport");
   setVariable("--fontColor", fontcolor);
   contentBox = createElement("div");
   gradientBackgroundBox = createElement("div");
@@ -160,7 +165,7 @@ function setup() {
   menucontrol.id("menubutton");
   menucontrol.changed(toggleMenu);
   menubutton = createElement("label", "");
-  menubutton.html("≡");
+  menubutton.html("⊜");
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
@@ -170,32 +175,31 @@ function setup() {
   newP.parent(menu);
   newP.id("verba");
   newP.html("Verbose");
+  //description
+  newP = createElement("p");
+  newP.parent(menu);
+  newP.html("I made this webapp as a personal aid for learning French conjugations. Tap and hold for the conjugations list, adjust vowel accents with desktop arrow buttons.");  
   //translation
-  let pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);
-  pEmpty1.class("empty");
+  newP.class("double");
   let pTrans1 = createElement("p");
   pTrans1.parent(menu);
-  pTrans1.html("Translation:");
+  pTrans1.html("Translation language:");
   let pTrans2 = createElement("p");
   pTrans2.parent(menu);
   pTrans2.class("radio-wrapper");
   lang = createRadio("Language");
   lang.option("russian", "russian");
   lang.option("english", "english");
-  lang.selected("russian");
+  lang.selected("english");
   lang.parent(pTrans2);
 
   //dict
-  // pEmpty1 = createElement("p");
-  // pEmpty1.parent(menu);
-  // pEmpty1.class("empty");
   let pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.html("Verb list:");
   let pVerb2 = createElement("p");
   pVerb2.parent(menu);
-  pVerb2.class("radio-wrapper");
+  pVerb1.class("radio-wrapper");
   let dict = createRadio("Dictionary");
   dict.changed(changeList);
   for (let i = 0; i < listFileName.length; i++) {
@@ -204,24 +208,21 @@ function setup() {
   dict.selected(listFileName[0]);
   dict.parent(pVerb2);
   //mode
-
-  // pEmpty1 = createElement("p");
-  // pEmpty1.parent(menu);
-  // pEmpty1.class("empty");
   let pMode1 = createElement("p");
   pMode1.parent(menu);
   pMode1.html("Optional:");
   let pMode2 = createElement("p");
   pMode2.parent(menu);
-  mode = createCheckbox("translation only", false);
-  mode.parent(pMode2);
-  muteSpeech = createCheckbox("mute", false);
-  muteSpeech.parent(pMode2);
-  passe = createCheckbox("participe passé", false);
+  passe = createCheckbox("add past participle form", false);
   passe.parent(pMode2);
+  mode = createCheckbox("show translation only", false);
+  mode.parent(pMode2);
+  muteSpeech = createCheckbox("mute speech", false);
+  muteSpeech.parent(pMode2);
   pVerb1 = createElement("p");
   pVerb1.parent(menu);
-  pVerb1.html("Tested on Chrome/Safari");
+  pVerb1.class("double");
+  pVerb1.html("Coding and design by Ivan Yakushev. Tested on Chrome & Safari only.");
 
   //input
   inp = createInput("");
@@ -275,8 +276,8 @@ function setup() {
   );
 
   noCanvas();
-
-  createNext();
+  
+  createNext();  
 }
 
 function createNext() {
@@ -350,7 +351,7 @@ function createNext() {
   let impersonal = false;
   if (verbRow.getString(conjugationText[0]).length < 1 || verb == "advenir") {
     impersonal = true;
-    if(conjnum!=6) {
+    if(conjNum!=6) {
       conjNum = 2;
       varNum = 0;
     }
@@ -711,7 +712,7 @@ function toggleMenu() {
     setAnimation(verbFrench, "newVerb reverse forwards", 0.4, 0.55);
     setAnimation(result, "newVerb reverse forwards", 0.4, 0.4);
     inp.elt.blur();
-    menubutton.html("✕");
+    menubutton.html("⊗");
   } else {
     setAnimation(result, "", "0s ease 0s 1 normal none running none ");
     verbFrench.style("animation", "0s ease 0s 1 normal none running none ");
@@ -719,7 +720,7 @@ function toggleMenu() {
     groupName.style("animation", "0s ease 0s 1 normal none running none ");
     createNext();
     inp.elt.focus();
-    menubutton.html("≡");
+    menubutton.html("⊜");
   }
 }
 
@@ -769,4 +770,28 @@ function addAnimation(elem, name, time, delay) {
       delay +
       "s"
   );
+}
+
+function viewportHandler(event) {
+  if (pendingUpdate) return;
+  pendingUpdate = true;
+
+  requestAnimationFrame(() => {
+    pendingUpdate = false;
+    const layoutViewport = document.getElementById("layoutViewport");
+    
+    // Since the bar is position: fixed we need to offset it by the
+    // visual viewport's offset from the layout viewport origin.
+    const viewport = event.target;
+    const offsetLeft = viewport.offsetLeft;
+    const offsetTop =
+      viewport.height -
+      layoutViewport.getBoundingClientRect().height +
+      viewport.offsetTop;
+console.log(offsetTop,viewport.height,layoutViewport.getBoundingClientRect().height,viewport.offsetTop);
+    // You could also do this by setting style.left and style.top if you
+    // use width: 100% instead.
+    menubutton.style("top",offsetTop+"px") ;
+
+  });
 }

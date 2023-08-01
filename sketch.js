@@ -9,10 +9,12 @@ let result,
   contentBox,
   menubutton,
   menu;
-let mode, soundon;
+let mode, muteSpeech, passe;
 let menucontrol;
 let inp;
-let verbNum, conjNum, varNum;
+let verbNum = "0",
+  conjNum,
+  varNum;
 let answer;
 let backgroundColor = "#4BC6DA";
 let fontcolor = "#F0F0D2";
@@ -37,6 +39,7 @@ let prefix = [
   ["nous "],
   ["vous "],
   ["ils ", "elles "],
+  ["il a ", "il sont "]
 ];
 let vowels = [
   "a",
@@ -69,6 +72,23 @@ let conjugationText = [
   "indicative|present|first person plural",
   "indicative|present|second person plural",
   "indicative|present|third person plural",
+  "past participle"
+];
+let etreVerbs = [
+  "naître",
+  "mourir",
+  "monter",
+  "descendre",
+  "aller",
+  "venir",
+  "partir",
+  "arriver",
+  "retourner",
+  "rester",
+  "entrer",
+  "sortir",
+  "tomber",
+  "devenir",
 ];
 let correctAnswer;
 
@@ -83,7 +103,7 @@ function windowResized() {
 }
 function setup() {
   setVoice();
-  
+
   //set groups
   let index = 0;
   let subindex = 0;
@@ -132,7 +152,7 @@ function setup() {
   tiplist.parent(contentBox);
   groupName.id("group");
   groupName.parent(contentBox);
-
+  
   //menu
   menucontrol = createInput();
   menucontrol.attribute("type", "checkbox");
@@ -160,7 +180,6 @@ function setup() {
   let pTrans2 = createElement("p");
   pTrans2.parent(menu);
   pTrans2.class("radio-wrapper");
-  //pTrans2.id("Language")
   lang = createRadio("Language");
   lang.option("russian", "russian");
   lang.option("english", "english");
@@ -168,9 +187,9 @@ function setup() {
   lang.parent(pTrans2);
 
   //dict
-  pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);
-  pEmpty1.class("empty");
+  // pEmpty1 = createElement("p");
+  // pEmpty1.parent(menu);
+  // pEmpty1.class("empty");
   let pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.html("Verb list:");
@@ -186,19 +205,20 @@ function setup() {
   dict.parent(pVerb2);
   //mode
 
-  pEmpty1 = createElement("p");
-  pEmpty1.parent(menu);
-  pEmpty1.class("empty");
+  // pEmpty1 = createElement("p");
+  // pEmpty1.parent(menu);
+  // pEmpty1.class("empty");
   let pMode1 = createElement("p");
   pMode1.parent(menu);
   pMode1.html("Optional:");
   let pMode2 = createElement("p");
   pMode2.parent(menu);
-  mode = createCheckbox("show only translation", false);
+  mode = createCheckbox("translation only", false);
   mode.parent(pMode2);
-  soundon = createCheckbox("speech synth", true);
-  soundon.parent(pMode2);
-
+  muteSpeech = createCheckbox("mute", false);
+  muteSpeech.parent(pMode2);
+  passe = createCheckbox("participe passé", false);
+  passe.parent(pMode2);
   pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.html("Tested on Chrome/Safari");
@@ -224,7 +244,7 @@ function setup() {
     event.preventDefault();
     setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode == ENTER) {
-      if (answer == correctAnswer) {
+      if (answer == correctAnswer || answer == correctAnswer + " ") {
         speak(prefix[conjNum][varNum] + answer);
         correctAnimation();
       } else {
@@ -245,6 +265,14 @@ function setup() {
   //     showTip();
   //   }
   // });
+  
+    addEventListener(
+    "animationend",
+    function (e) {
+      if (e.animationName == "resultOut") createNext();
+    },
+    false
+  );
 
   noCanvas();
 
@@ -256,21 +284,44 @@ function createNext() {
   verbNum = int(random(0, shortTable.getRowCount()));
   let verb = shortTable.getString(verbNum, "verb");
   let reflexive;
-  conjNum = int(random(0, 6));
+  let past = false,
+    refl = false;
+  if (!passe.checked()) {
+    conjNum = int(random(0, 6));
+  } else {
+    conjNum = int(random(0, 7));
+  }
   console.log(verb);
   //cut reflexive
   if (verb.substring(0, 2) == "s'") {
-    reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'"];
+    refl = true;
+    reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'", "s'"];
     verb = verb.substring(2);
   } else if (verb.substring(0, 3) == "se ") {
-    reflexive = ["me ", "te ", "se ", "nous ", "vous ", "se "];
+    refl = true;
+    reflexive = ["me ", "te ", "se ", "nous ", "vous ", "se ", "se "];
     verb = verb.substring(3);
   } else {
-    reflexive = ["", "", "", "", "", ""];
+    refl = false;
+    reflexive = ["", "", "", "", "", "", "",""];
   }
   //find conjugation
   verbRow = fullTable.findRow(verb, "infinitive");
+  
+  //fix errors:
   if (!verbRow) {
+    console.log("no verb " + verb + " in table");
+    for (let i = 0; i < verb.length; i++) {
+      verbRow = fullTable.findRow(verb.substring(i), "infinitive");
+      if (verbRow) {
+        verb = verb.substring(i);
+        console.log("changed to " + verb);
+        i = verb.length;
+      }
+    }
+  }
+  if (!verbRow) {
+    console.log("deleting");
     shortTable.removeRow(verbNum);
     createNext();
   }
@@ -285,6 +336,12 @@ function createNext() {
     } else {
       varNum = 0;
     }
+  } else if (conjNum == 6) {
+    if (etreVerbs.includes(verb) || refl) {
+      varNum = 1;
+    } else {
+      varNum = 0;
+    }
   } else {
     varNum = 0;
   }
@@ -293,8 +350,10 @@ function createNext() {
   let impersonal = false;
   if (verbRow.getString(conjugationText[0]).length < 1 || verb == "advenir") {
     impersonal = true;
-    conjNum = 2;
-    varNum = 0;
+    if(conjnum!=6) {
+      conjNum = 2;
+      varNum = 0;
+    }
   }
 
   //group search
@@ -331,10 +390,10 @@ function createNext() {
   inp.value("");
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
-
   correctAnswer =
     reflexive[conjNum] +
     splitTokens(verbRow.getString(conjugationText[conjNum]), ";")[0];
+  //tip:
   tiplist.html(
     "<p>" +
       reflexive[0] +
@@ -363,12 +422,24 @@ function createNext() {
         "</p>"
     );
   }
+  //tip passe:
+  if (passe.checked()) {
+    tiplist.html(
+      tiplist.html() +
+        "</p></br><p>" +
+        splitTokens(verbRow.getString("past participle"), ";")[0] +
+        "</p>"
+    );
+  }
+  
+  //normal
   if (!mode.checked()) {
-    if (soundon.checked()) {
+    if (!muteSpeech.checked()) {
       speak(verb);
     }
     verbFrench.html(shortTable.getString(verbNum, "verb"));
     translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
+  //translation mode
   } else {
     verbFrench.html(shortTable.getString(verbNum, lang.value()));
     translation.html("");
@@ -433,13 +504,6 @@ function findMistake() {
 }
 
 function correctAnimation() {
-  addEventListener(
-    "animationend",
-    function (e) {
-      if (e.animationName == "resultOut") createNext();
-    },
-    false
-  );
   setAnimation(result, "resultOut linear forwards", 1.45, 0);
   secondAnimation(groupName, "flyUp ease-in forwards", 1.95, 0);
   setAnimation(verbFrench, "flyUp ease-in forwards", 1.95, 0.05);
@@ -592,7 +656,9 @@ function speak(message) {
     utterThis.lang = "fr_FR";
     utterThis.volume = 1;
     utterThis.rate = 1;
-    synth.speak(utterThis);
+    if (!muteSpeech.checked()) {
+      synth.speak(utterThis);
+    }
   }
 }
 
@@ -670,8 +736,6 @@ function setBigKegel() {
     ) + "px"
   );
 }
-
-
 
 function setAnimation(elem, name, time, delay) {
   elem.style("animation", "0s ease 0s 1 normal none running none ");

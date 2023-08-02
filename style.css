@@ -5,15 +5,13 @@
   --background2: color-mix(in srgb, var(--fontColor) 48%, var(--background));
   --bigKegel:10vh;
   --smallKegel: calc(0.5*var(--bigKegel));
-  --menuKegel: min(calc(0.45*var(--bigKegel)), 3.3vh);
+  --menuKegel: min(calc(0.45*var(--bigKegel)), 3.3vh, 4vw);
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
   --tipOpacity: 0;
   --scrollLength: 0;
-  --keyboardHeight: env(keyboard-inset-height, 0px);
-  --menubuttony: calc(0.38*0.9*var(--bigKegel) + env(keyboard-inset-height, 0em));
-  --menubuttonx: calc(0.27*0.9*var(--bigKegel));
+  --keyboardHeight: 0;
 }
 
 phtml,
@@ -41,7 +39,7 @@ canvas {
             width: 100%;
             height: 100%;
             visibility: hidden;
-        }
+ }
 .radio-wrapper>div{
   display:inline-flex;
   flex-wrap: wrap;
@@ -73,6 +71,7 @@ input[type=checkbox] + span {
     border-width: 0.15em;
 }   
 input[type=radio]{
+  
   transform: translateY(0.15em);
    font-size: var(--menuKegel);  
   appearance: none;
@@ -85,7 +84,6 @@ input[type=radio]{
   box-shadow: 0 0 0 0.1em var(--background2);   
 }
 input[type=radio] + span {
-
   font-size: var(--menuKegel); 
   color: var(--background);
   margin-right: 1em;
@@ -108,47 +106,45 @@ label[for="menubutton"] {
   -moz-user-select: none; 
   -ms-user-select: none; 
   user-select: none; 
+  
   display: block;
-  position: absolute;   
+  position: fixed;   
   appearance: none;
   color: var(--fontColor);  
   height: 1em;
-  width: 1em;
-/*   left: var(--menubuttonx);
-  bottom: var(--menubuttony); */
-  
+  width: 1em;  
   z-index: 999;
   text-align: center;
   font-size: var(--bigKegel);  
   cursor: pointer;
-  transform-origin: 50% 60%;
+  transform: rotate(0deg);
   transition: transform 0.2s ease-in 0.2s forwards, 
-    bottom 0.15s ease;
+    top 0.15s ease,
+    color 0.4s linear;
+  top: var(--keyboardHeight);;
 }
 label[for="menubutton"]:hover {
   transform: scale(1.05);
 }
 #menubutton:checked ~ label {
   transition: transform 0.2s ease-out, 
-    bottom 0.8s ease 0.4s, 
-    color 1s linear;
+    top 0.8s ease 0.4s, 
+    
   font-size: calc(0.9*var(--bigKegel));  
-  color: var(--background2);
-  transform: rotate(-90deg);
-    left: var(--menubuttonx);
-  bottom: calc(100% - 1.2em);
+  color: var(--background);
+  transform: rotate(0deg);
+  left: 0;
+  top: var(--keyboardHeight);
 }
 #menubutton:checked ~ label:hover {
-  transform: scale(1.05) rotate(-90deg);
+  transform: scale(1.05) rotate(0deg);
 }
 .menu {
-grid-template-columns: repeat(2, 1fr); 
   position: absolute;   
-
+  margin:0.5em;
   font-size: var(--bigKegel);  
   color: var(--fontColor);
-  bottom: 0.3em;
-  left: 0.3em;
+padding: 0em;
   width: 0.0em;
   height: 0.8em;
   overflow: hidden;
@@ -157,20 +153,30 @@ grid-template-columns: repeat(2, 1fr);
   background-color:   var(--fontColor); 
   display:grid;
   grid-template-columns: 0.5fr 1.5fr;
+  gap: 0em 0.9em;
   align-content: start;
   border-radius: 0.1em; 
-  transition: height 0.2s ease, width 0.2s ease 0.2s, bottom 0.15s ease, left 0.2s ease 0.2s;  
+  transition: height 0.2s ease, 
+    width 0.2s ease 0.2s, 
+    top 0.15s ease, 
+    left 0.2s ease 0.2s,
+    padding 0.2s ease 0.2s;  
   
 }
 #menubutton:checked ~ div.menu {
-  transition: width 0.4s ease, height 0.8s ease 0.4s, left 0.15s ease, bottom 0.4s ease 0.4s;
+  transition: width 0.4s ease, 
+    height 0.8s ease 0.4s, 
+    left 0.15s ease, 
+    top 0.4s ease 0.4s,
+    padding 0.6s ease 0.2s;
 
-  bottom: 0.3em;
-  left: 0.3em; 
+
   border-radius: 0.15em;
-
-  width: calc(100% - 0.6em);
-  height: calc(100% - 0.6em); 
+  padding: 0.75em;
+  padding-top:0em;
+  margin:0.5em;
+  width: calc(100% - 2.5em);
+  height: calc(100% - 1.75em); 
 }
 .menu > p {
   text-align: left;
@@ -193,7 +199,7 @@ grid-template-columns: repeat(2, 1fr);
   grid-column: span 2; 
 }
 .empty {
-  min-height: 1.2em;
+  min-height: 0em;
 }
 
 .fade {
@@ -257,7 +263,6 @@ grid-template-columns: repeat(2, 1fr);
   top:50%;
   left: 50%;
   transform: translate(-50%, -50%);
-/*   animation-composition: unset; */
 }
 
 #verbFrench { 
@@ -303,6 +308,7 @@ grid-template-columns: repeat(2, 1fr);
 #tip > p {
   line-height: 1.1;
   margin: 0;
+  
   padding: 0;
 }
 

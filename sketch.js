@@ -10,6 +10,7 @@ let result,
   contentBox,
   menubutton,
   menu;
+
 let mode, muteSpeech, passe;
 let menucontrol;
 let inp;
@@ -28,8 +29,8 @@ let listFileName = [
   "assets/50verbs.csv",
 ];
 let listName = [
-  "Will Dudziak's short list (147)",
-  "Will Dudziak's full list (681)",
+  "147 by Will Dudziak",
+  "681 by Will Dudziak",
   "50 most popular",
 ];
 let verbRow;
@@ -104,7 +105,7 @@ function windowResized() {
 }
 function setup() {
   setVoice();
-
+  
   //set groups
   let index = 0;
   let subindex = 0;
@@ -125,6 +126,7 @@ function setup() {
 
 window.visualViewport.addEventListener("scroll", viewportHandler);
 window.visualViewport.addEventListener("resize", viewportHandler)
+  viewportHandler();
 
   //create dom
   setBigKegel();
@@ -165,7 +167,7 @@ window.visualViewport.addEventListener("resize", viewportHandler)
   menucontrol.id("menubutton");
   menucontrol.changed(toggleMenu);
   menubutton = createElement("label", "");
-  menubutton.html("⊜");
+  menubutton.html("☰");
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
@@ -219,11 +221,11 @@ window.visualViewport.addEventListener("resize", viewportHandler)
   mode.parent(pMode2);
   muteSpeech = createCheckbox("mute speech", false);
   muteSpeech.parent(pMode2);
-  pVerb1 = createElement("p");
+    pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.class("double");
-  pVerb1.html("Coding and design by Ivan Yakushev. Tested on Chrome & Safari only.");
 
+  pVerb1.html("Coding and design by Ivan Yakushev. Tested on Chrome & Safari only.");
   //input
   inp = createInput("");
   inp.id("hiddenInput");
@@ -235,7 +237,6 @@ window.visualViewport.addEventListener("resize", viewportHandler)
   inp.elt.focus();
   //onkeypress
   inp.elt.addEventListener("input", (event) => {
-    result.style("animation", "");
     const inputValue = event.target.value.toLowerCase();
     answer = inputValue;
     result.html(prefix[conjNum][varNum] + answer);
@@ -274,7 +275,7 @@ window.visualViewport.addEventListener("resize", viewportHandler)
     },
     false
   );
-
+  
   noCanvas();
   
   createNext();  
@@ -693,15 +694,8 @@ function setVoice() {
     theVoice = voices.filter(function (voice) {
       return voice.name.startsWith("Thomas");
     })[0];
-  } else {
-    console.log(
-      voices.filter(function (voice) {
-        return voice.lang.startsWith("fr-FR");
-      })
-    );
-    theVoice = voices.filter(function (voice) {
-      return voice.lang.startsWith("fr-FR");
-    })[0];
+  } else {    
+    theVoice = voices[0];
   }
 }
 
@@ -712,7 +706,7 @@ function toggleMenu() {
     setAnimation(verbFrench, "newVerb reverse forwards", 0.4, 0.55);
     setAnimation(result, "newVerb reverse forwards", 0.4, 0.4);
     inp.elt.blur();
-    menubutton.html("⊗");
+    menubutton.html("×");
   } else {
     setAnimation(result, "", "0s ease 0s 1 normal none running none ");
     verbFrench.style("animation", "0s ease 0s 1 normal none running none ");
@@ -720,7 +714,7 @@ function toggleMenu() {
     groupName.style("animation", "0s ease 0s 1 normal none running none ");
     createNext();
     inp.elt.focus();
-    menubutton.html("⊜");
+    menubutton.html("☰");
   }
 }
 
@@ -784,14 +778,14 @@ function viewportHandler(event) {
     // visual viewport's offset from the layout viewport origin.
     const viewport = event.target;
     const offsetLeft = viewport.offsetLeft;
-    const offsetTop =
+    const offsetTop = 100+
       viewport.height -
       layoutViewport.getBoundingClientRect().height +
       viewport.offsetTop;
-console.log(offsetTop,viewport.height,layoutViewport.getBoundingClientRect().height,viewport.offsetTop);
     // You could also do this by setting style.left and style.top if you
     // use width: 100% instead.
-    menubutton.style("top",offsetTop+"px") ;
-
+    // menubutton.style("top",offsetTop+"px") ;
+    console.log(offsetTop);
+    setVariable("--keyboardHeight", offsetTop+"px");
   });
 }

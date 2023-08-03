@@ -102,11 +102,22 @@ function preload() {
 function windowResized() {
   setBigKegel();
 }
-window.speechSynthesis.onvoiceschanged = function () {
-  console.log(":)");
-  setVoice();
-};
+
 function setup() {
+  const allVoicesObtained = new Promise(function(resolve, reject) {
+  let voices = window.speechSynthesis.getVoices();
+  if (voices.length !== 0) {
+    resolve(voices);
+  } else {
+    window.speechSynthesis.addEventListener("voiceschanged", function() {
+      voices = window.speechSynthesis.getVoices();
+      resolve(voices);
+    });
+  }
+});
+
+allVoicesObtained.then(setVoice());
+  
   //set groups
   let index = 0;
   let subindex = 0;
@@ -659,7 +670,7 @@ function setCaretPosition(elemId, caretPos) {
 function speak(message) {
   if (!theVoice) {
     setVoice();
-  }
+  } else {
   if (synth.speaking) {
     //console.error("speechSynthesis.speaking");
     return;
@@ -674,11 +685,13 @@ function speak(message) {
       synth.speak(utterThis);
     }
   }
+  }
 }
 
 function setVoice() {
+  
   window.speechSynthesis.getVoices();
-  if (!(!synth.getVoices())) {
+ 
     let voices = synth.getVoices().filter(function (voice) {
       return voice.lang.includes("FR");
     });
@@ -712,7 +725,7 @@ function setVoice() {
       theVoice = voices[0];
     }
     console.log("Using: " + theVoice.name);
-  }  
+   
 }
 
 function toggleMenu() {

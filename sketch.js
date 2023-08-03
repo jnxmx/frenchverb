@@ -1,7 +1,5 @@
 const synth = window.speechSynthesis;
-synth.addEventListener("voiceschanged", function() {
-      setVoice();
-    });
+
 let theVoice;
 let lang, dict;
 let result,
@@ -101,8 +99,12 @@ function preload() {
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
+
+synth.addEventListener("voiceschanged", function() {
+      setVoice();
+    });
 }
-  
+function setup() {
   //set groups
   let index = 0;
   let subindex = 0;

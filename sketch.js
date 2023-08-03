@@ -1,4 +1,7 @@
 const synth = window.speechSynthesis;
+synth.addEventListener("voiceschanged", function() {
+      setVoice();
+    });
 let theVoice;
 let lang, dict;
 let result,
@@ -99,22 +102,6 @@ function preload() {
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
 }
-
-
-function setup() {
-  const allVoicesObtained = new Promise(function(resolve, reject) {
-  let voices = window.speechSynthesis.getVoices();
-  if (voices.length !== 0) {
-    resolve(voices);
-  } else {
-    window.speechSynthesis.addEventListener("voiceschanged", function() {
-      voices = window.speechSynthesis.getVoices();
-      resolve(voices);
-    });
-  }
-});
-
-allVoicesObtained.then(setVoice());
   
   //set groups
   let index = 0;

@@ -7,21 +7,30 @@
   --halfColor: color-mix(in srgb, var(--fontColor) 48%, var(--background));
   --menuBackground: color-mix(in srgb, var(--fontColor) 48%, #FFFFFF);
   --bigKegel: min(9.3vh, 9.319681456200228vw);
-  --smallKegel: calc(0.5*var(--bigKegel));
-  --menuKegel: min(calc(0.45*var(--bigKegel)), 3.3vh, 4vw);
+  --smallKegel: calc(0.6*var(--bigKegel));
+  --menuKegel: min(calc(0.38*var(--bigKegel)), 3.3vh, 4vw);
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
   --tipOpacity: 0;
   --scrollLength: 0;
 }
-
+@media (min-aspect-ratio: 100/109)  {
+  :root{
+  --smallKegel: calc(0.5*var(--bigKegel));
+  }
+}  
+@font-face {
+   font-family: RadioGrotesk;
+    src: url("assets/PPRadioGrotesk-Regular.otf") format("opentype");
+  font-weight: normal;
+}
 phtml,
 body {
   color: var(--fontColor);
   accent-color: var(--background);
   background: var(--fontColor);
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: RadioGrotesk;
   margin: 0;
   padding: 0;
   text-align: center;
@@ -32,6 +41,7 @@ body {
   -ms-user-select: none; 
   user-select: none; 
 }
+
 
 canvas {
   display: block;
@@ -92,7 +102,7 @@ input[type=radio] + span {
 }
 label[for="menubutton"] {
   left:50%;
-  top: calc(117vw - 2em); 
+  top: calc(109vw - 2em); 
   transform-origin: 50% 57%;
   transform: translateX(-50%);
   
@@ -118,7 +128,7 @@ label[for="menubutton"] {
     top 0.15s ease,
     color 0.4s linear;
 }
-@media (min-aspect-ratio: 100/117)  {
+@media (min-aspect-ratio: 100/109)  {
   label[for="menubutton"] {
     top: calc(100vh - 2em);
   }
@@ -147,9 +157,9 @@ label[for="menubutton"]:hover {
   overflow: hidden;
   overflow-y: hidden;
   z-index: 998;
-  background-color:   var(--menuBackground); 
-  display:grid;
-  grid-template-columns: 0.5fr 1.5fr;
+  background-color: var(--menuBackground); 
+  display: grid;3
+  grid-template-columns: 1fr 5fr;
   gap: 0em 0.9em;
   align-content: start;
   border-radius: 0.1em; 
@@ -160,7 +170,7 @@ label[for="menubutton"]:hover {
     padding 0.2s ease 0.2s;  
   color: var(--darkFontColor);
 }
-@media  (min-aspect-ratio: 100/117) {
+@media  (min-aspect-ratio: 100/109) {
   .menu{
   margin-left: calc(50vw - 50vh + 0.5em);
     }
@@ -177,9 +187,9 @@ label[for="menubutton"]:hover {
   padding-top:0em;
   
   width: calc(100vw - 2.5em);
-  height: calc(117vw - 1.25em); 
+  height: calc(109vw - 1.25em); 
 }
-@media (min-aspect-ratio: 100/117)  {
+@media (min-aspect-ratio: 100/109)  {
   #menubutton:checked ~ div.menu {
     height: calc(100vh - 1.75em);
     width: calc(100vh - 2.25em);
@@ -243,7 +253,7 @@ label[for="menubutton"]:hover {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 117vw;
+  height: 109vw;
   left: 0px;
   top: 0px;
   white-space: nowrap;
@@ -251,7 +261,7 @@ label[for="menubutton"]:hover {
   text-overflow: ellipsis;
   display: inline-block;
 }
-@media (min-aspect-ratio: 100/117)  {
+@media (min-aspect-ratio: 100/109)  {
   #contentBox {
     height: 100vh;
   }
@@ -289,7 +299,7 @@ label[for="menubutton"]:hover {
   position: absolute;
   font-size: var(--smallKegel);
   color: var(--fontColor);
-  top: calc(1.6*var(--bigKegel) + 1.55*var(--smallKegel));
+  top: calc(2.38*var(--bigKegel));
   width: 100%;
   white-space: nowrap;
   overflow: hidden;

@@ -1,8 +1,15 @@
+@media (width <= 700px) {
+  #contentBox {
+    height: 117vw;
+  }
+}
 :root {
   --background: #000000;
   --fontColor: #ffffff;
-  --background1: color-mix(in srgb, var(--fontColor) 88%, var(--background));
-  --background2: color-mix(in srgb, var(--fontColor) 48%, var(--background));
+  --darkFontColor: color-mix(in srgb, var(--fontColor) 74%, #000000);
+  --shade: color-mix(in srgb, var(--fontColor) 88%, var(--background));
+  --halfColor: color-mix(in srgb, var(--fontColor) 48%, var(--background));
+  --menuBackground: color-mix(in srgb, var(--fontColor) 48%, #FFFFFF);
   --bigKegel:10vh;
   --smallKegel: calc(0.5*var(--bigKegel));
   --menuKegel: min(calc(0.45*var(--bigKegel)), 3.3vh, 4vw);
@@ -11,7 +18,6 @@
   --tipPosition: 50%;
   --tipOpacity: 0;
   --scrollLength: 0;
-  --keyboardHeight: 0;
 }
 
 phtml,
@@ -34,32 +40,24 @@ body {
 canvas {
   display: block;
 }
-#layoutViewport {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            visibility: hidden;
- }
+
 .radio-wrapper>div{
   display:inline-flex;
   flex-wrap: wrap;
 }
 input[type=checkbox]{
-  transform: translateY(0.13em);
    font-size: var(--menuKegel);  
   appearance: none;
-      height: 0.5em;
-    width: 0.5em;
+      height: 0.4em;
+    width: 0.4em;
     margin-right: 0.5em;
   border-radius: 0%;
-  background: var(--background1);
-  border: 0.12em solid var(--fontColor);
-  box-shadow: 0 0 0 0.1em var(--background2);   
+  background: var(--shade);
+  border: 0.15em solid var(--fontColor);
+  box-shadow: 0 0 0 0.01em var(--darkFontColor);   
 }
 input[type=checkbox] + span {
-
   font-size: var(--menuKegel); 
-  color: var(--background);
   margin-right: 1em;
 }
 [type=checkbox]:hover{
@@ -68,24 +66,21 @@ input[type=checkbox] + span {
 [type=checkbox]:checked{
       box-shadow: 0 0 0 0.1em var(--background);
     background-color: var(--background);
-    border-width: 0.15em;
+    border-width: 0.11em;
 }   
 input[type=radio]{
-  
-  transform: translateY(0.15em);
    font-size: var(--menuKegel);  
   appearance: none;
-      height: 0.6em;
-    width: 0.6em;
+      height: 0.5em;
+    width: 0.5em;
     margin-right: 0.5em;
   border-radius: 50%;
-  background: var(--background1);
-  border: 0.12em solid var(--fontColor);
-  box-shadow: 0 0 0 0.1em var(--background2);   
+  background: var(--shade);
+  border: 0.15em solid var(--fontColor);
+  box-shadow: 0 0 0 0.1em var(--darkFontColor);   
 }
 input[type=radio] + span {
   font-size: var(--menuKegel); 
-  color: var(--background);
   margin-right: 1em;
 }
 [type=radio]:hover{
@@ -94,63 +89,60 @@ input[type=radio] + span {
 [type=radio]:checked{
       box-shadow: 0 0 0 0.1em var(--background);
     background-color: var(--background);
-    border-width: 0.15em;
+    border-width: 0.11em;
 }   
 #menubutton { 
   display:none;
 }
 label[for="menubutton"] {
+  left:50%;
+  transform: translateX(-50%);
+  margin-bottom: -1em;
     -webkit-touch-callout: none; 
   -webkit-user-select: none; 
   -khtml-user-select: none; 
   -moz-user-select: none; 
   -ms-user-select: none; 
   user-select: none; 
-  
+    overflow: hidden;
+  overflow-y: hidden;
   display: block;
   position: fixed;   
   appearance: none;
   color: var(--fontColor);  
-  height: 1em;
   width: 1em;  
   z-index: 999;
   text-align: center;
-  font-size: var(--bigKegel);  
+  font-size: calc(0.85*var(--bigKegel));  
   cursor: pointer;
-  transform: rotate(0deg);
+]
   transition: transform 0.2s ease-in 0.2s forwards, 
     top 0.15s ease,
     color 0.4s linear;
-  top: var(--keyboardHeight);;
 }
 label[for="menubutton"]:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) translateX(-50%);
 }
 #menubutton:checked ~ label {
   transition: transform 0.2s ease-out, 
     top 0.8s ease 0.4s, 
-    
-  font-size: calc(0.9*var(--bigKegel));  
-  color: var(--background);
-  transform: rotate(0deg);
-  left: 0;
-  top: var(--keyboardHeight);
+    color 0.4s linear;
+  color: color-mix(in srgb, var(--fontColor) 48%, var(--background));
 }
 #menubutton:checked ~ label:hover {
-  transform: scale(1.05) rotate(0deg);
+  transform: scale(1.05) rotate(0deg) translateX(-50%);
 }
 .menu {
   position: absolute;   
   margin:0.5em;
   font-size: var(--bigKegel);  
-  color: var(--fontColor);
-padding: 0em;
+padding-bottom: 0.6em;
   width: 0.0em;
   height: 0.8em;
   overflow: hidden;
   overflow-y: hidden;
   z-index: 998;
-  background-color:   var(--fontColor); 
+  background-color:   var(--menuBackground); 
   display:grid;
   grid-template-columns: 0.5fr 1.5fr;
   gap: 0em 0.9em;
@@ -161,7 +153,7 @@ padding: 0em;
     top 0.15s ease, 
     left 0.2s ease 0.2s,
     padding 0.2s ease 0.2s;  
-  
+  color: var(--darkFontColor);
 }
 #menubutton:checked ~ div.menu {
   transition: width 0.4s ease, 
@@ -185,7 +177,7 @@ padding: 0em;
   margin:0em;
   margin-bottom: 1.5em;
   padding: 0em;
-  color: var(--background);
+  
 }
 #verba {
   text-align: center;
@@ -202,10 +194,6 @@ padding: 0em;
   min-height: 0em;
 }
 
-.fade {
-  animation:0.4s ease 0s 1 normal forwards running opacity-fade;
-}
-
 @keyframes opacity-fade {
   0% {
     text-shadow: 0 0 0 var(--fontColor);
@@ -219,9 +207,7 @@ padding: 0em;
     color: transparent;
   }
 }
-.unfade {
-  animation:0.5s ease 0s 1 normal forwards running opacity-unfade;
-}
+
 @keyframes opacity-unfade {
   0% {
     color: transparent;
@@ -242,7 +228,7 @@ padding: 0em;
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: min(125vw, 100vh);
+  height: 100vh;
   left: 0px;
   top: 0px;
   white-space: nowrap;
@@ -337,7 +323,7 @@ padding: 0em;
 #group {
   position: absolute;  
   font-size: var(--smallKegel);
-  color: var(--background2);
+  color: var(--halfColor);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -357,7 +343,7 @@ padding: 0em;
   bottom: 0px;
   left: 0px;
   
-  background-image: linear-gradient(var(--background) 0%, color-mix(in srgb, var(--background) 40%, var(--fontColor)) 45% 52%, var(--background2) 75% 85%, var(--fontColor) 115%);
+  background-image: linear-gradient(var(--background) 0%, color-mix(in srgb, var(--background) 40%, var(--fontColor)) 45% 52%, var(--halfColor) 75% 85%, var(--fontColor) 115%);
 }
 
 @keyframes fly-in {
@@ -417,7 +403,7 @@ padding: 0em;
 @keyframes group-blur-in {
   0% {
     color: transparent;
-  text-shadow: 0 0 0 var(--background2);
+  text-shadow: 0 0 0 var(--halfColor);
     padding:0em;
   } 100% {
     color: transparent;
@@ -432,7 +418,7 @@ padding: 0em;
     padding:0em;
   } 100% {
     color: transparent;
-  text-shadow: 0 0 0 var(--background2);
+  text-shadow: 0 0 0 var(--halfColor);
     padding:0em;
   }
 }

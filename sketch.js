@@ -102,8 +102,12 @@ function preload() {
 function windowResized() {
   setBigKegel();
 }
+window.speechSynthesis.onvoiceschanged = function() {
+  console.log(":)");
+    setVoice();
+};
 function setup() {
-  setVoice();
+  
 
   //set groups
   let index = 0;
@@ -655,6 +659,9 @@ function setCaretPosition(elemId, caretPos) {
 //sound
 
 function speak(message) {
+    if(!theVoice) {
+    setVoice();
+  }
   if (synth.speaking) {
     //console.error("speechSynthesis.speaking");
     return;

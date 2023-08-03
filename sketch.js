@@ -1,5 +1,4 @@
 const synth = window.speechSynthesis;
-
 let theVoice;
 let lang, dict;
 let result,
@@ -99,12 +98,20 @@ function preload() {
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
-
-synth.addEventListener("voiceschanged", function() {
+  if(!synth.getVoices().length) {
+    synth.addEventListener("voiceschanged", function() {
+      console.log("!!!");
       setVoice();
     });
+} else {
+  setVoice();
 }
+}
+
+
 function setup() {
+
+
   //set groups
   let index = 0;
   let subindex = 0;
@@ -654,9 +661,7 @@ function setCaretPosition(elemId, caretPos) {
 //sound
 
 function speak(message) {
-  if (!theVoice) {
-    setVoice();
-  } else {
+
   if (synth.speaking) {
     //console.error("speechSynthesis.speaking");
     return;
@@ -671,7 +676,7 @@ function speak(message) {
       synth.speak(utterThis);
     }
   }
-  }
+  
 }
 
 function setVoice() {

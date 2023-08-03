@@ -12,7 +12,6 @@ arrêter,"to stop, arrest","остановить, арестовать"
 arriver,to arrive,прибыть
 attendre,to wait for,ждать
 avoir,to have,иметь
-avoir besoin,to need,нуждаться
 blesser,"to hurt, offend","обидеть, оскорбить"
 boire,to drink,пить
 brûler,to burn,обжечься
@@ -22,7 +21,7 @@ choisir,to choose,выбирать
 commencer,"to begin, to start","начать, приступить"
 compléter,to complete,завершить
 comprendre,to understand,понимать
-connaître,to know,знать
+connaître,to know (person or place),знать (человека)
 continuer,to continue,продолжать
 contrôler,to control,контролировать
 corriger,to correct,исправлять
@@ -39,7 +38,7 @@ dépêcher,to hurry,торопиться
 descendre,to descend,спускаться
 détester,to hate,ненавидеть
 devenir,to become,становиться
-devoir,to have to,быть вынужденным
+devoir,to have to,быть обязанным
 dire,to say,сказать
 donner,to give,давать
 dormir,to sleep,спать
@@ -79,7 +78,7 @@ monter,to climb,подняться
 mourir,to die,умирать
 nager,to swim,плавать
 naître,to be born,родиться
-neiger,to snow,выпасть снег
+neiger,to snow,идёт снег
 nettoyer,to clean,убирать
 noter,to write down,записывать
 obéir,to obey,слушаться
@@ -94,7 +93,7 @@ partir,to leave,уйти
 parvenir,to reach,дойти
 passer,"to pass, spend time","пройти, провести время"
 payer,to pay,платить
-penser,to think,думать
+penser,to think,"думать о, задумать"
 perdre,to lose,терять
 placer,to put,ставить
 pleurer,to cry,плакать
@@ -129,7 +128,7 @@ réussir,to succeed,добиться успеха
 réveiller,to wake up,проснуться
 révéler,to reveal,раскрыться
 revenir,to come back,возвращаться
-savoir,to know,знать
+savoir,know (a fact),знать (факт)
 sentir,"to feel, smell","чувствовать, обонять"
 sortir,to go out,выходить
 souhaiter,to wish,желать

@@ -40,7 +40,6 @@ appartenir,to belong,принадлежать
 appeler,to call,звать
 apporter,to bring,приводить
 apprendre,to learn,учиться
-app. par coeur,to memorize,запоминать
 approcher,to approach,подходить
 approuver,to approve (of),одобрять (о)
 armer,to arm,вооружиться
@@ -63,8 +62,6 @@ augmenter,to increase,увеличиваться
 avancer,to advance,продвигаться
 aventurer,to venture,решаться
 avoir,to have,иметь
-avoir besoin,to need,нуждаться
-avoir raison,to be right,быть правильным
 baisser,to lower,опускаться
 balancer,to sway,качаться
 balayer,to sweep,взметать
@@ -121,7 +118,7 @@ conduire,to drive,управлять
 confire,to preserve,сохранять
 confondre,to confuse,запутать
 conjoindre,to unite,объединяться
-connaître,to know,знать
+connaître,to know (person or place),знать (человека)
 conquérir,to conquer,покорять
 conseiller,to recommend,рекомендовать
 consentir,to consent,соглашаться
@@ -158,7 +155,6 @@ débattre,to debate,спорить
 décevoir,to disappoint,разочаровать
 déchirer,to rip,порвать
 décider,to decide,решать
-déclore,to reopen,открывать заново
 déconfire,to be beaten,быть избитым
 découdre,to unpick,распаковывать
 décourager,to discourage,обескураживать
@@ -198,7 +194,7 @@ développer,to develop,развиваться
 devenir,to become,становиться
 dévêtir,to undress,раздеваться
 deviner,to guess,догадаться
-devoir,to have to,быть вынужденным
+devoir,to have to,быть обязанным
 différer,to differ,отличаться
 diminuer,to diminish,уменьшаться
 dîner,to have dinner,ужинать
@@ -241,7 +237,6 @@ encourir,to incur,нести расходы
 endormir,to fall asleep,засыпать
 enduire,to coat,покрывать
 enfreindre,to infringe,нарушать
-s’enfuir,to run away,убегать
 engager,to bind,связывать
 enjoindre,to enjoin,предписывать
 enlever,to remove,удалять
@@ -303,7 +298,6 @@ fixer,to fix,исправить
 fonder,to found,найти
 fondre,to melt,растаять
 forcer,to force,заставлять
-forclore,to debar,запрещать
 fouiller,to dig deeply,глубоко копать
 fournir,"to furnish, provide","снабжать, обеспечивать"
 frapper,to knock,стучать
@@ -401,7 +395,7 @@ naître,to be born,родиться
 naviguer,to navigate,ориентироваться
 négliger,to neglect,пренебрегать
 négocier,to negotiate,договариваться
-neiger,to snow,убирать снег
+neiger,to snow,идёт снег
 nettoyer,to clean,чистить
 neutraliser,to neutralize,нейтрализовать
 nier,to deny,отрицать
@@ -441,7 +435,7 @@ peindre,to paint,красить
 peler,to peel,чистить
 pendre,to hang,вешать
 pénétrer,to enter,войти
-penser,to think,думать
+penser,to think,"думать о, задумать"
 percevoir,to perceive,воспринимать
 perdre,to lose,терять
 périr,to perish,погибнуть
@@ -525,7 +519,7 @@ rejoindre,to rejoin,воссоединиться
 relire,to reread,перечитывать
 remarquer,to notice,замечать
 remercier,to thank,благодарить
-remettre,to put back (on),вернуть (на) место
+remettre,to put back (on),вернуть (на место)
 remoudre,to regrind,перемалывать
 remplacer,to replace,заменить
 remplir,to fill,заполнять
@@ -576,7 +570,7 @@ salir,to soil,испачкать
 satisfaire,to satisfy,удовлетворять
 sauter,to jump,прыгать
 sauver,"to save, rescue","спасать, выручать"
-savoir,to know,знать
+savoir,know (a fact),знать (факт)
 secouer,to shake,трясти
 secourir,to help,помочь
 séduire,to seduce,соблазнить

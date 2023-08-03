@@ -99,9 +99,7 @@ function preload() {
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
 }
-function windowResized() {
-  setBigKegel();
-}
+
 
 function setup() {
   const allVoicesObtained = new Promise(function(resolve, reject) {
@@ -134,7 +132,6 @@ allVoicesObtained.then(setVoice());
   }
 
   //create dom
-  setBigKegel();
   lv = createElement("div");
   lv.id("layoutViewport");
   setVariable("--fontColor", fontcolor);
@@ -167,16 +164,17 @@ allVoicesObtained.then(setVoice());
 
   //menu
   menucontrol = createInput();
+  
   menucontrol.attribute("type", "checkbox");
   // menucontrol.attribute('checked', true);
   menucontrol.id("menubutton");
   menucontrol.changed(toggleMenu);
   menubutton = createElement("label", "");
   menubutton.html("☰");
-  menubutton.style("top", lookUpValue("contentBox", "height"));
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
+  
 
   //name
   let newP = createElement("p");
@@ -232,7 +230,6 @@ allVoicesObtained.then(setVoice());
   pVerb1 = createElement("p");
   pVerb1.parent(menu);
   pVerb1.class("double");
-
   pVerb1.html(
     "Coding and design by Ivan Yakushev. Tested on Chrome & Safari only."
   );
@@ -751,15 +748,14 @@ function changeList() {
   shortTable = loadTable(this.value(), "csv", "header");
 }
 
-function setBigKegel() {
-  setVariable(
-    "--bigKegel",
-    min(
-      windowHeight * 0.1,
-      (windowWidth * textSize()) / textWidth("nous déconceptualisons")
-    ) + "px"
-  );
-}
+// function setBigKegel() {
+//   // setVariable(
+//   //   "--bigKegel",
+//   //   min(
+//   //     windowHeight * 0.1,
+//   //     (windowWidth * textSize() / textWidth("nous déconceptualisons")) + "px"
+//   // ));
+// }
 
 function setAnimation(elem, name, time, delay) {
   elem.style("animation", "0s ease 0s 1 normal none running none ");

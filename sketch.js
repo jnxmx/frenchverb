@@ -102,13 +102,11 @@ function preload() {
 function windowResized() {
   setBigKegel();
 }
-window.speechSynthesis.onvoiceschanged = function() {
+window.speechSynthesis.onvoiceschanged = function () {
   console.log(":)");
-    setVoice();
+  setVoice();
 };
 function setup() {
-  
-
   //set groups
   let index = 0;
   let subindex = 0;
@@ -659,7 +657,7 @@ function setCaretPosition(elemId, caretPos) {
 //sound
 
 function speak(message) {
-    if(!theVoice) {
+  if (!theVoice) {
     setVoice();
   }
   if (synth.speaking) {
@@ -680,39 +678,41 @@ function speak(message) {
 
 function setVoice() {
   window.speechSynthesis.getVoices();
-  let voices = synth.getVoices().filter(function (voice) {
-    return voice.lang.includes("FR");
-  });
-  console.log("Available french voices:");
-  for (let a of voices) console.log(a.name + " " + a.lang);
-  if (
-    voices.filter(function (voice) {
-      return voice.name.startsWith("Microsoft Denise");
-    })[0]
-  ) {
-    theVoice = voices.filter(function (voice) {
-      return voice.name.startsWith("Microsoft");
-    })[0];
-  } else if (
-    voices.filter(function (voice) {
-      return voice.name.startsWith("Google");
-    })[0]
-  ) {
-    theVoice = voices.filter(function (voice) {
-      return voice.name.startsWith("Google");
-    })[0];
-  } else if (
-    voices.filter(function (voice) {
-      return voice.name.startsWith("Thomas");
-    })[0]
-  ) {
-    theVoice = voices.filter(function (voice) {
-      return voice.name.startsWith("Thomas");
-    })[0];
-  } else {
-    theVoice = voices[0];
-  }
-  console.log("Using: " + theVoice.name);
+  if (!(!synth.getVoices())) {
+    let voices = synth.getVoices().filter(function (voice) {
+      return voice.lang.includes("FR");
+    });
+    console.log("Available french voices:");
+    for (let a of voices) console.log(a.name + " " + a.lang);
+    if (
+      voices.filter(function (voice) {
+        return voice.name.startsWith("Microsoft Denise");
+      })[0]
+    ) {
+      theVoice = voices.filter(function (voice) {
+        return voice.name.startsWith("Microsoft");
+      })[0];
+    } else if (
+      voices.filter(function (voice) {
+        return voice.name.startsWith("Google");
+      })[0]
+    ) {
+      theVoice = voices.filter(function (voice) {
+        return voice.name.startsWith("Google");
+      })[0];
+    } else if (
+      voices.filter(function (voice) {
+        return voice.name.startsWith("Thomas");
+      })[0]
+    ) {
+      theVoice = voices.filter(function (voice) {
+        return voice.name.startsWith("Thomas");
+      })[0];
+    } else {
+      theVoice = voices[0];
+    }
+    console.log("Using: " + theVoice.name);
+  }  
 }
 
 function toggleMenu() {

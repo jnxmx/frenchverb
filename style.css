@@ -1,8 +1,4 @@
-@media (width <= 1300px) {
-  #contentBox {
-    height: 117vw;
-  }
-}
+
 :root {
   --background: #000000;
   --fontColor: #ffffff;
@@ -10,7 +6,7 @@
   --shade: color-mix(in srgb, var(--fontColor) 88%, var(--background));
   --halfColor: color-mix(in srgb, var(--fontColor) 48%, var(--background));
   --menuBackground: color-mix(in srgb, var(--fontColor) 48%, #FFFFFF);
-  --bigKegel:10vh;
+  --bigKegel: min(9.3vh, 9.319681456200228vw);
   --smallKegel: calc(0.5*var(--bigKegel));
   --menuKegel: min(calc(0.45*var(--bigKegel)), 3.3vh, 4vw);
   --blurLevel: 0px;
@@ -96,8 +92,11 @@ input[type=radio] + span {
 }
 label[for="menubutton"] {
   left:50%;
+  top: calc(117vw - 2em); 
+  transform-origin: 50% 57%;
   transform: translateX(-50%);
-  margin-bottom: -1em;
+  
+
     -webkit-touch-callout: none; 
   -webkit-user-select: none; 
   -khtml-user-select: none; 
@@ -115,28 +114,34 @@ label[for="menubutton"] {
   text-align: center;
   font-size: calc(0.85*var(--bigKegel));  
   cursor: pointer;
-]
   transition: transform 0.2s ease-in 0.2s forwards, 
     top 0.15s ease,
     color 0.4s linear;
 }
+@media (min-aspect-ratio: 100/117)  {
+  label[for="menubutton"] {
+    top: calc(100vh - 2em);
+  }
+}
 label[for="menubutton"]:hover {
-  transform: scale(1.05) translateX(-50%);
+  transform: translateX(-50%) scale(1.05);
 }
 #menubutton:checked ~ label {
+  transform: translateX(-50%) rotate(180deg) ;
   transition: transform 0.2s ease-out, 
     top 0.8s ease 0.4s, 
     color 0.4s linear;
   color: color-mix(in srgb, var(--fontColor) 48%, var(--background));
 }
 #menubutton:checked ~ label:hover {
-  transform: scale(1.05) rotate(0deg) translateX(-50%);
+  transform: translateX(-50%) rotate(180deg) scale(1.05) ;
 }
 .menu {
   position: absolute;   
-  margin:0.5em;
+  margin-top:0.5em;
+  margin-left: 0.5em;
   font-size: var(--bigKegel);  
-padding-bottom: 0.6em;
+  padding-bottom: 0.6em;
   width: 0.0em;
   height: 0.8em;
   overflow: hidden;
@@ -155,20 +160,30 @@ padding-bottom: 0.6em;
     padding 0.2s ease 0.2s;  
   color: var(--darkFontColor);
 }
+@media  (min-aspect-ratio: 100/117) {
+  .menu{
+  margin-left: calc(50vw - 50vh + 0.5em);
+    }
+}
 #menubutton:checked ~ div.menu {
   transition: width 0.4s ease, 
     height 0.8s ease 0.4s, 
     left 0.15s ease, 
     top 0.4s ease 0.4s,
     padding 0.6s ease 0.2s;
-
-
+  left: 0em;
   border-radius: 0.15em;
   padding: 0.75em;
   padding-top:0em;
-  margin:0.5em;
-  width: calc(100% - 2.5em);
-  height: calc(100% - 1.75em); 
+  
+  width: calc(100vw - 2.5em);
+  height: calc(117vw - 1.25em); 
+}
+@media (min-aspect-ratio: 100/117)  {
+  #menubutton:checked ~ div.menu {
+    height: calc(100vh - 1.75em);
+    width: calc(100vh - 2.25em);
+  }
 }
 .menu > p {
   text-align: left;
@@ -184,7 +199,7 @@ padding-bottom: 0.6em;
   margin: 0.2em;
   block-size: 1.43em;
   color: var(--background);
-  margin-bottom: 3em;
+/*   margin-bottom: 2em; */
   grid-column: span 2;   
 }
 .double{
@@ -228,13 +243,18 @@ padding-bottom: 0.6em;
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
+  height: 117vw;
   left: 0px;
   top: 0px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+}
+@media (min-aspect-ratio: 100/117)  {
+  #contentBox {
+    height: 100vh;
+  }
 }
 
 #result {
@@ -524,3 +544,4 @@ padding-bottom: 0.6em;
     text-decoration-color: transparent;
   }
 }
+

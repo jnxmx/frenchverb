@@ -26,11 +26,13 @@ let listFileName = [
   "assets/willdudziak147.csv",
   "assets/willdudziak681.csv",
   "assets/50verbs.csv",
+  "assets/reflexive.csv",
 ];
 let listName = [
   "147 by Will Dudziak",
   "681 by Will Dudziak",
   "50 most popular",
+  "40 reflexive",
 ];
 let verbRow;
 let prefix = [
@@ -185,6 +187,21 @@ function setup() {
   );
   //translation
   newP.class("double");
+    //dict
+  let pVerb1 = createElement("p");
+  pVerb1.parent(menu);
+  pVerb1.html("Verb list:");
+  let pVerb2 = createElement("p");
+  pVerb2.parent(menu);
+  pVerb2.class("radio-wrapper");
+  let dict = createRadio("Dictionary");
+  dict.changed(changeList);
+  for (let i = 0; i < listFileName.length; i++) {
+    dict.option(listFileName[i], listName[i]);
+  }
+  dict.selected(listFileName[0]);
+  dict.parent(pVerb2);
+  
   let pTrans1 = createElement("p");
   pTrans1.parent(menu);
   pTrans1.html("Translation language:");
@@ -197,20 +214,7 @@ function setup() {
   lang.selected("english");
   lang.parent(pTrans2);
 
-  //dict
-  let pVerb1 = createElement("p");
-  pVerb1.parent(menu);
-  pVerb1.html("Verb list:");
-  let pVerb2 = createElement("p");
-  pVerb2.parent(menu);
-  pVerb1.class("radio-wrapper");
-  let dict = createRadio("Dictionary");
-  dict.changed(changeList);
-  for (let i = 0; i < listFileName.length; i++) {
-    dict.option(listFileName[i], listName[i]);
-  }
-  dict.selected(listFileName[0]);
-  dict.parent(pVerb2);
+
   //mode
   let pMode1 = createElement("p");
   pMode1.parent(menu);
@@ -227,7 +231,7 @@ function setup() {
   pVerb1.parent(menu);
   pVerb1.class("double");
   pVerb1.html(
-    "Coding and design by Ivan Yakushev. Tested on Chrome & Safari only."
+    "Coding and design by Ivan Yakushev. Font PP Radio Grotesk by Pangram Pangram. Tested on Chrome & Safari only."
   );
   pVerb1.style("align-self", "end");
   //input
@@ -337,7 +341,7 @@ function createNext() {
     varNum = int(random(0, prefix[conjNum].length));
   } else if (conjNum == 0) {
     let firstLetter = verbRow.getString(conjugationText[0]).charAt(0);
-    if (vowels.includes(firstLetter)) {
+    if (vowels.includes(firstLetter) && !refl) {
       varNum = 1;
     } else {
       varNum = 0;
@@ -430,7 +434,7 @@ function createNext() {
   );
   if (impersonal) {
     tiplist.html(
-      "<p>il " +
+      "<p>il "+ reflexive[5] +
         splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
         "</p>"
     );
@@ -439,7 +443,7 @@ function createNext() {
   if (passe.checked()) {
     tiplist.html(
       tiplist.html() +
-        "</p></br><p>" +
+        "</p></br><p>" + reflexive[5] +
         splitTokens(verbRow.getString("past participle"), ";")[0] +
         "</p>"
     );
@@ -448,7 +452,7 @@ function createNext() {
   //normal
   if (!mode.checked()) {
     if (!muteSpeech.checked()) {
-      speak(verb);
+      speak(shortTable.getString(verbNum, "verb"));
     }
     verbFrench.html(shortTable.getString(verbNum, "verb"));
     translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
@@ -662,10 +666,11 @@ function setCaretPosition(elemId, caretPos) {
 
 function speak(message) {
 
-  if (synth.speaking) {
-    //console.error("speechSynthesis.speaking");
-    return;
-  }
+  // if (synth.speaking) {
+  //   //console.error("speechSynthesis.speaking");
+  //   //synth.cancel()
+  //   return;
+  // }
   if (message !== "") {
     const utterThis = new SpeechSynthesisUtterance(message);
     utterThis.voice = theVoice;

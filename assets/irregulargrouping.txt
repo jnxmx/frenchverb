@@ -388,6 +388,7 @@ réinscrire
 retranscrire
 souscrire
 transcrire
+inscrire
 
 confire
 déconfire

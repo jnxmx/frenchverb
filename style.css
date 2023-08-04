@@ -15,7 +15,7 @@
   --tipOpacity: 0;
   --scrollLength: 0;
 }
-@media (min-aspect-ratio: 100/109)  {
+@media (min-aspect-ratio: 100/103)  {
   :root{
   --smallKegel: calc(0.5*var(--bigKegel));
   }
@@ -49,51 +49,55 @@ canvas {
 
 .radio-wrapper>div{
   display:inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; 
 }
 input[type=checkbox]{
+  /*     white-space: nowrap;
+overflow: hidden; */
    font-size: var(--menuKegel);  
   appearance: none;
-      height: 0.4em;
-    width: 0.4em;
-    margin-right: 0.5em;
+      height: 0.48em;
+    width: 0.48em;
+    margin-right: 0.6em;
+  margin-left: 0.19em;
   border-radius: 0%;
   background: var(--shade);
-  border: 0.15em solid var(--fontColor);
-  box-shadow: 0 0 0 0.01em var(--darkFontColor);   
+  border: 0.17em solid var(--fontColor);
+  box-shadow: 0 0 0 0.12em var(--shade);   
 }
 input[type=checkbox] + span {
   font-size: var(--menuKegel); 
   margin-right: 1em;
 }
 [type=checkbox]:hover{
-  border-width: 0;
+  border-width: 0.24em;
 }
 [type=checkbox]:checked{
-      box-shadow: 0 0 0 0.1em var(--background);
+      box-shadow: 0 0 0 0.12em var(--background);
     background-color: var(--background);
     border-width: 0.11em;
 }   
 input[type=radio]{
    font-size: var(--menuKegel);  
-  appearance: none;
+   appearance: none; 
       height: 0.5em;
     width: 0.5em;
+  margin-left: 0.22em;
     margin-right: 0.5em;
   border-radius: 50%;
   background: var(--shade);
-  border: 0.15em solid var(--fontColor);
-  box-shadow: 0 0 0 0.1em var(--darkFontColor);   
+  border: 0.17em solid var(--fontColor);
+  box-shadow: 0 0 0 0.12em var(--shade);   
 }
 input[type=radio] + span {
   font-size: var(--menuKegel); 
   margin-right: 1em;
 }
 [type=radio]:hover{
-  border-width: 0;
+  border-width: 0.24em;
 }
 [type=radio]:checked{
-      box-shadow: 0 0 0 0.1em var(--background);
+      box-shadow: 0 0 0 0.12em var(--background);
     background-color: var(--background);
     border-width: 0.11em;
 }   
@@ -101,65 +105,66 @@ input[type=radio] + span {
   display:none;
 }
 label[for="menubutton"] {
-  left:50%;
-  top: calc(109vw - 2em); 
-  transform-origin: 50% 57%;
-  transform: translateX(-50%);
-  
-
+    font-size: calc(0.85*var(--bigKegel));  
+  text-align: center;
+  left: calc(50% - 0.5em);
+  top: calc(103vw - 2em); 
+  transform-origin: 50% 53%;
     -webkit-touch-callout: none; 
   -webkit-user-select: none; 
   -khtml-user-select: none; 
   -moz-user-select: none; 
   -ms-user-select: none; 
   user-select: none; 
-    overflow: hidden;
-  overflow-y: hidden;
+
   display: block;
   position: fixed;   
   appearance: none;
   color: var(--fontColor);  
   width: 1em;  
   z-index: 999;
-  text-align: center;
-  font-size: calc(0.85*var(--bigKegel));  
+  
+
   cursor: pointer;
-  transition: transform 0.2s ease-in 0.2s forwards, 
-    top 0.15s ease,
+  transition: transform 0.1s ease-in, 
     color 0.4s linear;
 }
-@media (min-aspect-ratio: 100/109)  {
+@media (min-aspect-ratio: 100/103)  {
   label[for="menubutton"] {
     top: calc(100vh - 2em);
   }
 }
 label[for="menubutton"]:hover {
-  transform: translateX(-50%) scale(1.05);
+  transform: scale(1.05);
 }
 #menubutton:checked ~ label {
-  transform: translateX(-50%) rotate(180deg) ;
+  font-size: calc(0.85*var(--bigKegel));  
+  transform: rotate(180deg);
   transition: transform 0.2s ease-out, 
-    top 0.8s ease 0.4s, 
     color 0.4s linear;
   color: color-mix(in srgb, var(--fontColor) 48%, var(--background));
 }
 #menubutton:checked ~ label:hover {
-  transform: translateX(-50%) rotate(180deg) scale(1.05) ;
+  transform: rotate(180deg), scale(1.2);
 }
 .menu {
+    left: calc(50% - 0.5em);
+  top: calc(103vw - 2em); 
   position: absolute;   
   margin-top:0.5em;
   margin-left: 0.5em;
+  margin-right: 0.5em;
   font-size: var(--bigKegel);  
-  padding-bottom: 0.6em;
+  padding-bottom: 0.0em;
   width: 0.0em;
   height: 0.8em;
   overflow: hidden;
   overflow-y: hidden;
   z-index: 998;
   background-color: var(--menuBackground); 
-  display: grid;3
-  grid-template-columns: 1fr 5fr;
+  display: grid;
+  
+  
   gap: 0em 0.9em;
   align-content: start;
   border-radius: 0.1em; 
@@ -167,32 +172,35 @@ label[for="menubutton"]:hover {
     width 0.2s ease 0.2s, 
     top 0.15s ease, 
     left 0.2s ease 0.2s,
-    padding 0.2s ease 0.2s;  
+    padding-left 0.4s ease 0.2s;  
   color: var(--darkFontColor);
 }
-@media  (min-aspect-ratio: 100/109) {
+@media  (min-aspect-ratio: 100/103) {
   .menu{
-  margin-left: calc(50vw - 50vh + 0.5em);
-    }
+    margin-left: calc(-48.54vw + 50vw + 0.5em);
+    top: calc(100vh - 2em);
+  }
 }
 #menubutton:checked ~ div.menu {
-  transition: width 0.4s ease, 
+  transition: width 0.15s ease, 
     height 0.8s ease 0.4s, 
     left 0.15s ease, 
     top 0.4s ease 0.4s,
-    padding 0.6s ease 0.2s;
+    padding 0.4s ease,
+    padding-bottom 0.4s ease 0.4s;
   left: 0em;
+  top:0em;
   border-radius: 0.15em;
   padding: 0.75em;
   padding-top:0em;
-  
+
   width: calc(100vw - 2.5em);
-  height: calc(109vw - 1.25em); 
+  height: calc(103vw - 1.75em); 
 }
-@media (min-aspect-ratio: 100/109)  {
+@media (min-aspect-ratio: 100/103)  {
   #menubutton:checked ~ div.menu {
     height: calc(100vh - 1.75em);
-    width: calc(100vh - 2.25em);
+    width: calc(97.08vh - 2.25em);
   }
 }
 .menu > p {
@@ -200,20 +208,20 @@ label[for="menubutton"]:hover {
   line-height: 1.2em;
   font-size: var(--menuKegel);
   margin:0em;
-  margin-bottom: 1.5em;
+  margin-bottom: 0.5em;
   padding: 0em;
   
 }
 #verba {
   text-align: center;
-  margin: 0.2em;
+  margin: 0.7em;
   block-size: 1.43em;
   color: var(--background);
-/*   margin-bottom: 2em; */
-  grid-column: span 2;   
+margin-bottom: 1em; 
+  grid-column: span 1;   
 }
 .double{
-  grid-column: span 2; 
+  grid-column: span 1; 
 }
 .empty {
   min-height: 0em;
@@ -253,7 +261,7 @@ label[for="menubutton"]:hover {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 109vw;
+  height: 103vw;
   left: 0px;
   top: 0px;
   white-space: nowrap;
@@ -261,7 +269,7 @@ label[for="menubutton"]:hover {
   text-overflow: ellipsis;
   display: inline-block;
 }
-@media (min-aspect-ratio: 100/109)  {
+@media (min-aspect-ratio: 100/103)  {
   #contentBox {
     height: 100vh;
   }

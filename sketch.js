@@ -32,7 +32,7 @@ let listName = [
   "147 by Will Dudziak",
   "681 by Will Dudziak",
   "50 most popular",
-  "40 reflexive",
+  "40 reflexive verbs",
 ];
 let verbRow;
 let prefix = [
@@ -172,8 +172,6 @@ function setup() {
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
-  
-
   //name
   let newP = createElement("p");
   newP.parent(menu);
@@ -186,14 +184,17 @@ function setup() {
     "I made this webapp as a personal aid for learning French conjugations. Tap and hold for the conjugations list, adjust vowel accents with desktop arrow buttons."
   );
   //translation
-  newP.class("double");
+  let opts = createElement("p");
+  opts.parent(menu);
+  opts.id("optionsblock");
     //dict
   let pVerb1 = createElement("p");
-  pVerb1.parent(menu);
+  pVerb1.parent(opts);
+  pVerb1.id("verbblock");
   pVerb1.html("Verb list:");
   let pVerb2 = createElement("p");
-  pVerb2.parent(menu);
-  pVerb2.class("radio-wrapper");
+  pVerb2.parent(pVerb1);
+  pVerb2.class("radio-wrapper")
   let dict = createRadio("Dictionary");
   dict.changed(changeList);
   for (let i = 0; i < listFileName.length; i++) {
@@ -201,39 +202,39 @@ function setup() {
   }
   dict.selected(listFileName[0]);
   dict.parent(pVerb2);
-  
   let pTrans1 = createElement("p");
-  pTrans1.parent(menu);
+  pTrans1.parent(opts);
+  pTrans1.id("transblock");
   pTrans1.html("Translation language:");
   let pTrans2 = createElement("p");
-  pTrans2.parent(menu);
+  pTrans2.parent(pTrans1);
   pTrans2.class("radio-wrapper");
   lang = createRadio("Language");
   lang.option("russian", "russian");
   lang.option("english", "english");
   lang.selected("english");
   lang.parent(pTrans2);
-
-
   //mode
   let pMode1 = createElement("p");
-  pMode1.parent(menu);
-  pMode1.html("Optional:");
+  pMode1.parent(opts);
+  pMode1.id("modeblock");
+  pMode1.html("Configuration:");
   let pMode2 = createElement("p");
-  pMode2.parent(menu);
-  passe = createCheckbox("add past participle form", false);
+  pMode2.parent(pMode1);
+  passe = createCheckbox("past participle form", false);
   passe.parent(pMode2);
-  mode = createCheckbox("show translation only", false);
+  mode = createCheckbox("translation only", false);
   mode.parent(pMode2);
   muteSpeech = createCheckbox("mute speech", false);
   muteSpeech.parent(pMode2);
   pVerb1 = createElement("p");
   pVerb1.parent(menu);
-  pVerb1.class("double");
+  //pVerb1.class("double");
   pVerb1.html(
-    "Coding and design by Ivan Yakushev. Font PP Radio Grotesk by Pangram Pangram. Tested on Chrome & Safari only."
+    "Coding and design by Ivan Yakushev.</br>Font PP Radio Grotesk by Pangram Pangram.</br>Tested on Chrome & Safari only."
   );
-  pVerb1.style("align-self", "end");
+  //pVerb1.style("align-self", "end");
+  
   //input
   inp = createInput("");
   inp.id("hiddenInput");
@@ -245,7 +246,7 @@ function setup() {
   inp.elt.focus();
   //onkeypress
   inp.elt.addEventListener("input", (event) => {
-    const inputValue = event.target.value.toLowerCase();
+    const inputValue = event.target.value.toLowerCase().replace("'","’");
     answer = inputValue;
     result.html(prefix[conjNum][varNum] + answer);
   });
@@ -253,8 +254,8 @@ function setup() {
   inp.elt.addEventListener("keyup", (event) => {
     event.preventDefault();
     setCaretPosition("hiddenInput", inp.value().length);
-    if (event.keyCode == ENTER) {
-      if (answer == correctAnswer || answer == correctAnswer + " ") {
+    if (event.keyCode === ENTER) {
+      if (answer === correctAnswer || answer === correctAnswer + " ") {
         speak(prefix[conjNum][varNum] + answer);
         correctAnimation();
       } else {
@@ -271,7 +272,7 @@ function setup() {
   });
 
   // inp.elt.addEventListener("keydown", (event) => {
-  //   if (event.keyCode == LEFT_ARROW) {
+  //   if (event.keyCode === LEFT_ARROW) {
   //     showTip();
   //   }
   // });
@@ -279,7 +280,7 @@ function setup() {
   addEventListener(
     "animationend",
     function (e) {
-      if (e.animationName == "resultOut") createNext();
+      if (e.animationName === "resultOut") createNext();
     },
     false
   );
@@ -303,11 +304,11 @@ function createNext() {
   }
   console.log(verb);
   //cut reflexive
-  if (verb.substring(0, 2) == "s'") {
+  if (verb.substring(0, 2) === "s'") {
     refl = true;
-    reflexive = ["m'", "t'", "s'", "nous ", "vous ", "s'", "s'"];
+    reflexive = ["m’", "t’", "s’", "nous ", "vous ", "s’", "s’"];
     verb = verb.substring(2);
-  } else if (verb.substring(0, 3) == "se ") {
+  } else if (verb.substring(0, 3) === "se ") {
     refl = true;
     reflexive = ["me ", "te ", "se ", "nous ", "vous ", "se ", "se "];
     verb = verb.substring(3);
@@ -337,16 +338,16 @@ function createNext() {
   }
 
   //varNum:
-  if (conjNum == 2 || conjNum == 5) {
+  if (conjNum === 2 || conjNum === 5) {
     varNum = int(random(0, prefix[conjNum].length));
-  } else if (conjNum == 0) {
+  } else if (conjNum === 0) {
     let firstLetter = verbRow.getString(conjugationText[0]).charAt(0);
     if (vowels.includes(firstLetter) && !refl) {
       varNum = 1;
     } else {
       varNum = 0;
     }
-  } else if (conjNum == 6) {
+  } else if (conjNum === 6) {
     for (let etreVerb of etreVerbs) {
       if (
         (verb.endsWith(etreVerb) &&
@@ -365,7 +366,7 @@ function createNext() {
 
   //falloir etc.
   let impersonal = false;
-  if (verbRow.getString(conjugationText[0]).length < 1 || verb == "advenir") {
+  if (verbRow.getString(conjugationText[0]).length < 1 || verb === "advenir") {
     impersonal = true;
     if (conjNum != 6) {
       conjNum = 2;
@@ -454,10 +455,11 @@ function createNext() {
     if (!muteSpeech.checked()) {
       speak(shortTable.getString(verbNum, "verb"));
     }
-    verbFrench.html(shortTable.getString(verbNum, "verb"));
+    verbFrench.html(shortTable.getString(verbNum, "verb").replace("\'","’" ));
     translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
     //translation mode
   } else {
+    
     verbFrench.html(shortTable.getString(verbNum, lang.value()));
     translation.html("");
     groupName.html("");
@@ -561,7 +563,8 @@ function hideTip() {
   setVariable("--blurLevel", bLev + "px");
   setAnimation(result, "blur-out ease-in", 0.5, 0);
   setAnimation(verbFrench, "blur-out ease-in", 0.5, 0);
-  secondAnimation(groupName, "group-blur-out ease-in", 0.5, 0);
+  secondAnimation(groupName, "group-blur-out ease-in", 0.3, 0);
+  //console.log(lookUpValue(groupName.elt.id, "animation"));
   setAnimation(translation, "blur-out ease-in", 0.5, 0);
   setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);
   //setAnimation(menubutton,"ease forwards opacity-unfade", 0.5, 0);
@@ -602,12 +605,12 @@ function addAccentsWithUpDown(code) {
     ["c", "ç"],
     ["y", "ÿ"],
   ];
-  if (code == 40) {
+  if (code === 40) {
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
       for (let i = 0; i < weird.length; i++) {
         for (let j = 0; j < weird[i].length; j++) {
-          if (lastSymbol == weird[i][j]) {
+          if (lastSymbol === weird[i][j]) {
             let n = constrain(j - 1, 0, weird[i].length - 1);
             inp.value(
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
@@ -620,12 +623,12 @@ function addAccentsWithUpDown(code) {
         }
       }
     }
-  } else if (code == 38) {
+  } else if (code === 38) {
     if (inp.value().length > 0) {
       let lastSymbol = inp.value().charAt(inp.value().length - 1);
       for (let i = 0; i < weird.length; i++) {
         for (let j = 0; j < weird[i].length; j++) {
-          if (lastSymbol == weird[i][j]) {
+          if (lastSymbol === weird[i][j]) {
             let n = constrain(j + 1, 0, weird[i].length - 1);
             inp.value(
               inp.value().substring(0, inp.value().length - 1) + weird[i][n]
@@ -727,16 +730,12 @@ function setVoice() {
 function toggleMenu() {
   if (this.elt.checked) {
     secondAnimation(groupName, "flyUp forwards ease-in", 1.95, 0);
-    setAnimation(translation, "newVerb reverse forwards", 0.4, 0.5);
-    setAnimation(verbFrench, "newVerb reverse forwards", 0.4, 0.55);
-    setAnimation(result, "newVerb reverse forwards", 0.4, 0.4);
+    setAnimation(translation, "newVerb reverse forwards", 0.3, 0.05);
+    setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
+    setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     inp.elt.blur();
     menubutton.html("×");
   } else {
-    setAnimation(result, "", "0s ease 0s 1 normal none running none ");
-    verbFrench.style("animation", "0s ease 0s 1 normal none running none ");
-    translation.style("animation", "0s ease 0s 1 normal none running none ");
-    groupName.style("animation", "0s ease 0s 1 normal none running none ");
     createNext();
     inp.elt.focus();
     menubutton.html("☰");
@@ -762,6 +761,13 @@ function setAnimation(elem, name, time, delay) {
   elem.style("animation", name + " " + time + "s" + " " + delay + "s");
 }
 function secondAnimation(elem, name, time, delay) {
+  elem.style(
+    "animation",
+    splitTokens(lookUpValue(elem.elt.id, "animation"), ",")[0] +
+      ", " +
+      "0s ease 0s 1 normal none running none "
+  );
+  lookUpValue(elem.elt.id, "animation");
   elem.style(
     "animation",
     splitTokens(lookUpValue(elem.elt.id, "animation"), ",")[0] +

@@ -42,7 +42,7 @@ let prefix = [
   ["nous "],
   ["vous "],
   ["ils ", "elles "],
-  ["il a ", "il est "],
+  ["il a ", "il est ", "il s’est "],
 ];
 let vowels = [
   "a",
@@ -306,7 +306,7 @@ function createNext() {
   //cut reflexive
   if (verb.substring(0, 2) === "s'") {
     refl = true;
-    reflexive = ["m’", "t’", "s’", "nous ", "vous ", "s’", "s’"];
+    reflexive = ["m’", "t’", "s’", "nous ", "vous ", "s’", "se "];
     verb = verb.substring(2);
   } else if (verb.substring(0, 3) === "se ") {
     refl = true;
@@ -349,10 +349,12 @@ function createNext() {
     }
   } else if (conjNum === 6) {
     for (let etreVerb of etreVerbs) {
-      if (
-        (verb.endsWith(etreVerb) &&
-          verbRow.getString("compound verb") != "avoir") ||
-        refl
+      if (refl) {
+        varNum = 2;
+      } 
+      else if (
+        verb.endsWith(etreVerb) &&
+          verbRow.getString("compound verb") != "avoir"
       ) {
         varNum = 1;
         break;
@@ -442,12 +444,24 @@ function createNext() {
   }
   //tip passe:
   if (passe.checked()) {
-    tiplist.html(
-      tiplist.html() +
-        "</p></br><p>" + reflexive[5] +
-        splitTokens(verbRow.getString("past participle"), ";")[0] +
-        "</p>"
-    );
+    if(!refl) {
+      tiplist.html(
+        tiplist.html() +
+          "</p></br><p>" + reflexive[6] +
+          splitTokens(verbRow.getString("past participle"), ";")[0] +
+          "</p>"
+      );
+    } else {
+      tiplist.html(
+        tiplist.html() +
+          "</p></br><p>s’est " +
+          splitTokens(verbRow.getString("past participle"), ";")[0] +
+          "</p>"
+      );
+      correctAnswer =
+    splitTokens(verbRow.getString(conjugationText[conjNum]), ";")[0];
+      console.log(correctAnswer);
+    }
   }
 
   //normal
@@ -734,7 +748,7 @@ function toggleMenu() {
     setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     inp.elt.blur();
-    menubutton.html("×");
+    menubutton.html("+");
   } else {
     createNext();
     inp.elt.focus();

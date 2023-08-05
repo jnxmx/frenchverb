@@ -556,8 +556,8 @@ function showTip() {if(!menucontrol.elt.checked) {
   addAnimation(groupName, "group-blur-in forwards", 0.5, 0);
   secondAnimation(translation, "blur-in forwards", 0.5, 0);
   setAnimation(gradientBackgroundBox, "fade-in forwards ease-out", 0.8, 0);
-  //setAnimation(menubutton,"ease forwards opacity-fade", 0.4, 0);
-  menubutton.style("animation", "ease forwards opacity-fade 0.4s 0s");
+  setAnimation(menubutton,"ease forwards svg-opacity-fade", 0.2, 0);
+  //menubutton.style("animation", "ease forwards svg-opacity-fade 0.4s 0s");
   inp.elt.blur();
 }
 }
@@ -582,8 +582,8 @@ function hideTip() {if(!menucontrol.elt.checked) {
   //console.log(lookUpValue(groupName.elt.id, "animation"));
   setAnimation(translation, "blur-out ease-in", 0.5, 0);
   setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);
-  //setAnimation(menubutton,"ease forwards opacity-unfade", 0.5, 0);
-  menubutton.style("animation", "ease opacity-unfade 0.5s 0s");
+  setAnimation(menubutton,"ease forwards svg-opacity-unfade", 0.2, 0);
+  //menubutton.style("animation", "ease opacity-unfade 0.5s 0s");
   inp.elt.focus();
                    }
 }

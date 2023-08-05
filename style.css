@@ -16,7 +16,7 @@
   --bigKegel: calc(0.093 * var(--contHeight));
   --smallKegel: calc(0.6*var(--bigKegel));
   --menuKegel: calc(0.035*var(--contWidth));
-
+  --blurColor: #FF0000;
 }
 @media (min-aspect-ratio: 100/103)  {
   :root{
@@ -382,7 +382,6 @@ margin-bottom: 1.4em;
   top: var(--smallKegel);
   display: inline-block;
   padding:0em;
-
 }
 
 #gradBox {  
@@ -464,7 +463,7 @@ margin-bottom: 1.4em;
 @keyframes group-blur-out {
   0% {
     color: transparent;
-  text-shadow: 0 0 var(--blurLevel) var(--fontColor);
+  text-shadow: 0 0 var(--blurLevel) var(--blurColor);
     padding:0em;
   } 100% {
     color: transparent;

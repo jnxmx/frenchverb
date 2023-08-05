@@ -241,7 +241,6 @@ function setup() {
   inp.elt.autocorrect = "off";
   inp.elt.autocapitalize = "off";
   inp.elt.spellcheck = "off";
-  inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   //onkeypress
   inp.elt.addEventListener("input", (event) => {

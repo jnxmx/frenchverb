@@ -118,12 +118,12 @@ input[type=radio] + span {
 }
 label[for="menubutton"] {
   opacity: 0;
-  display: inline-block;
+  display: block;
   font-size: calc(0.4*var(--bigKegel));
-  width: 1em;
-  height: 1em;
+  width: 2em;
+  height: 2em;
   overflow: hide;
-  left: calc(50vw - 0.5em);
+  left: calc(50vw - 1em);
   top: calc(var(--contHeight) - 2.5*var(--bigKegel));   
   position: absolute;   
   padding: 0;

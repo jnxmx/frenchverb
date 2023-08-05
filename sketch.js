@@ -751,12 +751,12 @@ function toggleMenu() {
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     inp.elt.blur();
-    menubutton.html("_");
+
   } else {
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     createNext();
     inp.elt.focus();
-    menubutton.html("_");
+
   }
 }
 

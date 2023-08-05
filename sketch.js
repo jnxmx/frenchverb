@@ -237,7 +237,7 @@ function setup() {
   //input
   inp = createInput("");
   inp.id("hiddenInput");
-  inp.elt.autocomplete = "off";
+  inp.elt.autocomplete = "false";
   inp.elt.autocorrect = "off";
   inp.elt.autocapitalize = "off";
   inp.elt.spellcheck = "off";

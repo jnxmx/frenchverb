@@ -126,15 +126,15 @@ label[for="menubutton"] {
   opacity: 0;
   display: block;
   font-size: calc(0.4*var(--bigKegel));
-  width: 2em;
-  height: 2em;
+  width: 1em;
+  height: 1em;
   overflow: hide;
   left: calc(50vw - 1em);
   top: calc(var(--contHeight) - 2.5*var(--bigKegel));   
   position: absolute;   
-  padding: 0;
+  padding: 0.5em;
   margin: 0;
-/*   appearance: none;   */
+  appearance: none;  
   z-index: 999;
   cursor: pointer;
   animation: zoomin 0.4s forwards 0.2s;
@@ -144,6 +144,7 @@ label[for="menubutton"] > svg  {
 }
 
 #menubutton:checked ~ label {
+  appearance: none;  
   top: calc(50vh - 0.43*var(--contHeight));
   left: calc(50vw + 0.39*var(--contWidth)); 
 }

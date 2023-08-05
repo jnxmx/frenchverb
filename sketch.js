@@ -748,7 +748,7 @@ function toggleMenu() {
     setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     inp.elt.blur();
-    menubutton.html("+");
+    menubutton.html("×");
   } else {
     createNext();
     inp.elt.focus();
@@ -759,15 +759,6 @@ function toggleMenu() {
 function changeList() {
   shortTable = loadTable(this.value(), "csv", "header");
 }
-
-// function setBigKegel() {
-//   // setVariable(
-//   //   "--bigKegel",
-//   //   min(
-//   //     windowHeight * 0.1,
-//   //     (windowWidth * textSize() / textWidth("nous déconceptualisons")) + "px"
-//   // ));
-// }
 
 function setAnimation(elem, name, time, delay) {
   elem.style("animation", "0s ease 0s 1 normal none running none ");

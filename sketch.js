@@ -9,7 +9,6 @@ let result,
   contentBox,
   menubutton,
   menu;
-
 let mode, muteSpeech, passe;
 let menucontrol;
 let inp;
@@ -140,7 +139,7 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-
+  
   //id
   contentBox.id("contentBox");
   contentBox.touchStarted(showTip);
@@ -170,6 +169,7 @@ function setup() {
   menubutton = createElement("label", "");
   menubutton.id("button");
   menubutton.attribute("for", "menubutton");
+  menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 12 12";"><rect x="0" width="12" height="2.4"/><rect x="0" y="9.6" width="12" height="2.4"/><rect y="4.8" width="12" height="2.4"/></svg>');
   menu = createElement("div");
   menu.class("menu");
   //name
@@ -286,7 +286,6 @@ function setup() {
   );
 
   noCanvas();
-
   createNext();
 }
 
@@ -506,6 +505,7 @@ function draw() {
     0.1
   );
   setVariable("--background", backgroundColor);
+  
 }
 
 function findMistake() {
@@ -750,11 +750,13 @@ function toggleMenu() {
     setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
+    menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><polygon points="12,1.7 10.3,0 6,4.3 1.7,0 0,1.7 4.3,6 0,10.3 1.7,12 6,7.7 10.3,12 12,10.3 7.7,6 	"/></g></svg>');
     inp.elt.blur();
 
   } else {
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     createNext();
+    menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><rect x="0" width="12" height="2.4"/></g><g><rect x="0" y="9.6" width="12" height="2.4"/></g><g><rect y="4.8" width="12" height="2.4"/></g></svg>');
     inp.elt.focus();
 
   }

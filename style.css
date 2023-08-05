@@ -4,7 +4,7 @@
   --fontColor: #ffffff;
   --darkFontColor: color-mix(in srgb, var(--fontColor) 74%, #000000);
   --shade: color-mix(in srgb, var(--fontColor) 88%, var(--background));
-  --halfColor: color-mix(in srgb, var(--fontColor) 48%, var(--background));
+  --halfColor: color-mix(in srgb, var(--fontColor) 48%, transparent);
   --menuBackground: color-mix(in srgb, var(--fontColor) 34%, #FFFFFF);
   --blurLevel: 0px;
   --opacityLevel: 1;
@@ -16,7 +16,7 @@
   --bigKegel: calc(0.093 * var(--contHeight));
   --smallKegel: calc(0.6*var(--bigKegel));
   --menuKegel: calc(0.035*var(--contWidth));
-  --blurColor: #FF0000;
+  --blurColor: var(--halfColor);
 }
 @media (min-aspect-ratio: 100/103)  {
   :root{
@@ -35,7 +35,7 @@ phtml,
 body {
   color: var(--fontColor);
   accent-color: var(--background);
-  background: var(--fontColor);
+  background: color-mix(in srgb, var(--fontColor) 65%, var(--background));
   font-family: RadioGrotesk;
   margin: 0;
   padding: 0;
@@ -385,14 +385,18 @@ margin-bottom: 1.4em;
 }
 
 #gradBox {  
-  position: fixed;
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   bottom: 0px;
   left: 0px;
   
-  background-image: linear-gradient(var(--background) 0%, color-mix(in srgb, var(--background) 40%, var(--fontColor)) 45% 52%, var(--halfColor) 75% 85%, var(--fontColor) 115%);
+  background-image: linear-gradient(var(--background) 0%, 
+    color-mix(in srgb, var(--background) 40%, var(--fontColor)) 50% 54%, 
+    color-mix(in srgb, var(--fontColor) 48%, 
+    var(--background)) 75% 82%, 
+    color-mix(in srgb, var(--fontColor) 65%, var(--background))  100%);
 }
 
 @keyframes fly-in {
@@ -456,14 +460,14 @@ margin-bottom: 1.4em;
     padding:0em;
   } 100% {
     color: transparent;
-  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--fontColor);
+  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--halfColor);
     padding:0em;
   }
 }
 @keyframes group-blur-out {
   0% {
     color: transparent;
-  text-shadow: 0 0 var(--blurLevel) var(--blurColor);
+  text-shadow: 0 0 var(--blurLevel) var(--halfColor);
     padding:0em;
   } 100% {
     color: transparent;

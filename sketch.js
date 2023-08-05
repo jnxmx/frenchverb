@@ -18,7 +18,6 @@ let verbNum = "0",
 let answer;
 let backgroundColor = "#4BC6DA";
 let fontcolor = "#F0F0D2";
-let backgroundColorLerp;
 let shortTable;
 let fullTable;
 let listFileName = [
@@ -404,8 +403,6 @@ function createNext() {
     }
   }
 
-  backgroundColorLerp = backgroundColor;
-
   inp.value("");
   answer = inp.value();
   result.html(prefix[conjNum][varNum] + answer);
@@ -491,6 +488,7 @@ function createNext() {
 }
 
 function draw() {
+
   //update background color
   colorMode(HSB, 1200);
   backgroundColor = color(
@@ -499,11 +497,6 @@ function draw() {
     brightness(backgroundColor)
   );
   colorMode(RGB, 255);
-  backgroundColorLerp = lerpColor(
-    color(backgroundColorLerp),
-    color(backgroundColor),
-    0.1
-  );
   setVariable("--background", backgroundColor);
   
 }
@@ -563,6 +556,13 @@ function showTip() {if(!menucontrol.elt.checked) {
 }
 
 function hideTip() {if(!menucontrol.elt.checked) {
+  let bColr = int(splitTokens(lookUpValue("group", "text-shadow"),',')[0].substring(4));
+  let bColg =int(splitTokens(lookUpValue("group", "text-shadow"),',')[1]);
+  let bColb = int(splitTokens(lookUpValue("group", "text-shadow"),',')[2]);
+  let bHex = "#"+bColr.toString(16) + bColg.toString(16) + bColb.toString(16);
+  console.log(bHex);
+  setVariable("--blurColor", bHex);
+  // setVariable("--blurColor", bCol);
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
 
   let tipPos = float(lookUpValue("tip", "left"));

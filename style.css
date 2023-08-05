@@ -125,40 +125,29 @@ label[for="menubutton"] {
   user-select: none; 
   font-family: Arial, sans-serif; 
   font-size: calc(0.7*var(--bigKegel));  
-  text-align: center;
-  left: calc(50vw - 0.85*var(--bigKegel));
-  top: calc(var(--contHeight) - 3*var(--bigKegel));
-  display: block;
+  left: calc(50vw - 0.35*var(--bigKegel));
+  top: calc(var(--contHeight) - 3*var(--bigKegel));  
   position: absolute;   
 /*   appearance: none; */
   color: var(--fontColor);  
-  width: calc(1.7*var(--bigKegel)); 
+  width: 0; 
+  height: 0;
   z-index: 999;
   cursor: pointer;
   transition: 
-    transform 0.2s ease,
     top 0.2s ease-in, 
     left 0.2s ease-in, 
     color 0.4s linear;
 }
-label[for="menubutton"]:hover {
-  transform: scale(1.1);
-}
 #menubutton:checked ~ label {
-  font-family: Arial, sans-serif; 
-  transform: rotate(405deg);
   top: calc(50vh - 0.45*var(--contHeight));
-  left: calc(50vw + 0.33*var(--contWidth));
+  left: calc(50vw + 0.39*var(--contWidth));
   color: var(--background);
   transition: 
-    transform 1.0s ease-out,
-    top 0.25s ease-out 0.25s, 
-    left 0.25s ease-in,
+    top 0.5s ease, 
+    left 0.5s ease,
     color 2s linear;
   
-}
-#menubutton:checked ~ label:hover {
-  transform: rotate(405deg) scale(1.1);
 }
 .menu {
   left: calc(50%);
@@ -192,11 +181,11 @@ label[for="menubutton"]:hover {
 
 #menubutton:checked ~ div.menu {
 /*   transform: translate(0%,0%) */
-  transition: width 0.2s ease, 
-    height 0.5s ease-out, 
-    left 0.5s ease-out, 
-    top 0.5s ease-out,
-    color 0.5s 0.3s,
+  transition: width 0.5s ease, 
+    height 0.5s ease, 
+    left 0.5s ease, 
+    top 0.5s ease,
+    color 0.5s 0.4s,
     padding 0.5s ease-out 0.0s;
   left: 50%;
   top:50%;

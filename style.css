@@ -4,7 +4,7 @@
   --fontColor: #ffffff;
   --darkFontColor: color-mix(in srgb, var(--fontColor) 74%, #000000);
   --shade: color-mix(in srgb, var(--fontColor) 88%, var(--background));
-  --halfColor: color-mix(in srgb, var(--fontColor) 48%, transparent);
+
   --menuBackground: color-mix(in srgb, var(--fontColor) 34%, #FFFFFF);
   --blurLevel: 0px;
   --opacityLevel: 1;
@@ -16,7 +16,7 @@
   --bigKegel: calc(0.093 * var(--contHeight));
   --smallKegel: calc(0.6*var(--bigKegel));
   --menuKegel: calc(0.035*var(--contWidth));
-  --blurColor: var(--halfColor);
+
 }
 @media (min-aspect-ratio: 100/103)  {
   :root{
@@ -373,7 +373,7 @@ margin-bottom: 1.4em;
 #group {
   position: absolute;  
   font-size: var(--smallKegel);
-  color: var(--halfColor);
+  color: var(--fontColot);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -382,6 +382,7 @@ margin-bottom: 1.4em;
   top: var(--smallKegel);
   display: inline-block;
   padding:0em;
+  opacity: 0.48;
 }
 
 #gradBox {  
@@ -453,29 +454,6 @@ margin-bottom: 1.4em;
     padding:0em;
   }
 }
-@keyframes group-blur-in {
-  0% {
-    color: transparent;
-  text-shadow: 0 0 0 var(--halfColor);
-    padding:0em;
-  } 100% {
-    color: transparent;
-  text-shadow: 0 0 calc(0.25*var(--bigKegel)) var(--halfColor);
-    padding:0em;
-  }
-}
-@keyframes group-blur-out {
-  0% {
-    color: transparent;
-  text-shadow: 0 0 var(--blurLevel) var(--halfColor);
-    padding:0em;
-  } 100% {
-    color: transparent;
-  text-shadow: 0 0 0 var(--halfColor);
-    padding:0em;
-  }
-}
-
 
 @keyframes shake {
   0% {  margin-left: 0rem; }
@@ -495,7 +473,7 @@ margin-bottom: 1.4em;
 
 @keyframes flyUp {
   0% {
-    opacity: 1;
+    
     margin-top:0px
   } 
   
@@ -522,7 +500,7 @@ margin-bottom: 1.4em;
     opacity: 0;
   }   
   100% {
-    opacity: 1;
+    
   } 
 }
 

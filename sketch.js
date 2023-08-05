@@ -237,7 +237,7 @@ function setup() {
   //input
   inp = createInput("");
   inp.id("hiddenInput");
-  inp.elt.autocomplete = "false";
+  inp.elt.autocomplete = "one-time-code";
   inp.elt.autocorrect = "off";
   inp.elt.autocapitalize = "off";
   inp.elt.spellcheck = "off";

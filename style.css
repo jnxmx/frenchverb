@@ -117,6 +117,12 @@ input[type=radio] + span {
   display:none;
 }
 label[for="menubutton"] {
+        -webkit-touch-callout: none; 
+  -webkit-user-select: none; 
+  -khtml-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
   opacity: 0;
   display: block;
   font-size: calc(0.4*var(--bigKegel));

@@ -537,6 +537,15 @@ function correctAnimation() {
 }
 
 function showTip() {if(!menucontrol.elt.checked) {
+    let bColr = int(splitTokens(lookUpValue("group", "text-shadow"),',')[0].substring(4));
+  let bColg =int(splitTokens(lookUpValue("group", "text-shadow"),',')[1]);
+  let bColb = int(splitTokens(lookUpValue("group", "text-shadow"),',')[2]);
+  let bRGB = "rgb("+bColr + "," + bColg + ","+ bColb+")";
+  if(!bColr) {
+    bRGB = "var(--halfColor)";
+  }
+  setVariable("--blurColor", bRGB);
+  setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
   setAnimation(
     tiplist,
@@ -559,10 +568,11 @@ function hideTip() {if(!menucontrol.elt.checked) {
   let bColr = int(splitTokens(lookUpValue("group", "text-shadow"),',')[0].substring(4));
   let bColg =int(splitTokens(lookUpValue("group", "text-shadow"),',')[1]);
   let bColb = int(splitTokens(lookUpValue("group", "text-shadow"),',')[2]);
-  let bHex = "#"+bColr.toString(16) + bColg.toString(16) + bColb.toString(16);
-  console.log(bHex);
-  setVariable("--blurColor", bHex);
-  // setVariable("--blurColor", bCol);
+  let bRGB = "rgb("+bColr + "," + bColg + ","+ bColb+")";
+  if(!bColr) {
+    bRGB = "var(--halfColor)";
+  }
+  setVariable("--blurColor", bRGB);
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
 
   let tipPos = float(lookUpValue("tip", "left"));
@@ -578,7 +588,7 @@ function hideTip() {if(!menucontrol.elt.checked) {
   setVariable("--blurLevel", bLev + "px");
   setAnimation(result, "blur-out ease-in", 0.5, 0);
   setAnimation(verbFrench, "blur-out ease-in", 0.5, 0);
-  secondAnimation(groupName, "group-blur-out ease-in", 0.3, 0);
+  secondAnimation(groupName, "group-blur-out ease-in", 0.5, 0);
   //console.log(lookUpValue(groupName.elt.id, "animation"));
   setAnimation(translation, "blur-out ease-in", 0.5, 0);
   setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);

@@ -5,7 +5,7 @@
   --darkFontColor: color-mix(in srgb, var(--fontColor) 74%, #000000);
   --shade: color-mix(in srgb, var(--fontColor) 88%, var(--background));
   --halfColor: color-mix(in srgb, var(--fontColor) 48%, var(--background));
-  --menuBackground: color-mix(in srgb, var(--fontColor) 48%, #FFFFFF);
+  --menuBackground: color-mix(in srgb, var(--fontColor) 34%, #FFFFFF);
   --blurLevel: 0px;
   --opacityLevel: 1;
   --tipPosition: 50%;
@@ -142,11 +142,11 @@ label[for="menubutton"] {
 #menubutton:checked ~ label {
   top: calc(50vh - 0.45*var(--contHeight));
   left: calc(50vw + 0.39*var(--contWidth));
-  color: var(--background);
+  color: var(--halfColor);
   transition: 
     top 0.5s ease, 
     left 0.5s ease,
-    color 2s linear;
+    color 1s linear;
   
 }
 .menu {
@@ -165,7 +165,7 @@ label[for="menubutton"] {
 /*   align-content: start; */
   grid-template-rows: 1fr 1fr 5fr 1fr; 
   border-radius: 0.1em; 
- color: var(--darkFontColor);
+ color: transparent;
   padding: 0em;
   border-radius: 0em;
   color: transparent;
@@ -187,8 +187,8 @@ label[for="menubutton"] {
     top 0.5s ease,
     color 0.5s 0.4s,
     padding 0.5s ease-out 0.0s;
-  left: 50%;
-  top:50%;
+  left: 50vw;
+  top:50vh;
   border-radius: 0.15em;
   color: var(--darkFontColor);
   padding: 0.75em;
@@ -207,7 +207,7 @@ label[for="menubutton"] {
   text-align: center;
   margin: calc(0.25 * var(--bigKegel));
   block-size: 1.43em;
-  color: var(--background);
+  color: var(--halfColor);
 margin-bottom: 1.4em; 
  
 }
@@ -558,7 +558,7 @@ margin-bottom: 1.4em;
     margin:0em;
   padding: 0em;
    display: inline-grid; 	
-  gap: 0px;
+  row-gap: 0.2em;
 column-gap: 0.5em;
    margin-bottom: 2em;
   margin-top: 1em;

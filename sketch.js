@@ -168,7 +168,7 @@ function setup() {
   menucontrol.id("menubutton");
   menucontrol.changed(toggleMenu);
   menubutton = createElement("label", "");
-  menubutton.html("☰");
+  menubutton.id("button");
   menubutton.attribute("for", "menubutton");
   menu = createElement("div");
   menu.class("menu");
@@ -543,7 +543,7 @@ function correctAnimation() {
   setAnimation(translation, "flyUp ease-in forwards", 1.95, 0.1);
 }
 
-function showTip() {
+function showTip() {if(!menucontrol.elt.checked) {
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
   setAnimation(
     tiplist,
@@ -560,8 +560,9 @@ function showTip() {
   menubutton.style("animation", "ease forwards opacity-fade 0.4s 0s");
   inp.elt.blur();
 }
+}
 
-function hideTip() {
+function hideTip() {if(!menucontrol.elt.checked) {
   setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
 
   let tipPos = float(lookUpValue("tip", "left"));
@@ -584,6 +585,7 @@ function hideTip() {
   //setAnimation(menubutton,"ease forwards opacity-unfade", 0.5, 0);
   menubutton.style("animation", "ease opacity-unfade 0.5s 0s");
   inp.elt.focus();
+                   }
 }
 
 //structure
@@ -747,12 +749,14 @@ function toggleMenu() {
     setAnimation(translation, "newVerb reverse forwards", 0.3, 0.05);
     setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
+    setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     inp.elt.blur();
-    menubutton.html("×");
+    menubutton.html("_");
   } else {
+    setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     createNext();
     inp.elt.focus();
-    menubutton.html("☰");
+    menubutton.html("_");
   }
 }
 

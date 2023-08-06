@@ -279,6 +279,24 @@ margin-bottom: 1.4em;
     opacity: 1;
   }
 }
+@keyframes tutorial-opacity-fade {
+  0% {
+    color:var(--fontColor);
+  }
+  100% {
+   color:transparent;
+    top: 100vh;
+  }
+}
+@keyframes tutorial-opacity-unfade {
+  0% {
+    color:transparent;
+    top: 100vh;
+  }
+  100% {
+   color:var(--fontColor);
+  }
+}
 #contentBox {
   position: absolute;
   box-sizing: border-box;
@@ -302,14 +320,13 @@ margin-bottom: 1.4em;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis; 
+  height: 2.1em;
   line-height: 1.05em;
   -webkit-line-clamp: 2; 
   
   font-size: var(--bigKegel);
   color: var(--fontColor);
-/*   
-   */
-  top:50%;
+  top:calc(50% + 0.525em);
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -341,6 +358,56 @@ margin-bottom: 1.4em;
   display: inline-block;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+#tutorial-hold {
+  position: absolute;
+  font-size: var(--smallKegel);
+  color: var(--fontColor);
+  top: calc(0.5*var(--contHeight) - 2.5*var(--smallKegel));
+  width: 100%;
+  left: 50%;
+  line-height: 1em;
+  transform: translate(-50%, -50%);
+  animation: shine infinite alternate ease 1s;
+}
+#tutorial-input {
+  
+  position: absolute;
+  font-size: var(--smallKegel);
+  color: var(--fontColor);
+  top: calc(0.5*var(--contHeight) + 1*var(--smallKegel) + 0.45*var(--bigKegel));
+  width: 100%;
+  left: 50%;
+  line-height: 1em;
+  transform: translate(-50%, -50%);
+  animation: shine infinite alternate ease 1s;
+}
+#tutorial-menu {
+  position: absolute;
+  font-size: var(--smallKegel);
+  color: var(--fontColor);
+  top: calc(var(--contHeight) - 2.5*var(--bigKegel) - 0.45*var(--smallKegel));
+  width: 100%;
+  left: 50%;
+  line-height: 1em;
+  transform: translate(-50%, -50%);
+  animation: shine infinite alternate ease 1s;
+}
+@keyframes disappear {
+  0% 99% {
+    visibility: inherit;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+@keyframes shine {
+  0% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 #tip {

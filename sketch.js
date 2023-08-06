@@ -158,6 +158,9 @@ function setup() {
   tutorialInput.parent(contentBox);
   tutorialInput.id("tutorial-input");
   tutorialInput.html("↑</br>type verb conjugation here");
+  tutorialMenu = createElement("div");
+  tutorialMenu.id("tutorial-menu");
+  tutorialMenu.style("visibility", "hidden");
 
   setAnimation(tutorialInput, "ease forwards svg-opacity-unfade", 0.6, 0);
       addAnimation(tutorialInput, "shine infinite alternate ease", 1, 0);
@@ -246,7 +249,6 @@ function setup() {
   inp.elt.autocorrect = "off";
   inp.elt.autocapitalize = "off";
   inp.elt.spellcheck = "off";
-  inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   //onkeypress
   inp.elt.addEventListener("input", (event) => {
@@ -269,6 +271,8 @@ function setup() {
     setCaretPosition("hiddenInput", inp.value().length);
     if (event.keyCode === ENTER) {
       if (answer === correctAnswer || answer === correctAnswer + " ") {
+        tutorialHold.style("visibility", "hidden");;
+        tutorialMenu.style("visibility", "hidden");;
         speak(prefix[conjNum][varNum] + answer);
         correctAnimation();
       } else {
@@ -589,13 +593,12 @@ function showTip() {
 function hideTip() {
   if (!menucontrol.elt.checked) {
     if (
-      document.getElementById("tutorial-hold") &&!document.getElementById("tutorial-menu") &&
+      document.getElementById("tutorial-hold") &&
       lookUpValue("tutorial-hold", "visibility") == "visible"
     ) {
-      tutorialHold.hide();
-      tutorialMenu = createElement("div");
+      tutorialHold.style("visibility", "hidden");;
+      tutorialMenu.style("visibility", "visible");
       tutorialMenu.parent(contentBox);
-      tutorialMenu.id("tutorial-menu");
       tutorialMenu.html("adjust options</br>↓");
     }
     if (lookUpValue("tutorial-input", "visibility") == "visible") {
@@ -792,7 +795,7 @@ function toggleMenu() {
       document.getElementById("tutorial-menu") &&
       lookUpValue("tutorial-menu", "visibility") == "visible"
     ) {
-      tutorialMenu.hide();
+      tutorialMenu.style("visibility", "hidden");;
       
     }
   if (this.elt.checked) {

@@ -320,13 +320,12 @@ margin-bottom: 1.4em;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis; 
-  height: 2.1em;
   line-height: 1.05em;
   -webkit-line-clamp: 2; 
   
   font-size: var(--bigKegel);
   color: var(--fontColor);
-  top:calc(50% + 0.525em);
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }

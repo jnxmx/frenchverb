@@ -98,20 +98,17 @@ function preload() {
   fullTable = loadTable("assets/french-verb-conjugation.csv", "csv", "header");
   shortTable = loadTable(listFileName[0], "csv", "header");
   irregularGroupsSource = loadStrings("assets/irregulargrouping.txt");
-  if(!synth.getVoices().length) {
-    synth.addEventListener("voiceschanged", function() {
+  if (!synth.getVoices().length) {
+    synth.addEventListener("voiceschanged", function () {
       console.log("!!!");
       setVoice();
     });
-} else {
-  setVoice();
+  } else {
+    setVoice();
+  }
 }
-}
-
 
 function setup() {
-
-
   //set groups
   let index = 0;
   let subindex = 0;
@@ -138,7 +135,7 @@ function setup() {
   result = createElement("div");
   groupName = createElement("div");
   tiplist = createElement("div");
-  
+
   //id
   contentBox.id("contentBox");
   contentBox.touchStarted(showTip);
@@ -157,10 +154,17 @@ function setup() {
   tiplist.parent(contentBox);
   groupName.id("group");
   groupName.parent(contentBox);
+  tutorialInput = createElement("div");
+  tutorialInput.parent(contentBox);
+  tutorialInput.id("tutorial-input");
+  tutorialInput.html("↑</br>type verb conjugation here");
+
+  setAnimation(tutorialInput, "ease forwards svg-opacity-unfade", 0.6, 0);
+      addAnimation(tutorialInput, "shine infinite alternate ease", 1, 0);
 
   //menu
   menucontrol = createInput();
-  
+
   menucontrol.attribute("type", "checkbox");
   // menucontrol.attribute('checked', true);
   menucontrol.id("menubutton");
@@ -168,7 +172,9 @@ function setup() {
   menubutton = createElement("label", "");
   menubutton.id("button");
   menubutton.attribute("for", "menubutton");
-  menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 12 12";"><rect x="0" width="12" height="2.4"/><rect x="0" y="9.6" width="12" height="2.4"/><rect y="4.8" width="12" height="2.4"/></svg>');
+  menubutton.html(
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 12 12";"><rect x="0" width="12" height="2.4"/><rect x="0" y="9.6" width="12" height="2.4"/><rect y="4.8" width="12" height="2.4"/></svg>'
+  );
   menu = createElement("div");
   menu.class("menu");
   //name
@@ -186,14 +192,14 @@ function setup() {
   let opts = createElement("p");
   opts.parent(menu);
   opts.id("optionsblock");
-    //dict
+  //dict
   let pVerb1 = createElement("p");
   pVerb1.parent(opts);
   pVerb1.id("verbblock");
   pVerb1.html("Verb list:");
   let pVerb2 = createElement("p");
   pVerb2.parent(pVerb1);
-  pVerb2.class("radio-wrapper")
+  pVerb2.class("radio-wrapper");
   let dict = createRadio("Dictionary");
   dict.changed(changeList);
   for (let i = 0; i < listFileName.length; i++) {
@@ -233,7 +239,6 @@ function setup() {
     "Coding and design by Ivan Yakushev.</br>Font PP Radio Grotesk by Pangram Pangram.</br>Tested on Chrome & Safari only."
   );
   //pVerb1.style("align-self", "end");
-  
   //input
   inp = createInput("");
   inp.id("hiddenInput");
@@ -241,12 +246,22 @@ function setup() {
   inp.elt.autocorrect = "off";
   inp.elt.autocapitalize = "off";
   inp.elt.spellcheck = "off";
+  inp.elt.setAttribute("type", "text");
   inp.elt.focus();
   //onkeypress
   inp.elt.addEventListener("input", (event) => {
-    const inputValue = event.target.value.toLowerCase().replace("'","’");
+    const inputValue = event.target.value.toLowerCase().replace("'", "’");
     answer = inputValue;
     result.html(prefix[conjNum][varNum] + answer);
+    if (lookUpValue("tutorial-input", "visibility") == "visible") {
+      console.log("again");
+      tutorialInput.style("visibility", "hidden");
+      console.log(lookUpValue("tutorial-input", "visibility"));
+      tutorialHold = createElement("div");
+      tutorialHold.id("tutorial-hold");
+      tutorialHold.parent(contentBox);
+      tutorialHold.html("press & hold</br>→ screen ←</br>for tip");
+    }
   });
   //onsend
   inp.elt.addEventListener("keyup", (event) => {
@@ -348,10 +363,9 @@ function createNext() {
     for (let etreVerb of etreVerbs) {
       if (refl) {
         varNum = 2;
-      } 
-      else if (
+      } else if (
         verb.endsWith(etreVerb) &&
-          verbRow.getString("compound verb") != "avoir"
+        verbRow.getString("compound verb") != "avoir"
       ) {
         varNum = 1;
         break;
@@ -432,17 +446,19 @@ function createNext() {
   );
   if (impersonal) {
     tiplist.html(
-      "<p>il "+ reflexive[5] +
+      "<p>il " +
+        reflexive[5] +
         splitTokens(verbRow.getString(conjugationText[2]), ";")[0] +
         "</p>"
     );
   }
   //tip passe:
   if (passe.checked()) {
-    if(!refl) {
+    if (!refl) {
       tiplist.html(
         tiplist.html() +
-          "</p></br><p>" + reflexive[6] +
+          "</p></br><p>" +
+          reflexive[6] +
           splitTokens(verbRow.getString("past participle"), ";")[0] +
           "</p>"
       );
@@ -453,8 +469,10 @@ function createNext() {
           splitTokens(verbRow.getString("past participle"), ";")[0] +
           "</p>"
       );
-      correctAnswer =
-    splitTokens(verbRow.getString(conjugationText[conjNum]), ";")[0];
+      correctAnswer = splitTokens(
+        verbRow.getString(conjugationText[conjNum]),
+        ";"
+      )[0];
       console.log(correctAnswer);
     }
   }
@@ -464,11 +482,10 @@ function createNext() {
     if (!muteSpeech.checked()) {
       speak(shortTable.getString(verbNum, "verb"));
     }
-    verbFrench.html(shortTable.getString(verbNum, "verb").replace("\'","’" ));
+    verbFrench.html(shortTable.getString(verbNum, "verb").replace("'", "’"));
     translation.html("[" + shortTable.getString(verbNum, lang.value()) + "]");
     //translation mode
   } else {
-    
     verbFrench.html(shortTable.getString(verbNum, lang.value()));
     translation.html("");
     groupName.html("");
@@ -487,7 +504,6 @@ function createNext() {
 }
 
 function draw() {
-
   //update background color
   colorMode(HSB, 1200);
   backgroundColor = color(
@@ -497,7 +513,6 @@ function draw() {
   );
   colorMode(RGB, 255);
   setVariable("--background", backgroundColor);
-  
 }
 
 function findMistake() {
@@ -535,49 +550,90 @@ function correctAnimation() {
   setAnimation(translation, "flyUp ease-in forwards", 1.95, 0.1);
 }
 
-function showTip() {if(!menucontrol.elt.checked) {
-  setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
-  setAnimation(
-    tiplist,
-    "fly-in forwards cubic-bezier(0.18,1,0.74,1)",
-    0.4,
-    0.1
-  );
-  secondAnimation(result, "blur-in forwards", 0.5, 0);
-  secondAnimation(verbFrench, "blur-in forwards", 0.5, 0);
-  addAnimation(groupName, "blur-in forwards", 0.5, 0);
-  secondAnimation(translation, "blur-in forwards", 0.5, 0);
-  setAnimation(gradientBackgroundBox, "fade-in forwards ease-out", 0.8, 0);
-  setAnimation(menubutton,"ease forwards svg-opacity-fade", 0.2, 0);
-  //menubutton.style("animation", "ease forwards svg-opacity-fade 0.4s 0s");
-  inp.elt.blur();
-}
-}
-
-function hideTip() {if(!menucontrol.elt.checked) {
-  setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
-
-  let tipPos = float(lookUpValue("tip", "left"));
-  if (tipPos >= windowWidth * 0.45) {
-    setAnimation(tiplist, "fly-out forwards", 0.35, 0.0);
-  } else {
-    setVariable("--tipPosition", lookUpValue("tip", "left"));
-    setVariable("--tipOpacity", lookUpValue("tip", "opacity"));
-    setAnimation(tiplist, "fly-back", 0.35, 0.0);
+function showTip() {
+  if (!menucontrol.elt.checked) {
+    if (
+      document.getElementById("tutorial-hold") &&
+      lookUpValue("tutorial-hold", "visibility") == "visible"
+    ) {
+      setAnimation(tutorialHold, "blur-in forwards", 0.5, 0);
+      secondAnimation(tutorialHold, "ease forwards svg-opacity-fade", 0.5, 0);
+    }
+    if (lookUpValue("tutorial-input", "visibility") == "visible") {
+      setAnimation(tutorialInput, "ease forwards tutorial-opacity-fade", 0.5, 0);
+    }
+    if (
+      document.getElementById("tutorial-menu") &&
+      lookUpValue("tutorial-menu", "visibility") == "visible"
+    ) {
+      setAnimation(tutorialMenu, "ease forwards tutorial-opacity-fade", 0.2, 0);
+    }
+    setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
+    setAnimation(
+      tiplist,
+      "fly-in forwards cubic-bezier(0.18,1,0.74,1)",
+      0.4,
+      0.1
+    );
+    secondAnimation(result, "blur-in forwards", 0.5, 0);
+    secondAnimation(verbFrench, "blur-in forwards", 0.5, 0);
+    addAnimation(groupName, "blur-in forwards", 0.5, 0);
+    secondAnimation(translation, "blur-in forwards", 0.5, 0);
+    setAnimation(gradientBackgroundBox, "fade-in forwards ease-out", 0.8, 0);
+    setAnimation(menubutton, "ease forwards svg-opacity-fade", 0.2, 0);
+    //menubutton.style("animation", "ease forwards svg-opacity-fade 0.4s 0s");
+    inp.elt.blur();
   }
-  let bLev = float(splitTokens(lookUpValue("result", "text-shadow"), "px ")[5]);
+}
 
-  setVariable("--blurLevel", bLev + "px");
-  setAnimation(result, "blur-out ease-in", 0.5, 0);
-  setAnimation(verbFrench, "blur-out ease-in", 0.5, 0);
-  secondAnimation(groupName, "blur-out ease-in", 0.5, 0);
-  //console.log(lookUpValue(groupName.elt.id, "animation"));
-  setAnimation(translation, "blur-out ease-in", 0.5, 0);
-  setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);
-  setAnimation(menubutton,"ease forwards svg-opacity-unfade", 0.2, 0);
-  //menubutton.style("animation", "ease opacity-unfade 0.5s 0s");
-  inp.elt.focus();
-                   }
+function hideTip() {
+  if (!menucontrol.elt.checked) {
+    if (
+      document.getElementById("tutorial-hold") &&!document.getElementById("tutorial-menu") &&
+      lookUpValue("tutorial-hold", "visibility") == "visible"
+    ) {
+      tutorialHold.hide();
+      tutorialMenu = createElement("div");
+      tutorialMenu.parent(contentBox);
+      tutorialMenu.id("tutorial-menu");
+      tutorialMenu.html("adjust options</br>↓");
+    }
+    if (lookUpValue("tutorial-input", "visibility") == "visible") {
+      setAnimation(tutorialInput, "ease forwards tutorial-opacity-unfade", 0.3, 0);
+      addAnimation(tutorialInput, "shine infinite alternate ease", 1, 0.0);
+    }
+    if (
+      document.getElementById("tutorial-menu") &&
+      lookUpValue("tutorial-menu", "visibility") == "visible"
+    ) {
+      setAnimation(tutorialMenu, "ease forwards tutorial-opacity-unfade", 0.3, 0);     
+      addAnimation(tutorialMenu, "shine infinite alternate ease", 1, 0.0);
+    }
+    setVariable("--opacityLevel", lookUpValue("gradBox", "opacity"));
+
+    let tipPos = float(lookUpValue("tip", "left"));
+    if (tipPos >= windowWidth * 0.45) {
+      setAnimation(tiplist, "fly-out forwards", 0.35, 0.0);
+    } else {
+      setVariable("--tipPosition", lookUpValue("tip", "left"));
+      setVariable("--tipOpacity", lookUpValue("tip", "opacity"));
+      setAnimation(tiplist, "fly-back", 0.35, 0.0);
+    }
+    let bLev = float(
+      splitTokens(lookUpValue("result", "text-shadow"), "px ")[5]
+    );
+
+    setVariable("--blurLevel", bLev + "px");
+    setAnimation(result, "blur-out ease-in", 0.5, 0);
+    setAnimation(verbFrench, "blur-out ease-in", 0.5, 0);
+    secondAnimation(groupName, "blur-out ease-in", 0.5, 0);
+    //console.log(lookUpValue(groupName.elt.id, "animation"));
+    setAnimation(translation, "blur-out ease-in", 0.5, 0);
+    setAnimation(gradientBackgroundBox, "fade-out ease-in", 0.4, 0);
+    setAnimation(menubutton, "ease forwards svg-opacity-unfade", 0.2, 0);
+    //menubutton.style("animation", "ease opacity-unfade 0.5s 0s");
+    inp.elt.focus();
+  }
 }
 
 //structure
@@ -676,7 +732,6 @@ function setCaretPosition(elemId, caretPos) {
 //sound
 
 function speak(message) {
-
   // if (synth.speaking) {
   //   //console.error("speechSynthesis.speaking");
   //   //synth.cancel()
@@ -692,65 +747,71 @@ function speak(message) {
       synth.speak(utterThis);
     }
   }
-  
 }
 
 function setVoice() {
-  
   window.speechSynthesis.getVoices();
- 
-    let voices = synth.getVoices().filter(function (voice) {
-      return voice.lang.includes("FR");
-    });
-    console.log("Available french voices:");
-    for (let a of voices) console.log(a.name + " " + a.lang);
-    if (
-      voices.filter(function (voice) {
-        return voice.name.startsWith("Microsoft Denise");
-      })[0]
-    ) {
-      theVoice = voices.filter(function (voice) {
-        return voice.name.startsWith("Microsoft");
-      })[0];
-    } else if (
-      voices.filter(function (voice) {
-        return voice.name.startsWith("Google");
-      })[0]
-    ) {
-      theVoice = voices.filter(function (voice) {
-        return voice.name.startsWith("Google");
-      })[0];
-    } else if (
-      voices.filter(function (voice) {
-        return voice.name.startsWith("Thomas");
-      })[0]
-    ) {
-      theVoice = voices.filter(function (voice) {
-        return voice.name.startsWith("Thomas");
-      })[0];
-    } else {
-      theVoice = voices[0];
-    }
-    console.log("Using: " + theVoice.name);
-   
+
+  let voices = synth.getVoices().filter(function (voice) {
+    return voice.lang.includes("FR");
+  });
+  console.log("Available french voices:");
+  for (let a of voices) console.log(a.name + " " + a.lang);
+  if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Microsoft Denise");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Microsoft");
+    })[0];
+  } else if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Google");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Google");
+    })[0];
+  } else if (
+    voices.filter(function (voice) {
+      return voice.name.startsWith("Thomas");
+    })[0]
+  ) {
+    theVoice = voices.filter(function (voice) {
+      return voice.name.startsWith("Thomas");
+    })[0];
+  } else {
+    theVoice = voices[0];
+  }
+  console.log("Using: " + theVoice.name);
 }
 
 function toggleMenu() {
+  if (
+      document.getElementById("tutorial-menu") &&
+      lookUpValue("tutorial-menu", "visibility") == "visible"
+    ) {
+      tutorialMenu.hide();
+      
+    }
   if (this.elt.checked) {
     secondAnimation(groupName, "flyUp forwards ease-in", 1.95, 0);
     setAnimation(translation, "newVerb reverse forwards", 0.3, 0.05);
     setAnimation(verbFrench, "newVerb reverse forwards", 0.3, 0.1);
     setAnimation(result, "newVerb reverse forwards", 0.15, 0);
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
-    menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><polygon points="12,1.7 10.3,0 6,4.3 1.7,0 0,1.7 4.3,6 0,10.3 1.7,12 6,7.7 10.3,12 12,10.3 7.7,6 	"/></g></svg>');
+    menubutton.html(
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><polygon points="12,1.7 10.3,0 6,4.3 1.7,0 0,1.7 4.3,6 0,10.3 1.7,12 6,7.7 10.3,12 12,10.3 7.7,6 	"/></g></svg>'
+    );
     inp.elt.blur();
-
   } else {
     setAnimation(menubutton, "zoomin ease-out forwards", 0.4, 0.4);
     createNext();
-    menubutton.html('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><rect x="0" width="12" height="2.4"/></g><g><rect x="0" y="9.6" width="12" height="2.4"/></g><g><rect y="4.8" width="12" height="2.4"/></g></svg>');
+    menubutton.html(
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 12 12" style="enable-background:new 0 0 12 12; " xml:space="preserve"><g><rect x="0" width="12" height="2.4"/></g><g><rect x="0" y="9.6" width="12" height="2.4"/></g><g><rect y="4.8" width="12" height="2.4"/></g></svg>'
+    );
     inp.elt.focus();
-
   }
 }
 
